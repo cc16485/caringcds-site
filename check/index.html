@@ -329,6 +329,18 @@
     b.addEventListener('click', function () { show(Math.max(0, at - 1)); });
   });
 
+  var OUTSIDE = 'Outside these counties';
+  /* 'Outside these counties' is an option value, not a place, so it must never
+     be printed as '<value> County' or dropped into a sentence as a proper noun. */
+  function countyLabel() {
+    if (!answers.county) return '—';
+    return answers.county === OUTSIDE ? 'Somewhere else in Missouri' : answers.county + ' County';
+  }
+  function countyPhrase() {
+    if (!answers.county) return 'your county';
+    return answers.county === OUTSIDE ? 'where you are' : answers.county + ' County';
+  }
+
   /* verdict */
   function decide() {
     var med = answers.medicaid || '';
@@ -359,7 +371,7 @@
     } else if (!served) {
       tone = 'maybe';
       title = 'Outside our usual area, so let us check';
-      text = '<p>We work across 27 counties in Southwest Missouri and ' + (answers.county || 'your county')
+      text = '<p>We work across 27 counties in Southwest Missouri, and ' + countyPhrase()
            + ' is not one of them. That does not always mean no.</p>'
            + '<p>Give us a call. If we cannot help, we will point you to a provider who can.</p>';
     }
@@ -380,7 +392,7 @@
 
     document.getElementById('recap').innerHTML = [
       ['You', answers.role], ['Medicaid', answers.medicaid],
-      ['County', answers.county ? answers.county + ' County' : '—'], ['Caregiver', answers.who]
+      ['County', countyLabel()], ['Caregiver', answers.who]
     ].map(function (r) {
       return '<li><b>' + r[0] + ':</b> ' + (r[1] || '—') + '</li>';
     }).join('');
