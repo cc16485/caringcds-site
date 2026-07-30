@@ -118,8 +118,8 @@ var GHL_WEBHOOK   = null;   // set this to the GHL inbound webhook URL to enable
         Array.prototype.forEach.call(form.querySelectorAll('input,select,textarea,button'), function (el) { el.disabled = true; });
         if (okBox) {
           okBox.innerHTML = '<strong>Thank you, ' + firstName + '.</strong> We have your details and someone will call you'
-            + (row.phone ? ' on ' + row.phone : '') + '. If you would rather not wait, call us now on '
-            + '<a href="tel:+18668635151">866-863-5151</a>.';
+            + (row.phone ? ' on ' + row.phone : '') + '. If you would rather not wait, call us on '
+            + '<a href="tel:+14172182888">417-218-2888</a>.';
           okBox.classList.add('show');
           okBox.scrollIntoView({ behavior:'smooth', block:'center' });
         }
@@ -127,7 +127,7 @@ var GHL_WEBHOOK   = null;   // set this to the GHL inbound webhook URL to enable
         if (btn) { btn.disabled = false; btn.textContent = btnLabel; }
         if (errBox) {
           errBox.innerHTML = 'Something went wrong sending that, so nothing was submitted. Please call us on '
-            + '<a href="tel:+18668635151" style="color:#8b2e24;font-weight:700">866-863-5151</a> and we will help straight away.'
+            + '<a href="tel:+14172182888" style="color:#8b2e24;font-weight:700">417-218-2888</a>, or toll free 866-863-5151, and we will help straight away.'
             + '<br><span style="font-size:.85em;opacity:.75">' + (err.message || 'unknown error') + '</span>';
           errBox.classList.add('show');
         }
