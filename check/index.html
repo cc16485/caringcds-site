@@ -102,7 +102,6 @@
         <li><a href="../consumers/">Receive Care</a></li>
         <li><a href="../attendants/">Become a Caregiver</a></li>
         <li><a href="../service-area/">Service Area</a></li>
-        <li><a href="../caregiver-list/">Caregiver List</a></li>
         <li><a href="../contact/">Contact</a></li>
       </ul>
     </nav>
@@ -115,7 +114,6 @@
       <li><a href="../consumers/">Receive Care</a></li>
       <li><a href="../attendants/">Become a Caregiver</a></li>
       <li><a href="../service-area/">Service Area</a></li>
-      <li><a href="../caregiver-list/">Caregiver List</a></li>
       <li><a href="../contact/">Contact</a></li>
     </ul>
   </div>
@@ -190,7 +188,7 @@
             <span>Yes, a family member or friend<small>Not a spouse or legal guardian, they cannot be paid</small></span></button></li>
           <li><button class="opt" data-q="who" data-val="Needs help finding a caregiver" aria-pressed="false">
             <span class="tick"><svg class="icon" aria-hidden="true"><use href="#i-check"/></svg></span>
-            <span>No, I would need help finding someone<small>We keep a list of caregivers in every county</small></span></button></li>
+            <span>No, I would need help finding someone<small>We introduce you to someone in your county</small></span></button></li>
           <li><button class="opt" data-q="who" data-val="Is the caregiver" aria-pressed="false">
             <span class="tick"><svg class="icon" aria-hidden="true"><use href="#i-check"/></svg></span>
             <span>I would be the caregiver<small>I want to be paid for the care I give</small></span></button></li>
@@ -382,8 +380,9 @@
             + '<a href="../pay-calculator/">See what that works out to</a>.</p>';
     }
     if (answers.who === 'Needs help finding a caregiver') {
-      text += '<p><strong>On finding a caregiver:</strong> that is not a problem. We keep a list of caregivers across '
-            + 'all 27 counties and can introduce you to someone near you.</p>';
+      text += '<p><strong>On finding a caregiver:</strong> that is not a problem. We keep our own list of people '
+            + 'looking for caregiving work across all 27 counties, and we introduce you to someone near you. '
+            + 'You still choose who you hire.</p>';
     }
 
     v.className = 'verdict ' + tone;
