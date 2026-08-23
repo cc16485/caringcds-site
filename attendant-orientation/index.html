@@ -788,6 +788,34 @@
 </x-dc>
 <script type="text/x-dc" data-dc-script>
 const KEY = 'ccCdsAttendantV1';
+const COURSE_ID = 'attendant';
+/* Completion capture: fires once when the learner finishes. The state already
+   models everything the case file needs; this posts it to the agency so the
+   orientation record exists even if the learner never prints. INSERT-only
+   key, fire-and-forget, and never blocks finishing if the network is down. */
+function ccSubmitCompletion(st) {
+  try {
+    if (localStorage.getItem(KEY + '_submitted')) return;
+    let score = 0;
+    FINAL.forEach((q, qi) => { if (st.picks && st.picks['f' + qi] === q.c) score++; });
+    fetch('https://siivpekcaryeyttszwav.supabase.co/rest/v1/orientation_completions', {
+      method: 'POST',
+      headers: { 'apikey': 'sb_publishable_iDJ00Ve4hw5iw2YtVmiulg__FmjShmO',
+                 'Authorization': 'Bearer sb_publishable_iDJ00Ve4hw5iw2YtVmiulg__FmjShmO',
+                 'Content-Type': 'application/json', 'Prefer': 'return=minimal' },
+      body: JSON.stringify({
+        course: COURSE_ID,
+        name: (st.name || '').trim(),
+        date_signed: st.date || '',
+        score: score, total: FINAL.length,
+        elapsed_min: Math.max(1, Math.round((Date.now() - (st.started || Date.now())) / 60000)),
+        acks: [1,2,3,4,5,6,7].every(n => !!st['ack' + n]),
+        user_agent: (navigator.userAgent || '').slice(0, 180)
+      })
+    }).then(r => { if (r.ok) localStorage.setItem(KEY + '_submitted', '1'); }).catch(() => {});
+  } catch (e) {}
+}
+
 const PHONE = '417-218-2888, or toll free at 866-863-5151';
 
 const MODS = [
@@ -1346,6 +1374,7 @@ class Component extends DCLogic {
     v.finishLockMsg = 'Finish all 8 modules and pass the final check before completing your orientation.';
     v.finish = () => {
       if (!ready) return;
+      ccSubmitCompletion(st);
       this.persist({ finishedAt: Date.now(), view: 'done' });
       if (typeof window !== 'undefined') window.scrollTo(0, 0);
     };
