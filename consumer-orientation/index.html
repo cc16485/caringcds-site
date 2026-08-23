@@ -1,0 +1,1683 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous" />
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@600;700;800&family=Source+Sans+3:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+  html, body { margin: 0; padding: 0; background: #F5F9FA; }
+  * { box-sizing: border-box; }
+  a { color: #14807A; text-decoration: underline; text-underline-offset: 3px; }
+  a:hover { color: #103860; }
+  button { font-family: 'Source Sans 3', system-ui, sans-serif; }
+  @media print { .no-print { display: none !important; } }
+  @keyframes ccSpin { to { transform: rotate(360deg); } }
+  @keyframes ccSpinSlow { to { transform: rotate(-360deg); } }
+  @keyframes ccPulse { 0%,100% { transform: scale(1); opacity: .9 } 50% { transform: scale(1.06); opacity: 1 } }
+  @keyframes ccRing { 0% { transform: scale(.6); opacity: .75 } 100% { transform: scale(1.5); opacity: 0 } }
+  @keyframes ccFloat { 0%,100% { transform: translateY(0) } 50% { transform: translateY(-10px) } }
+  @keyframes ccDrift { 0% { transform: translate3d(0,0,0) } 50% { transform: translate3d(14px,-12px,0) } 100% { transform: translate3d(0,0,0) } }
+</style>
+</helmet>
+<div style="min-height:100vh;background:#F5F9FA;color:#0E2438;font:400 19px/1.62 'Source Sans 3',system-ui,sans-serif;text-wrap:pretty">
+
+  <header class="no-print" style="position:sticky;top:0;z-index:20;background:#FFFFFFF2;backdrop-filter:blur(6px);border-bottom:1px solid #DCE5EA">
+    <div style="max-width:840px;margin:0 auto;padding:12px 20px;display:flex;align-items:center;gap:16px;flex-wrap:wrap">
+      <img src="cc-logo.png" alt="Caring Companions Consumer Directed Services" style="height:38px;width:auto;margin-right:auto" />
+      <div hidden="{{ hideProgress }}" style="display:flex;align-items:center;gap:10px;min-width:150px;flex:1">
+        <div style="flex:1;height:10px;background:#E4EDF0;border-radius:99px;overflow:hidden">
+          <div style="width:{{ pct }};height:100%;background:#38C0B8;border-radius:99px;transition:width .35s ease"></div>
+        </div>
+        <span style="font:700 15px/1 'Source Sans 3',sans-serif;color:#103860;white-space:nowrap">{{ pct }}</span>
+      </div>
+      <button type="button" hidden="{{ hideProgress }}" onClick="{{ goDash }}" style="min-height:44px;padding:0 16px;border:2px solid #C3D0D9;border-radius:10px;background:#fff;color:#103860;font:600 16px/1 'Source Sans 3',sans-serif;cursor:pointer">All modules</button>
+    </div>
+  </header>
+
+  <section hidden="{{ hideWelcome }}" style="max-width:840px;margin:0 auto;padding:42px 20px 80px">
+    <p style="margin:0 0 14px;font:700 13px/1 'Source Sans 3',sans-serif;letter-spacing:.16em;text-transform:uppercase;color:#14807A">Consumer Orientation</p>
+    <h1 style="margin:0 0 18px;font:800 clamp(36px,6.6vw,54px)/1.1 Nunito,system-ui,sans-serif;color:#103860;letter-spacing:-.015em">Your care. Your choice. We will walk you through it.</h1>
+    <p style="margin:0 0 28px;font-size:22px;line-height:1.55;color:#3D5164;max-width:660px">This is your orientation to Missouri's Consumer Directed Services (CDS) program. You will learn what CDS is, what Caring Companions does for you, and how to hire, train and direct your own attendant with confidence.</p>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:14px;margin:0 0 32px">
+      <div style="background:#fff;border:1px solid #DCE5EA;border-radius:16px;padding:20px">
+        <p style="margin:0 0 6px;font:700 18px/1.3 Nunito,sans-serif;color:#103860">8 short modules</p>
+        <p style="margin:0;font-size:17px;color:#4C6070">Go at your own pace. Your place is saved automatically.</p>
+      </div>
+      <div style="background:#fff;border:1px solid #DCE5EA;border-radius:16px;padding:20px">
+        <p style="margin:0 0 6px;font:700 18px/1.3 Nunito,sans-serif;color:#103860">About 60 minutes</p>
+        <p style="margin:0;font-size:17px;color:#4C6070">Stop whenever you need to and come back later.</p>
+      </div>
+      <div style="background:#fff;border:1px solid #DCE5EA;border-radius:16px;padding:20px">
+        <p style="margin:0 0 6px;font:700 18px/1.3 Nunito,sans-serif;color:#103860">Ends with a short check</p>
+        <p style="margin:0;font-size:17px;color:#4C6070">Then you sign an acknowledgment and you are finished.</p>
+      </div>
+    </div>
+    <button type="button" onClick="{{ goDash }}" style="display:inline-flex;align-items:center;justify-content:center;min-height:62px;padding:0 34px;border:none;border-radius:14px;background:#103860;color:#fff;font:700 21px/1 'Source Sans 3',sans-serif;cursor:pointer">Start Orientation</button>
+    <p style="margin:22px 0 0;font-size:17px;color:#5A6E7C">Questions at any point? Call Caring Companions at {{ phone }}. You never have to figure this out alone.</p>
+  </section>
+
+  <section hidden="{{ hideDash }}" style="max-width:840px;margin:0 auto;padding:34px 20px 80px">
+    <h1 style="margin:0 0 8px;font:800 clamp(30px,5vw,40px)/1.12 Nunito,sans-serif;color:#103860">Your orientation</h1>
+    <p style="margin:0 0 26px;font-size:19px;color:#4C6070">Orientation progress: <strong style="color:#14807A">{{ pct }}</strong>, {{ doneCount }} of 8 modules complete.</p>
+    <div style="display:flex;flex-direction:column;gap:12px">
+      <sc-for list="{{ modules }}" as="m" hint-placeholder-count="8">
+        <button type="button" onClick="{{ m.open }}" style="display:flex;gap:16px;align-items:flex-start;text-align:left;width:100%;padding:20px;border:2px solid {{ m.border }};border-radius:16px;background:{{ m.bg }};cursor:pointer">
+          <span style="flex:none;width:46px;height:46px;border-radius:12px;background:{{ m.numBg }};color:{{ m.numColor }};display:flex;align-items:center;justify-content:center;font:800 20px/1 Nunito,sans-serif">{{ m.numMark }}</span>
+          <span style="flex:1;min-width:0">
+            <span style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
+              <span style="font:700 21px/1.3 Nunito,sans-serif;color:#103860">{{ m.t }}</span>
+              <span style="display:inline-flex;align-items:center;gap:6px;padding:5px 12px;border-radius:99px;background:{{ m.badgeBg }};color:{{ m.badgeColor }};font:700 14px/1 'Source Sans 3',sans-serif;letter-spacing:.04em;text-transform:uppercase;white-space:nowrap">{{ m.status }}</span>
+            </span>
+            <span style="display:block;font-size:17px;color:#4C6070;margin-top:6px">{{ m.d }}</span>
+            <span style="display:block;font:600 15px/1 'Source Sans 3',sans-serif;color:#7A8C99;margin-top:10px">{{ m.meta }}</span>
+          </span>
+        </button>
+      </sc-for>
+    </div>
+    <div style="margin-top:26px;background:#fff;border:2px solid #38C0B8;border-radius:16px;padding:22px">
+      <p style="margin:0 0 6px;font:700 21px/1.3 Nunito,sans-serif;color:#103860">Final knowledge check and acknowledgment</p>
+      <p style="margin:0 0 16px;font-size:17px;color:#4C6070">12 questions, then a short acknowledgment you sign with your name and the date.</p>
+      <p hidden="{{ hideFinalLock }}" style="margin:0 0 16px;font-size:18px;font-weight:600;color:#C4551B">{{ finalLockMsg }}</p>
+      <button type="button" disabled="{{ finalLocked }}" onClick="{{ goFinal }}" style="display:inline-flex;align-items:center;justify-content:center;min-height:56px;padding:0 26px;border:none;border-radius:12px;background:{{ finalBtnBg }};color:#fff;font:700 19px/1 'Source Sans 3',sans-serif;cursor:pointer">Go to the final check</button>
+    </div>
+  </section>
+
+  <section hidden="{{ hidePlayer }}" style="max-width:900px;margin:0 auto;padding:28px 20px 10px">
+    <p style="margin:0 0 8px;font:700 13px/1 'Source Sans 3',sans-serif;letter-spacing:.16em;text-transform:uppercase;color:#14807A">{{ vidEyebrow }}</p>
+    <h1 style="margin:0 0 18px;font:800 clamp(28px,5vw,40px)/1.14 Nunito,sans-serif;color:#103860">{{ vidTitle }}</h1>
+
+    <div style="position:relative;border-radius:20px;overflow:hidden;background:{{ stageBg }};border:1px solid #0B2740;transition:background .9s ease">
+      <div style="position:absolute;width:46%;aspect-ratio:1;border-radius:50%;background:{{ blobA }};filter:blur(2px);opacity:.5;top:-14%;right:-10%;animation:ccDrift 16s ease-in-out infinite"></div>
+      <div style="position:absolute;width:34%;aspect-ratio:1;border-radius:50%;background:{{ blobB }};filter:blur(2px);opacity:.4;bottom:-16%;left:-8%;animation:ccDrift 22s ease-in-out infinite reverse"></div>
+
+      <div style="position:relative;aspect-ratio:16/9;width:100%;padding:clamp(18px,3.4vw,40px);display:flex;align-items:center;gap:clamp(16px,3vw,36px)">
+        <div style="flex:1 1 56%;min-width:0;display:flex;flex-direction:column;justify-content:center;gap:clamp(8px,1.4vw,16px)">
+          <p style="margin:0;font:700 clamp(10px,1.2vw,14px)/1 'Source Sans 3',sans-serif;letter-spacing:.18em;text-transform:uppercase;color:#7FE3DC;opacity:{{ sceneKickerOpacity }};transition:opacity .5s ease">{{ sceneKicker }}</p>
+          <p style="margin:0;font:800 clamp(19px,2.9vw,38px)/1.13 Nunito,sans-serif;color:#fff;opacity:{{ sceneTitleOpacity }};transform:translateY({{ sceneTitleY }});transition:opacity .6s ease,transform .6s ease">{{ sceneTitle }}</p>
+          <div style="display:flex;flex-direction:column;gap:clamp(5px,.9vw,11px)">
+            <sc-for list="{{ sceneLines }}" as="l" hint-placeholder-count="4">
+              <div style="display:flex;gap:11px;align-items:flex-start;opacity:{{ l.o }};transform:translateY({{ l.y }});transition:opacity .5s ease,transform .5s ease">
+                <span style="flex:none;width:9px;height:9px;border-radius:3px;background:#38C0B8;margin-top:clamp(5px,.9vw,10px)"></span>
+                <span style="font:500 clamp(12px,1.55vw,20px)/1.4 'Source Sans 3',sans-serif;color:#DCEAF2">{{ l.t }}</span>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+
+        <div style="flex:1 1 40%;align-self:stretch;position:relative;display:flex;align-items:center;justify-content:center">
+          <sc-if value="{{ artOrbit }}" hint-placeholder-val="{{ false }}">
+            <div style="position:relative;width:min(100%,300px);aspect-ratio:1;display:flex;align-items:center;justify-content:center">
+              <div style="position:absolute;inset:0;border-radius:50%;border:2px dashed #2C5C82;animation:ccSpin 40s linear infinite"></div>
+              <div style="position:absolute;inset:16%;border-radius:50%;border:2px solid #1D4B6E;animation:ccSpinSlow 28s linear infinite"></div>
+              <div style="width:34%;aspect-ratio:1;border-radius:50%;background:#38C0B8;display:flex;align-items:center;justify-content:center;font:800 clamp(11px,1.4vw,17px)/1.15 Nunito,sans-serif;color:#08283C;text-align:center;animation:ccPulse 3.4s ease-in-out infinite">{{ artCenter }}</div>
+              <sc-for list="{{ artOrbitDots }}" as="d" hint-placeholder-count="3">
+                <div style="position:absolute;left:{{ d.x }};top:{{ d.y }};transform:translate(-50%,-50%);display:flex;flex-direction:column;align-items:center;gap:6px;opacity:{{ d.o }};transition:opacity .6s ease">
+                  <span style="width:clamp(30px,4.4vw,52px);height:clamp(30px,4.4vw,52px);border-radius:50%;background:#0E3352;border:2px solid #7FE3DC"></span>
+                  <span style="font:700 clamp(9px,1.1vw,14px)/1.2 'Source Sans 3',sans-serif;color:#BFE6E3;white-space:nowrap">{{ d.t }}</span>
+                </div>
+              </sc-for>
+            </div>
+          </sc-if>
+
+          <sc-if value="{{ artClock }}" hint-placeholder-val="{{ false }}">
+            <div style="display:flex;flex-direction:column;align-items:center;gap:14px">
+              <div style="width:min(100%,230px);aspect-ratio:1;border-radius:50%;background:conic-gradient(#38C0B8 0turn {{ artTurn }},#123B5C {{ artTurn }} 1turn);display:flex;align-items:center;justify-content:center;box-shadow:0 0 0 6px #0E3352">
+                <div style="width:62%;aspect-ratio:1;border-radius:50%;background:#0B2740;display:flex;flex-direction:column;align-items:center;justify-content:center">
+                  <span style="font:800 clamp(20px,3vw,34px)/1 Nunito,sans-serif;color:#fff">{{ artBig }}</span>
+                  <span style="font:600 clamp(9px,1.1vw,13px)/1.2 'Source Sans 3',sans-serif;color:#7FE3DC;letter-spacing:.1em;text-transform:uppercase">{{ artSmall }}</span>
+                </div>
+              </div>
+              <span style="font:600 clamp(11px,1.3vw,16px)/1.3 'Source Sans 3',sans-serif;color:#BFE6E3;text-align:center">{{ artCaption }}</span>
+            </div>
+          </sc-if>
+
+          <sc-if value="{{ artMeter }}" hint-placeholder-val="{{ false }}">
+            <div style="width:min(100%,300px);display:flex;flex-direction:column;gap:12px">
+              <div style="position:relative;height:clamp(90px,13vw,150px);display:flex;align-items:flex-end;gap:10px;padding-top:14px">
+                <sc-for list="{{ artBars }}" as="b" hint-placeholder-count="5">
+                  <div style="flex:1;height:{{ b.h }};border-radius:8px 8px 0 0;background:{{ b.c }};transition:height .8s ease"></div>
+                </sc-for>
+                <div style="position:absolute;left:0;right:0;top:8px;border-top:3px dashed #F0B44B"></div>
+                <span style="position:absolute;right:0;top:-12px;font:700 clamp(9px,1.05vw,13px)/1 'Source Sans 3',sans-serif;color:#F0B44B;letter-spacing:.08em;text-transform:uppercase">Your maximum</span>
+              </div>
+              <span style="font:600 clamp(11px,1.3vw,16px)/1.35 'Source Sans 3',sans-serif;color:#BFE6E3">{{ artCaption }}</span>
+            </div>
+          </sc-if>
+
+          <sc-if value="{{ artPhone }}" hint-placeholder-val="{{ false }}">
+            <div style="position:relative;display:flex;flex-direction:column;align-items:center;gap:16px">
+              <div style="position:relative;width:clamp(84px,11vw,124px);height:clamp(140px,18vw,206px);border-radius:20px;border:3px solid #7FE3DC;background:#0E3352;display:flex;align-items:center;justify-content:center;animation:ccFloat 5s ease-in-out infinite">
+                <span style="font:800 clamp(13px,1.7vw,21px)/1.2 Nunito,sans-serif;color:#fff;text-align:center;padding:0 8px">{{ artBig }}</span>
+                <span style="position:absolute;inset:-18px;border-radius:30px;border:2px solid #38C0B8;animation:ccRing 2.6s ease-out infinite"></span>
+                <span style="position:absolute;inset:-18px;border-radius:30px;border:2px solid #38C0B8;animation:ccRing 2.6s ease-out .9s infinite"></span>
+              </div>
+              <span style="font:600 clamp(11px,1.3vw,16px)/1.35 'Source Sans 3',sans-serif;color:#BFE6E3;text-align:center;max-width:260px">{{ artCaption }}</span>
+            </div>
+          </sc-if>
+
+          <sc-if value="{{ artStop }}" hint-placeholder-val="{{ false }}">
+            <div style="display:flex;flex-direction:column;align-items:center;gap:16px">
+              <div style="width:min(100%,210px);aspect-ratio:1;border-radius:26px;background:#B3341F;transform:rotate(45deg);display:flex;align-items:center;justify-content:center;animation:ccPulse 2.8s ease-in-out infinite;box-shadow:0 0 0 8px rgba(179,52,31,.22)">
+                <span style="transform:rotate(-45deg);font:800 clamp(20px,3.1vw,38px)/1 Nunito,sans-serif;color:#fff;letter-spacing:.04em">{{ artBig }}</span>
+              </div>
+              <span style="font:700 clamp(11px,1.35vw,17px)/1.35 'Source Sans 3',sans-serif;color:#FFD9CC;text-align:center;max-width:280px">{{ artCaption }}</span>
+            </div>
+          </sc-if>
+
+          <sc-if value="{{ artCount }}" hint-placeholder-val="{{ false }}">
+            <div style="display:flex;flex-direction:column;align-items:center;gap:10px">
+              <span style="font:800 clamp(56px,11vw,140px)/1 Nunito,sans-serif;color:#38C0B8">{{ artBig }}</span>
+              <span style="font:700 clamp(12px,1.5vw,19px)/1.3 'Source Sans 3',sans-serif;color:#fff;text-align:center;max-width:270px">{{ artSmall }}</span>
+              <span style="font:500 clamp(10px,1.2vw,15px)/1.35 'Source Sans 3',sans-serif;color:#BFE6E3;text-align:center;max-width:270px">{{ artCaption }}</span>
+            </div>
+          </sc-if>
+
+          <sc-if value="{{ artCompare }}" hint-placeholder-val="{{ false }}">
+            <div style="width:100%;display:flex;flex-direction:column;gap:12px">
+              <sc-for list="{{ artRows }}" as="r" hint-placeholder-count="4">
+                <div style="display:flex;gap:10px;align-items:center;background:{{ r.bg }};border-radius:12px;padding:clamp(7px,1.1vw,13px) clamp(9px,1.3vw,15px);opacity:{{ r.o }};transform:translateX({{ r.x }});transition:all .55s ease">
+                  <span style="flex:none;width:clamp(20px,2.5vw,30px);height:clamp(20px,2.5vw,30px);border-radius:50%;background:{{ r.dot }};display:flex;align-items:center;justify-content:center;font:800 clamp(11px,1.4vw,17px)/1 Nunito,sans-serif;color:#fff">{{ r.mark }}</span>
+                  <span style="font:600 clamp(11px,1.35vw,17px)/1.3 'Source Sans 3',sans-serif;color:#fff">{{ r.t }}</span>
+                </div>
+              </sc-for>
+            </div>
+          </sc-if>
+
+          <sc-if value="{{ artGrid }}" hint-placeholder-val="{{ false }}">
+            <div style="width:min(100%,290px);display:grid;grid-template-columns:repeat(5,1fr);gap:clamp(6px,1vw,11px)">
+              <sc-for list="{{ artCells }}" as="c" hint-placeholder-count="15">
+                <div style="aspect-ratio:1;border-radius:8px;background:{{ c.bg }};transform:scale({{ c.s }});transition:all .5s ease"></div>
+              </sc-for>
+            </div>
+          </sc-if>
+        </div>
+      </div>
+      <div style="position:absolute;left:0;right:0;bottom:0;height:5px;background:#123B5C"></div>
+      <div style="position:absolute;left:0;bottom:0;height:5px;width:{{ playPct }};background:#38C0B8;transition:width .2s linear"></div>
+    </div>
+
+    <div class="no-print" style="display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin:16px 0 0">
+      <button type="button" onClick="{{ togglePlay }}" style="min-height:56px;padding:0 26px;border:none;border-radius:12px;background:#103860;color:#fff;font:700 19px/1 'Source Sans 3',sans-serif;cursor:pointer">{{ playLabel }}</button>
+      <button type="button" onClick="{{ restart }}" style="min-height:56px;padding:0 20px;border:2px solid #C3D0D9;border-radius:12px;background:#fff;color:#103860;font:600 17px/1 'Source Sans 3',sans-serif;cursor:pointer">Start over</button>
+      <span style="font:600 17px/1 'Source Sans 3',sans-serif;color:#5A6E7C">{{ timeLabel }}</span>
+      <span style="margin-left:auto;font:600 16px/1.3 'Source Sans 3',sans-serif;color:#5A6E7C">{{ sceneCounter }}</span>
+    </div>
+
+    <div hidden="{{ hideAudioNotice }}" style="margin-top:14px;background:#FFF7E6;border:1px solid #F0DCA8;border-left:6px solid #C98A16;border-radius:12px;padding:16px;font-size:17px">
+      Voiceover not found yet. Drop the recorded file at <strong>{{ audioSrc }}</strong> and it will play here automatically. The visuals are running on estimated timing for now.
+    </div>
+
+    <div class="no-print" style="display:flex;gap:12px;flex-wrap:wrap;margin-top:20px">
+      <button type="button" onClick="{{ nextFromVideo }}" style="min-height:58px;padding:0 26px;border:none;border-radius:12px;background:#103860;color:#fff;font:700 19px/1 'Source Sans 3',sans-serif;cursor:pointer">Mark complete and continue</button>
+      <button type="button" onClick="{{ goDash }}" style="min-height:58px;padding:0 22px;border:2px solid #C3D0D9;border-radius:12px;background:#fff;color:#103860;font:600 18px/1 'Source Sans 3',sans-serif;cursor:pointer">Back to modules</button>
+    </div>
+
+    <div style="margin-top:18px;background:#fff;border:1px solid #DCE5EA;border-radius:18px;overflow:hidden">
+      <button type="button" onClick="{{ toggleTranscript }}" style="display:flex;width:100%;align-items:center;gap:12px;text-align:left;padding:18px 20px;border:none;background:#fff;cursor:pointer">
+        <span style="flex:none;width:32px;height:32px;border-radius:9px;background:#EAF6F5;color:#14807A;display:flex;align-items:center;justify-content:center;font:800 17px/1 Nunito,sans-serif">{{ transcriptSign }}</span>
+        <span style="flex:1;font:700 19px/1.3 Nunito,sans-serif;color:#103860">{{ transcriptLabel }}</span>
+      </button>
+      <div hidden="{{ hideTranscript }}" style="padding:0 20px 20px;display:flex;flex-direction:column;gap:12px">
+        <sc-for list="{{ transcript }}" as="p" hint-placeholder-count="6">
+          <p style="margin:0;font-size:18px;line-height:1.6;color:{{ p.color }}">{{ p.t }}</p>
+        </sc-for>
+      </div>
+    </div>
+    <sc-if value="{{ watching }}" hint-placeholder-val="{{ true }}">
+      <audio ref="{{ audioRef }}" preload="auto" style="display:none"></audio>
+    </sc-if>
+  </section>
+
+  <article hidden="{{ hideM1 }}" style="max-width:760px;margin:0 auto;padding:34px 20px 90px">
+    <p style="margin:0 0 10px;font:700 13px/1 'Source Sans 3',sans-serif;letter-spacing:.16em;text-transform:uppercase;color:#14807A">Module 1 of 8</p>
+    <h1 style="margin:0 0 16px;font:800 clamp(30px,5.4vw,42px)/1.14 Nunito,sans-serif;color:#103860">Welcome to CDS</h1>
+    <p style="margin:0 0 26px;font-size:21px;color:#3D5164">Consumer Directed Services, or CDS, is a Missouri Medicaid program that lets you stay in your own home and hire your own caregiver, called an attendant. You are in charge of your care.</p>
+
+    <h2 style="margin:30px 0 12px;font:700 26px/1.25 Nunito,sans-serif;color:#103860">The one thing that makes CDS different</h2>
+    <p style="margin:0 0 18px">With a traditional home care agency, the agency picks the caregiver, sets the schedule, and tells that caregiver what to do. In CDS, you do those things. You are the employer of your attendant, which means you are responsible for hiring, training, supervising and directing them.</p>
+    <div style="background:#FFF7E6;border:1px solid #F0DCA8;border-left:6px solid #C98A16;border-radius:14px;padding:20px;margin:0 0 24px">
+      <p style="margin:0 0 6px;font:700 13px/1 'Source Sans 3',sans-serif;letter-spacing:.14em;text-transform:uppercase;color:#8A6B18">Remember</p>
+      <p style="margin:0;font-size:19px">CDS gives you more control over your care. That control also means you have real responsibilities as the consumer. This orientation teaches you exactly what they are.</p>
+    </div>
+
+    <h2 style="margin:30px 0 12px;font:700 26px/1.25 Nunito,sans-serif;color:#103860">Words you will hear</h2>
+    <div style="display:flex;flex-direction:column;gap:12px;margin:0 0 12px">
+      <div style="background:#fff;border:1px solid #DCE5EA;border-radius:14px;padding:18px">
+        <p style="margin:0 0 4px;font:700 19px/1.3 Nunito,sans-serif;color:#103860">Consumer</p>
+        <p style="margin:0;font-size:18px;color:#4C6070">You. A person the Missouri Department of Health and Senior Services (DHSS) has found eligible for CDS.</p>
+      </div>
+      <div style="background:#fff;border:1px solid #DCE5EA;border-radius:14px;padding:18px">
+        <p style="margin:0 0 4px;font:700 19px/1.3 Nunito,sans-serif;color:#103860">Attendant</p>
+        <p style="margin:0;font-size:18px;color:#4C6070">The person you hire to help with your daily tasks. Your attendant is your employee, not an employee of Caring Companions, DHSS, or the state of Missouri.</p>
+      </div>
+      <div style="background:#fff;border:1px solid #DCE5EA;border-radius:14px;padding:18px">
+        <p style="margin:0 0 4px;font:700 19px/1.3 Nunito,sans-serif;color:#103860">Vendor</p>
+        <p style="margin:0;font-size:18px;color:#4C6070">Caring Companions. We hold the agreement with DHSS to handle payroll, attendant screening, monitoring, and your training and support.</p>
+      </div>
+      <div style="background:#fff;border:1px solid #DCE5EA;border-radius:14px;padding:18px">
+        <p style="margin:0 0 4px;font:700 19px/1.3 Nunito,sans-serif;color:#103860">Plan of care</p>
+        <p style="margin:0;font-size:18px;color:#4C6070">The document created from your DHSS assessment. It lists the tasks you are approved for, how often, and the maximum units of care you may use.</p>
+      </div>
+      <div style="background:#fff;border:1px solid #DCE5EA;border-radius:14px;padding:18px">
+        <p style="margin:0 0 4px;font:700 19px/1.3 Nunito,sans-serif;color:#103860">Unit of service</p>
+        <p style="margin:0;font-size:18px;color:#4C6070">One unit equals 15 minutes of care.</p>
+      </div>
+      <div style="background:#fff;border:1px solid #DCE5EA;border-radius:14px;padding:18px">
+        <p style="margin:0 0 4px;font:700 19px/1.3 Nunito,sans-serif;color:#103860">Unmet needs</p>
+        <p style="margin:0;font-size:18px;color:#4C6070">Daily tasks that cannot reasonably be met by people already in your household without causing undue hardship. CDS pays for unmet needs.</p>
+      </div>
+    </div>
+
+    <h2 style="margin:30px 0 12px;font:700 26px/1.25 Nunito,sans-serif;color:#103860">The kinds of help CDS can cover</h2>
+    <p style="margin:0 0 10px">Your plan of care may include routine tasks such as bowel and bladder needs, dressing and undressing, moving into and out of bed, preparing and eating food and drink, bathing and grooming, shopping and transportation, using aids and equipment, walking, and housekeeping.</p>
+    <p style="margin:0 0 8px;color:#4C6070">Your own plan of care is the final word on which of these you are approved for.</p>
+
+    <div style="background:#fff;border:2px solid #E4EDF0;border-radius:18px;padding:24px;margin:34px 0 26px">
+      <p style="margin:0 0 4px;font:700 13px/1 'Source Sans 3',sans-serif;letter-spacing:.14em;text-transform:uppercase;color:#14807A">Knowledge check</p>
+      <p style="margin:0 0 16px;font:700 22px/1.35 Nunito,sans-serif;color:#103860">True or false: in CDS, Caring Companions decides who provides your care and how your tasks are done.</p>
+      <div style="display:flex;flex-direction:column;gap:10px">
+        <button type="button" onClick="{{ p_m1_0 }}" style="text-align:left;width:100%;min-height:56px;padding:14px 18px;border:2px solid #D5E0E6;border-radius:12px;background:#fff;font:500 18px/1.4 'Source Sans 3',sans-serif;cursor:pointer">True</button>
+        <button type="button" onClick="{{ p_m1_1 }}" style="text-align:left;width:100%;min-height:56px;padding:14px 18px;border:2px solid #D5E0E6;border-radius:12px;background:#fff;font:500 18px/1.4 'Source Sans 3',sans-serif;cursor:pointer">False</button>
+      </div>
+      <div hidden="{{ hideOk_m1 }}" style="margin-top:14px;background:#EAF7F1;border-left:6px solid #1E8A5F;border-radius:12px;padding:16px;font-size:18px">Correct. You choose, hire, train and direct your attendant. Caring Companions handles the vendor duties such as payroll, background screening and monitoring.</div>
+      <div hidden="{{ hideNo_m1 }}" style="margin-top:14px;background:#FFF4EC;border-left:6px solid #C4551B;border-radius:12px;padding:16px;font-size:18px">{{ fb_m1 }}</div>
+    </div>
+    <div class="no-print" style="display:flex;gap:12px;flex-wrap:wrap">
+      <button type="button" onClick="{{ next1 }}" style="min-height:58px;padding:0 26px;border:none;border-radius:12px;background:#103860;color:#fff;font:700 19px/1 'Source Sans 3',sans-serif;cursor:pointer">Mark complete and continue</button>
+      <button type="button" onClick="{{ goDash }}" style="min-height:58px;padding:0 22px;border:2px solid #C3D0D9;border-radius:12px;background:#fff;color:#103860;font:600 18px/1 'Source Sans 3',sans-serif;cursor:pointer">Back to modules</button>
+    </div>
+  </article>
+
+  <article hidden="{{ hideM2 }}" style="max-width:760px;margin:0 auto;padding:34px 20px 90px">
+    <p style="margin:0 0 10px;font:700 13px/1 'Source Sans 3',sans-serif;letter-spacing:.16em;text-transform:uppercase;color:#14807A">Module 2 of 8</p>
+    <h1 style="margin:0 0 16px;font:800 clamp(30px,5.4vw,42px)/1.14 Nunito,sans-serif;color:#103860">Who does what</h1>
+    <p style="margin:0 0 26px;font-size:21px;color:#3D5164">Three people share the work in CDS: you, your attendant, and Caring Companions. Here is the honest split.</p>
+
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px;margin:0 0 26px">
+      <div style="background:#103860;color:#fff;border-radius:16px;padding:22px">
+        <p style="margin:0 0 10px;font:700 20px/1.3 Nunito,sans-serif">You, the consumer</p>
+        <p style="margin:0;font-size:17px;line-height:1.55;color:#D8E6EE">Choose and hire your attendant. Train them. Set the schedule. Supervise the work. Report changes. Keep your Medicaid active.</p>
+      </div>
+      <div style="background:#fff;border:1px solid #DCE5EA;border-radius:16px;padding:22px">
+        <p style="margin:0 0 10px;font:700 20px/1.3 Nunito,sans-serif;color:#103860">Your attendant</p>
+        <p style="margin:0;font-size:17px;line-height:1.55;color:#4C6070">Show up as scheduled. Do only the tasks on your plan of care. Clock in and out accurately. Keep your information private.</p>
+      </div>
+      <div style="background:#EAF6F5;border:1px solid #B9E3DF;border-radius:16px;padding:22px">
+        <p style="margin:0 0 10px;font:700 20px/1.3 Nunito,sans-serif;color:#103860">Caring Companions</p>
+        <p style="margin:0;font-size:17px;line-height:1.55;color:#3D5164">Payroll and taxes. Background screening. Medicaid billing. Monthly case management. Training and support for you.</p>
+      </div>
+    </div>
+
+    <h2 style="margin:30px 0 12px;font:700 26px/1.25 Nunito,sans-serif;color:#103860">What Caring Companions does for you</h2>
+    <ul style="margin:0 0 22px;padding-left:24px;display:flex;flex-direction:column;gap:8px">
+      <li>Collect your attendant's time, certify it, and pay your attendant on your behalf</li>
+      <li>Pay all payroll, employment and other taxes on time</li>
+      <li>File the Medicaid claims for your services</li>
+      <li>Keep a list of eligible attendants and screen them through the Family Care Safety Registry, the Employee Disqualification List, and the federal exclusion list</li>
+      <li>Train and orient you in the skills needed to recruit, employ, instruct, supervise and keep an attendant</li>
+      <li>Answer your questions and help with problems</li>
+      <li>Keep your records confidential</li>
+      <li>Check in with you at least monthly and monitor your use of authorized units</li>
+      <li>Make sure you have an emergency and backup plan</li>
+    </ul>
+
+    <h2 style="margin:30px 0 12px;font:700 26px/1.25 Nunito,sans-serif;color:#103860">What Caring Companions does not do</h2>
+    <div style="background:#FFF4EC;border:1px solid #F3CDB3;border-left:6px solid #C4551B;border-radius:14px;padding:20px;margin:0 0 24px">
+      <ul style="margin:0;padding-left:22px;display:flex;flex-direction:column;gap:8px;font-size:18px">
+        <li>We do not choose your attendant for you or send a substitute when yours cannot come</li>
+        <li>We do not set your schedule or tell your attendant how you like things done</li>
+        <li>We do not decide how many hours you get. DHSS does that through your assessment</li>
+        <li>We do not supply cleaning products, gloves, gas or a vehicle. Those are yours to provide</li>
+        <li>Your attendant is never our employee, so day to day direction comes from you</li>
+      </ul>
+    </div>
+    <div style="background:#EAF6F5;border:1px solid #B9E3DF;border-left:6px solid #14807A;border-radius:14px;padding:20px;margin:0 0 24px">
+      <p style="margin:0 0 6px;font:700 13px/1 'Source Sans 3',sans-serif;letter-spacing:.14em;text-transform:uppercase;color:#14807A">Call us</p>
+      <p style="margin:0;font-size:19px">You do not have to figure everything out yourself. If you are unsure whether something is allowed, call us at {{ phone }} before you do it.</p>
+    </div>
+
+    <div style="background:#fff;border:2px solid #E4EDF0;border-radius:18px;padding:24px;margin:34px 0 26px">
+      <p style="margin:0 0 4px;font:700 13px/1 'Source Sans 3',sans-serif;letter-spacing:.14em;text-transform:uppercase;color:#14807A">What would you do?</p>
+      <p style="margin:0 0 16px;font:700 22px/1.35 Nunito,sans-serif;color:#103860">Your attendant calls at 7 a.m. and says they cannot come today. Who is responsible for finding a replacement?</p>
+      <div style="display:flex;flex-direction:column;gap:10px">
+        <button type="button" onClick="{{ p_m2_0 }}" style="text-align:left;width:100%;min-height:56px;padding:14px 18px;border:2px solid #D5E0E6;border-radius:12px;background:#fff;font:500 18px/1.4 'Source Sans 3',sans-serif;cursor:pointer">Caring Companions sends someone else out today</button>
+        <button type="button" onClick="{{ p_m2_1 }}" style="text-align:left;width:100%;min-height:56px;padding:14px 18px;border:2px solid #D5E0E6;border-radius:12px;background:#fff;font:500 18px/1.4 'Source Sans 3',sans-serif;cursor:pointer">You are, which is why you are encouraged to have a backup attendant already hired</button>
+        <button type="button" onClick="{{ p_m2_2 }}" style="text-align:left;width:100%;min-height:56px;padding:14px 18px;border:2px solid #D5E0E6;border-radius:12px;background:#fff;font:500 18px/1.4 'Source Sans 3',sans-serif;cursor:pointer">DHSS assigns a replacement attendant</button>
+      </div>
+      <div hidden="{{ hideOk_m2 }}" style="margin-top:14px;background:#EAF7F1;border-left:6px solid #1E8A5F;border-radius:12px;padding:16px;font-size:18px">Correct. You are the employer, so covering a call off is your responsibility. That is why consumers are strongly encouraged to hire a backup attendant in addition to a primary one. Call us if you are left without care and need help.</div>
+      <div hidden="{{ hideNo_m2 }}" style="margin-top:14px;background:#FFF4EC;border-left:6px solid #C4551B;border-radius:12px;padding:16px;font-size:18px">{{ fb_m2 }}</div>
+    </div>
+    <div class="no-print" style="display:flex;gap:12px;flex-wrap:wrap">
+      <button type="button" onClick="{{ next2 }}" style="min-height:58px;padding:0 26px;border:none;border-radius:12px;background:#103860;color:#fff;font:700 19px/1 'Source Sans 3',sans-serif;cursor:pointer">Mark complete and continue</button>
+      <button type="button" onClick="{{ goDash }}" style="min-height:58px;padding:0 22px;border:2px solid #C3D0D9;border-radius:12px;background:#fff;color:#103860;font:600 18px/1 'Source Sans 3',sans-serif;cursor:pointer">Back to modules</button>
+    </div>
+  </article>
+
+  <article hidden="{{ hideM3 }}" style="max-width:760px;margin:0 auto;padding:34px 20px 90px">
+    <p style="margin:0 0 10px;font:700 13px/1 'Source Sans 3',sans-serif;letter-spacing:.16em;text-transform:uppercase;color:#14807A">Module 3 of 8</p>
+    <h1 style="margin:0 0 16px;font:800 clamp(30px,5.4vw,42px)/1.14 Nunito,sans-serif;color:#103860">Your responsibilities</h1>
+    <p style="margin:0 0 26px;font-size:21px;color:#3D5164">These come straight from the CDS rules. None of them are hard on their own, and we will help with any of them.</p>
+
+    <h2 style="margin:24px 0 12px;font:700 26px/1.25 Nunito,sans-serif;color:#103860">Your plan of care</h2>
+    <p style="margin:0 0 18px">Your plan of care comes from an assessment done in your home by DHSS. It lists the maximum units of personal care you may use, which services you get and how often, when services start, and when you will be reassessed. You and DHSS both sign it, and you and Caring Companions each get a copy. Your needs are reassessed at least once a year.</p>
+
+    <h2 style="margin:30px 0 10px;font:700 26px/1.25 Nunito,sans-serif;color:#103860">What your care plan actually looks like</h2>
+    <p style="margin:0 0 16px">This is a real state care plan with all personal information replaced. Yours arrives in this same format.</p>
+
+    <div style="border:1px solid #C3D0D9;border-radius:16px;overflow:hidden;background:#fff;margin:0 0 18px">
+      <div style="background:#103860;color:#fff;padding:16px 20px">
+        <p style="margin:0;font:700 19px/1.3 Nunito,sans-serif">Home and Community Based Services Care Plan</p>
+        <p style="margin:4px 0 0;font-size:16px;color:#BFD5E4">Sample only. Names, addresses and numbers have been replaced.</p>
+      </div>
+      <div style="padding:20px;display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:16px;border-bottom:1px solid #E4EDF0">
+        <div>
+          <p style="margin:0 0 2px;font:700 12px/1 'Source Sans 3',sans-serif;letter-spacing:.12em;text-transform:uppercase;color:#7A8C99">Participant</p>
+          <p style="margin:0;font-size:18px;font-weight:600;color:#103860">EXAMPLE CONSUMER</p>
+        </div>
+        <div>
+          <p style="margin:0 0 2px;font:700 12px/1 'Source Sans 3',sans-serif;letter-spacing:.12em;text-transform:uppercase;color:#7A8C99">Physical address</p>
+          <p style="margin:0;font-size:18px;color:#3D5164">123 Example Street, Apt 100<br />Springfield, MO 65800</p>
+        </div>
+        <div>
+          <p style="margin:0 0 2px;font:700 12px/1 'Source Sans 3',sans-serif;letter-spacing:.12em;text-transform:uppercase;color:#7A8C99">Primary phone</p>
+          <p style="margin:0;font-size:18px;color:#3D5164">(417) 555-0100</p>
+        </div>
+        <div>
+          <p style="margin:0 0 2px;font:700 12px/1 'Source Sans 3',sans-serif;letter-spacing:.12em;text-transform:uppercase;color:#7A8C99">DCN</p>
+          <p style="margin:0;font-size:18px;color:#3D5164">00000000</p>
+        </div>
+        <div>
+          <p style="margin:0 0 2px;font:700 12px/1 'Source Sans 3',sans-serif;letter-spacing:.12em;text-transform:uppercase;color:#7A8C99">Date of birth</p>
+          <p style="margin:0;font-size:18px;color:#3D5164">01/01/1970</p>
+        </div>
+        <div>
+          <p style="margin:0 0 2px;font:700 12px/1 'Source Sans 3',sans-serif;letter-spacing:.12em;text-transform:uppercase;color:#7A8C99">Care plan period</p>
+          <p style="margin:0;font-size:18px;color:#3D5164">08/04/2025 to 06/30/2026</p>
+        </div>
+      </div>
+      <div style="padding:20px;border-bottom:1px solid #E4EDF0">
+        <p style="margin:0 0 12px;font:700 17px/1.3 Nunito,sans-serif;color:#103860">Authorized service</p>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:14px;font-size:17px;color:#3D5164">
+          <div><strong style="color:#103860">Service type</strong><br />PC - CDS</div>
+          <div><strong style="color:#103860">Dates</strong><br />08/04/2025 to 06/30/2026</div>
+          <div><strong style="color:#103860">Provider</strong><br />Caring Companions</div>
+          <div><strong style="color:#103860">Procedure code</strong><br />T1019</div>
+        </div>
+      </div>
+      <div style="padding:20px;border-bottom:1px solid #E4EDF0">
+        <p style="margin:0 0 12px;font:700 17px/1.3 Nunito,sans-serif;color:#103860">Authorized units by month</p>
+        <div style="overflow-x:auto">
+          <table style="border-collapse:collapse;width:100%;min-width:380px;font-size:17px">
+            <tr style="background:#F2F7F9">
+              <th style="text-align:left;padding:10px 12px;border-bottom:1px solid #E4EDF0;color:#103860">Month</th>
+              <th style="text-align:right;padding:10px 12px;border-bottom:1px solid #E4EDF0;color:#103860">Units</th>
+              <th style="text-align:right;padding:10px 12px;border-bottom:1px solid #E4EDF0;color:#103860">Hours</th>
+            </tr>
+            <sc-for list="{{ planMonths }}" as="pm" hint-placeholder-count="11">
+              <tr>
+                <td style="padding:9px 12px;border-bottom:1px solid #F0F4F6;color:#3D5164">{{ pm.m }}</td>
+                <td style="padding:9px 12px;text-align:right;border-bottom:1px solid #F0F4F6;color:#3D5164">{{ pm.u }}</td>
+                <td style="padding:9px 12px;text-align:right;border-bottom:1px solid #F0F4F6;color:#3D5164">{{ pm.h }}</td>
+              </tr>
+            </sc-for>
+          </table>
+        </div>
+        <p style="margin:12px 0 0;font-size:17px;color:#5A6E7C">Units are 15 minutes each, so 243 units is about 60 hours for the month. Monthly totals differ because months differ in length.</p>
+      </div>
+      <div style="padding:20px">
+        <p style="margin:0 0 12px;font:700 17px/1.3 Nunito,sans-serif;color:#103860">Authorized tasks</p>
+        <div style="overflow-x:auto">
+          <table style="border-collapse:collapse;width:100%;min-width:420px;font-size:17px">
+            <tr style="background:#F2F7F9">
+              <th style="text-align:left;padding:10px 12px;border-bottom:1px solid #E4EDF0;color:#103860">Task</th>
+              <th style="text-align:right;padding:10px 12px;border-bottom:1px solid #E4EDF0;color:#103860">Minutes per day</th>
+              <th style="text-align:right;padding:10px 12px;border-bottom:1px solid #E4EDF0;color:#103860">Days per week</th>
+            </tr>
+            <sc-for list="{{ planTasks }}" as="pt" hint-placeholder-count="15">
+              <tr>
+                <td style="padding:9px 12px;border-bottom:1px solid #F0F4F6;color:#3D5164">{{ pt.t }}</td>
+                <td style="padding:9px 12px;text-align:right;border-bottom:1px solid #F0F4F6;color:#3D5164">{{ pt.m }}</td>
+                <td style="padding:9px 12px;text-align:right;border-bottom:1px solid #F0F4F6;color:#3D5164">{{ pt.d }}</td>
+              </tr>
+            </sc-for>
+          </table>
+        </div>
+      </div>
+    </div>
+    <h2 style="margin:26px 0 10px;font:700 26px/1.25 Nunito,sans-serif;color:#103860">No two plans are the same</h2>
+    <p style="margin:0 0 16px">Here are two real plans side by side, both anonymized. Same program, same provider, different approvals, because each one came from a different assessment.</p>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:14px;margin:0 0 20px">
+      <div style="background:#fff;border:1px solid #DCE5EA;border-radius:16px;padding:20px">
+        <p style="margin:0 0 8px;font:700 19px/1.3 Nunito,sans-serif;color:#103860">Example Consumer A</p>
+        <p style="margin:0 0 10px;font-size:17px;color:#4C6070">243 units in a full month, about 60 hours, or roughly 2 hours a day.</p>
+        <p style="margin:0;font-size:17px;color:#4C6070">15 approved tasks including bathing 3 days a week, laundry off site, treatments daily, and essential transportation.</p>
+      </div>
+      <div style="background:#fff;border:1px solid #DCE5EA;border-radius:16px;padding:20px">
+        <p style="margin:0 0 8px;font:700 19px/1.3 Nunito,sans-serif;color:#103860">Example Consumer B</p>
+        <p style="margin:0 0 10px;font-size:17px;color:#4C6070">314 units in a full month, about 78 hours, or roughly 2 and a half hours a day.</p>
+        <p style="margin:0;font-size:17px;color:#4C6070">15 approved tasks including bathing 7 days a week, laundry at home, making the bed daily, and essential correspondence.</p>
+      </div>
+    </div>
+    <p style="margin:0 0 22px">Notice that B is approved for more time and for bathing every day, while A is approved for treatments and off site laundry that B is not. Your plan is yours. Do not compare your hours to a friend's and assume something is wrong.</p>
+
+    <div style="background:#EAF6F5;border:1px solid #B9E3DF;border-left:6px solid #14807A;border-radius:14px;padding:20px;margin:0 0 26px">
+      <p style="margin:0 0 6px;font:700 13px/1 'Source Sans 3',sans-serif;letter-spacing:.14em;text-transform:uppercase;color:#14807A">How to read it</p>
+      <p style="margin:0;font-size:19px">The task list is what your attendant may do. The monthly units are the most care that may be recorded that month. If something you need is not on the task list, call us before asking your attendant to do it.</p>
+    </div>
+
+    <h2 style="margin:30px 0 12px;font:700 26px/1.25 Nunito,sans-serif;color:#103860">Your ten responsibilities as the employer</h2>
+    <ol style="margin:0 0 24px;padding-left:26px;display:flex;flex-direction:column;gap:10px">
+      <li>Select, hire, train and supervise your attendant</li>
+      <li>Use the electronic time tracking system we designate to track your attendant's time worked</li>
+      <li>Make sure the time submitted never goes over the units authorized in your plan of care</li>
+      <li>Tell DHSS and Caring Companions within ten days about any change that affects your plan of care, including a move</li>
+      <li>Tell us promptly about any problem with the quality of your attendant's work. If we cannot resolve it together, it goes to DHSS</li>
+      <li>Keep your Medicaid status active, including meeting your spenddown each month if you have one</li>
+      <li>Train your attendant on how to complete the tasks authorized on your plan of care</li>
+      <li>Provide the supplies and equipment your attendant needs for authorized tasks, such as cleaning supplies, a vehicle and gas</li>
+      <li>Let your attendant and Caring Companions know if you will not be home for a scheduled shift</li>
+      <li>Tell Caring Companions when you are hospitalized</li>
+    </ol>
+
+    <div style="background:#FFF7E6;border:1px solid #F0DCA8;border-left:6px solid #C98A16;border-radius:14px;padding:20px;margin:0 0 24px">
+      <p style="margin:0 0 6px;font:700 13px/1 'Source Sans 3',sans-serif;letter-spacing:.14em;text-transform:uppercase;color:#8A6B18">Remember</p>
+      <p style="margin:0;font-size:19px">If you have a Medicaid spenddown, it must be met every month for your attendant to be paid. An inactive Medicaid status stops attendant pay.</p>
+    </div>
+
+    <h2 style="margin:24px 0 12px;font:700 26px/1.25 Nunito,sans-serif;color:#103860">Staying in the program</h2>
+    <p style="margin:0 0 12px">DHSS can reduce, deny or end CDS in certain situations, including when a consumer can no longer direct their own care, moves into a facility, falsifies records or commits fraud, is persistently noncompliant with the plan of care, or when a member of the household threatens or abuses the attendant or our staff.</p>
+    <p style="margin:0 0 8px">If DHSS denies, reduces or ends your services, you get that decision in writing and you may request a hearing. Services continue during that period unless you ask in writing to stop them.</p>
+
+    <div style="background:#fff;border:2px solid #E4EDF0;border-radius:18px;padding:24px;margin:34px 0 26px">
+      <p style="margin:0 0 4px;font:700 13px/1 'Source Sans 3',sans-serif;letter-spacing:.14em;text-transform:uppercase;color:#14807A">Knowledge check</p>
+      <p style="margin:0 0 16px;font:700 22px/1.35 Nunito,sans-serif;color:#103860">Which of these is your responsibility as the consumer?</p>
+      <div style="display:flex;flex-direction:column;gap:10px">
+        <button type="button" onClick="{{ p_m3_0 }}" style="text-align:left;width:100%;min-height:56px;padding:14px 18px;border:2px solid #D5E0E6;border-radius:12px;background:#fff;font:500 18px/1.4 'Source Sans 3',sans-serif;cursor:pointer">Providing the cleaning supplies, gloves, vehicle or gas needed for your authorized tasks</button>
+        <button type="button" onClick="{{ p_m3_1 }}" style="text-align:left;width:100%;min-height:56px;padding:14px 18px;border:2px solid #D5E0E6;border-radius:12px;background:#fff;font:500 18px/1.4 'Source Sans 3',sans-serif;cursor:pointer">Paying your attendant's wages out of your own pocket</button>
+        <button type="button" onClick="{{ p_m3_2 }}" style="text-align:left;width:100%;min-height:56px;padding:14px 18px;border:2px solid #D5E0E6;border-radius:12px;background:#fff;font:500 18px/1.4 'Source Sans 3',sans-serif;cursor:pointer">Running your attendant's background screening</button>
+      </div>
+      <div hidden="{{ hideOk_m3 }}" style="margin-top:14px;background:#EAF7F1;border-left:6px solid #1E8A5F;border-radius:12px;padding:16px;font-size:18px">Correct. Supplies and equipment for authorized tasks are the consumer's responsibility. Attendants are not required to bring their own.</div>
+      <div hidden="{{ hideNo_m3 }}" style="margin-top:14px;background:#FFF4EC;border-left:6px solid #C4551B;border-radius:12px;padding:16px;font-size:18px">{{ fb_m3 }}</div>
+    </div>
+    <div class="no-print" style="display:flex;gap:12px;flex-wrap:wrap">
+      <button type="button" onClick="{{ next3 }}" style="min-height:58px;padding:0 26px;border:none;border-radius:12px;background:#103860;color:#fff;font:700 19px/1 'Source Sans 3',sans-serif;cursor:pointer">Mark complete and continue</button>
+      <button type="button" onClick="{{ goDash }}" style="min-height:58px;padding:0 22px;border:2px solid #C3D0D9;border-radius:12px;background:#fff;color:#103860;font:600 18px/1 'Source Sans 3',sans-serif;cursor:pointer">Back to modules</button>
+    </div>
+  </article>
+
+  <article hidden="{{ hideM4 }}" style="max-width:760px;margin:0 auto;padding:34px 20px 90px">
+    <p style="margin:0 0 10px;font:700 13px/1 'Source Sans 3',sans-serif;letter-spacing:.16em;text-transform:uppercase;color:#14807A">Module 4 of 8</p>
+    <h1 style="margin:0 0 16px;font:800 clamp(30px,5.4vw,42px)/1.14 Nunito,sans-serif;color:#103860">Hiring your attendant</h1>
+    <p style="margin:0 0 26px;font-size:21px;color:#3D5164">You get to choose. Often that is a family member, a friend or a neighbor. Here are the rules and some practical advice.</p>
+
+    <h2 style="margin:24px 0 12px;font:700 26px/1.25 Nunito,sans-serif;color:#103860">Who may work as your attendant</h2>
+    <ul style="margin:0 0 20px;padding-left:24px;display:flex;flex-direction:column;gap:8px">
+      <li>At least 18 years old</li>
+      <li>Able to meet the physical and mental demands of your tasks</li>
+      <li>Willing to keep your information confidential</li>
+      <li>Emotionally mature, dependable, and able to handle an emergency</li>
+      <li>Registered with the Family Care Safety Registry with a clear screening, or holding a Good Cause Waiver from DHSS in good standing</li>
+      <li>Not listed on the Employee Disqualification List or the federal List of Excluded Individuals and Entities</li>
+    </ul>
+    <div style="background:#FFF4EC;border:1px solid #F3CDB3;border-left:6px solid #C4551B;border-radius:14px;padding:20px;margin:0 0 24px">
+      <p style="margin:0 0 6px;font:700 13px/1 'Source Sans 3',sans-serif;letter-spacing:.14em;text-transform:uppercase;color:#C4551B">Stop</p>
+      <p style="margin:0;font-size:19px">Your spouse may not be paid as your attendant. No one may begin working, or be paid, until Caring Companions has completed their screening and paperwork.</p>
+    </div>
+
+    <h2 style="margin:24px 0 12px;font:700 26px/1.25 Nunito,sans-serif;color:#103860">How many attendants</h2>
+    <p style="margin:0 0 18px">You may hire up to four attendants. That limit exists because of workers' compensation law. You are strongly encouraged to hire a primary attendant and at least one backup so you are covered when your primary attendant is unavailable.</p>
+
+    <h2 style="margin:24px 0 12px;font:700 26px/1.25 Nunito,sans-serif;color:#103860">You are an equal opportunity employer</h2>
+    <p style="margin:0 0 20px">As the employer you must select attendants without regard to race, color, national origin, sex, age, religion, political beliefs or disability. You may absolutely choose based on skills, reliability, availability and whether the person is a good fit for your needs.</p>
+
+    <h2 style="margin:24px 0 12px;font:700 26px/1.25 Nunito,sans-serif;color:#103860">Questions worth asking before you hire</h2>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px;margin:0 0 24px">
+      <div style="background:#fff;border:1px solid #DCE5EA;border-radius:14px;padding:18px;font-size:18px">Which days and hours can you truly commit to, every week?</div>
+      <div style="background:#fff;border:1px solid #DCE5EA;border-radius:14px;padding:18px;font-size:18px">Are you comfortable with personal care tasks such as bathing and toileting?</div>
+      <div style="background:#fff;border:1px solid #DCE5EA;border-radius:14px;padding:18px;font-size:18px">Do you have reliable transportation, and can you drive for errands if my plan includes them?</div>
+      <div style="background:#fff;border:1px solid #DCE5EA;border-radius:14px;padding:18px;font-size:18px">How will you let me know if you cannot come?</div>
+      <div style="background:#fff;border:1px solid #DCE5EA;border-radius:14px;padding:18px;font-size:18px">Do you have a smartphone for the WellSky app, or will you clock in from my home phone every shift?</div>
+      <div style="background:#fff;border:1px solid #DCE5EA;border-radius:14px;padding:18px;font-size:18px">Can you handle an emergency calmly and follow my instructions?</div>
+    </div>
+
+    <div style="background:#fff;border:2px solid #E4EDF0;border-radius:18px;padding:24px;margin:34px 0 26px">
+      <p style="margin:0 0 4px;font:700 13px/1 'Source Sans 3',sans-serif;letter-spacing:.14em;text-transform:uppercase;color:#14807A">Knowledge check</p>
+      <p style="margin:0 0 16px;font:700 22px/1.35 Nunito,sans-serif;color:#103860">Which person may not be paid as your attendant?</p>
+      <div style="display:flex;flex-direction:column;gap:10px">
+        <button type="button" onClick="{{ p_m4_0 }}" style="text-align:left;width:100%;min-height:56px;padding:14px 18px;border:2px solid #D5E0E6;border-radius:12px;background:#fff;font:500 18px/1.4 'Source Sans 3',sans-serif;cursor:pointer">Your adult daughter</button>
+        <button type="button" onClick="{{ p_m4_1 }}" style="text-align:left;width:100%;min-height:56px;padding:14px 18px;border:2px solid #D5E0E6;border-radius:12px;background:#fff;font:500 18px/1.4 'Source Sans 3',sans-serif;cursor:pointer">Your husband or wife</button>
+        <button type="button" onClick="{{ p_m4_2 }}" style="text-align:left;width:100%;min-height:56px;padding:14px 18px;border:2px solid #D5E0E6;border-radius:12px;background:#fff;font:500 18px/1.4 'Source Sans 3',sans-serif;cursor:pointer">A neighbor from down the street</button>
+      </div>
+      <div hidden="{{ hideOk_m4 }}" style="margin-top:14px;background:#EAF7F1;border-left:6px solid #1E8A5F;border-radius:12px;padding:16px;font-size:18px">Correct. A consumer's spouse cannot be the paid attendant. Other family members and friends can be, as long as they pass screening.</div>
+      <div hidden="{{ hideNo_m4 }}" style="margin-top:14px;background:#FFF4EC;border-left:6px solid #C4551B;border-radius:12px;padding:16px;font-size:18px">{{ fb_m4 }}</div>
+    </div>
+    <div class="no-print" style="display:flex;gap:12px;flex-wrap:wrap">
+      <button type="button" onClick="{{ next4 }}" style="min-height:58px;padding:0 26px;border:none;border-radius:12px;background:#103860;color:#fff;font:700 19px/1 'Source Sans 3',sans-serif;cursor:pointer">Mark complete and continue</button>
+      <button type="button" onClick="{{ goDash }}" style="min-height:58px;padding:0 22px;border:2px solid #C3D0D9;border-radius:12px;background:#fff;color:#103860;font:600 18px/1 'Source Sans 3',sans-serif;cursor:pointer">Back to modules</button>
+    </div>
+  </article>
+
+  <article hidden="{{ hideM5 }}" style="max-width:760px;margin:0 auto;padding:34px 20px 90px">
+    <p style="margin:0 0 10px;font:700 13px/1 'Source Sans 3',sans-serif;letter-spacing:.16em;text-transform:uppercase;color:#14807A">Module 5 of 8</p>
+    <h1 style="margin:0 0 10px;font:800 clamp(32px,6vw,46px)/1.1 Nunito,sans-serif;color:#103860">You are responsible for training your attendant</h1>
+    <p style="margin:0 0 24px;font-size:21px;color:#3D5164">This is the part that surprises people, and it is also the best part. Nobody knows your routine, your home or your body like you do. Your attendant needs you to teach them.</p>
+    <p style="margin:0 0 24px">Caring Companions will help you get ready and will assist with the general orientation of your attendant when you ask. What we cannot do is teach someone how you like your coffee, how you transfer out of bed, or which shirt goes with which day. That is your job, and it is what makes CDS care fit you.</p>
+
+    <h2 style="margin:24px 0 14px;font:700 26px/1.25 Nunito,sans-serif;color:#103860">How to train your attendant, step by step</h2>
+    <div style="display:flex;flex-direction:column;gap:12px;margin:0 0 26px">
+      <div style="display:flex;gap:14px;background:#fff;border:1px solid #DCE5EA;border-radius:14px;padding:18px">
+        <span style="flex:none;width:36px;height:36px;border-radius:10px;background:#103860;color:#fff;display:flex;align-items:center;justify-content:center;font:800 17px/1 Nunito,sans-serif">1</span>
+        <span style="font-size:18px">Show them how you like things done. Walk through a task together the first time instead of describing it.</span>
+      </div>
+      <div style="display:flex;gap:14px;background:#fff;border:1px solid #DCE5EA;border-radius:14px;padding:18px">
+        <span style="flex:none;width:36px;height:36px;border-radius:10px;background:#103860;color:#fff;display:flex;align-items:center;justify-content:center;font:800 17px/1 Nunito,sans-serif">2</span>
+        <span style="font-size:18px">Review your care needs and your authorized tasks together, using your plan of care.</span>
+      </div>
+      <div style="display:flex;gap:14px;background:#fff;border:1px solid #DCE5EA;border-radius:14px;padding:18px">
+        <span style="flex:none;width:36px;height:36px;border-radius:10px;background:#103860;color:#fff;display:flex;align-items:center;justify-content:center;font:800 17px/1 Nunito,sans-serif">3</span>
+        <span style="font-size:18px">Explain your normal routine: when you get up, when you eat, when you rest, what happens first.</span>
+      </div>
+      <div style="display:flex;gap:14px;background:#fff;border:1px solid #DCE5EA;border-radius:14px;padding:18px">
+        <span style="flex:none;width:36px;height:36px;border-radius:10px;background:#103860;color:#fff;display:flex;align-items:center;justify-content:center;font:800 17px/1 Nunito,sans-serif">4</span>
+        <span style="font-size:18px">Show them where supplies are kept: linens, cleaning products, gloves, laundry, trash.</span>
+      </div>
+      <div style="display:flex;gap:14px;background:#fff;border:1px solid #DCE5EA;border-radius:14px;padding:18px">
+        <span style="flex:none;width:36px;height:36px;border-radius:10px;background:#103860;color:#fff;display:flex;align-items:center;justify-content:center;font:800 17px/1 Nunito,sans-serif">5</span>
+        <span style="font-size:18px">Explain your mobility and safety needs: how you transfer, which side to stand on, what hurts, what helps.</span>
+      </div>
+      <div style="display:flex;gap:14px;background:#fff;border:1px solid #DCE5EA;border-radius:14px;padding:18px">
+        <span style="flex:none;width:36px;height:36px;border-radius:10px;background:#103860;color:#fff;display:flex;align-items:center;justify-content:center;font:800 17px/1 Nunito,sans-serif">6</span>
+        <span style="font-size:18px">Talk about medications only as they relate to your routine and your approved tasks. Do not ask an attendant to do anything with medication that is not authorized on your plan of care.</span>
+      </div>
+      <div style="display:flex;gap:14px;background:#fff;border:1px solid #DCE5EA;border-radius:14px;padding:18px">
+        <span style="flex:none;width:36px;height:36px;border-radius:10px;background:#103860;color:#fff;display:flex;align-items:center;justify-content:center;font:800 17px/1 Nunito,sans-serif">7</span>
+        <span style="font-size:18px">Set household expectations: shoes on or off, pets, phone use, visitors, quiet hours.</span>
+      </div>
+      <div style="display:flex;gap:14px;background:#fff;border:1px solid #DCE5EA;border-radius:14px;padding:18px">
+        <span style="flex:none;width:36px;height:36px;border-radius:10px;background:#103860;color:#fff;display:flex;align-items:center;justify-content:center;font:800 17px/1 Nunito,sans-serif">8</span>
+        <span style="font-size:18px">Establish a written schedule that fits inside your authorized units.</span>
+      </div>
+      <div style="display:flex;gap:14px;background:#fff;border:1px solid #DCE5EA;border-radius:14px;padding:18px">
+        <span style="flex:none;width:36px;height:36px;border-radius:10px;background:#103860;color:#fff;display:flex;align-items:center;justify-content:center;font:800 17px/1 Nunito,sans-serif">9</span>
+        <span style="font-size:18px">Explain call off expectations: how much notice you need, who to call, and what you will do for backup.</span>
+      </div>
+      <div style="display:flex;gap:14px;background:#fff;border:1px solid #DCE5EA;border-radius:14px;padding:18px">
+        <span style="flex:none;width:36px;height:36px;border-radius:10px;background:#103860;color:#fff;display:flex;align-items:center;justify-content:center;font:800 17px/1 Nunito,sans-serif">10</span>
+        <span style="font-size:18px">Teach them the clock in and clock out process, and watch them do it the first few shifts.</span>
+      </div>
+      <div style="display:flex;gap:14px;background:#fff;border:1px solid #DCE5EA;border-radius:14px;padding:18px">
+        <span style="flex:none;width:36px;height:36px;border-radius:10px;background:#103860;color:#fff;display:flex;align-items:center;justify-content:center;font:800 17px/1 Nunito,sans-serif">11</span>
+        <span style="font-size:18px">Make sure they understand they may never clock in when they are not actually providing your care.</span>
+      </div>
+      <div style="display:flex;gap:14px;background:#fff;border:1px solid #DCE5EA;border-radius:14px;padding:18px">
+        <span style="flex:none;width:36px;height:36px;border-radius:10px;background:#103860;color:#fff;display:flex;align-items:center;justify-content:center;font:800 17px/1 Nunito,sans-serif">12</span>
+        <span style="font-size:18px">Correct problems early and kindly. A small habit fixed in week one does not become a crisis in month six.</span>
+      </div>
+      <div style="display:flex;gap:14px;background:#EAF6F5;border:1px solid #B9E3DF;border-radius:14px;padding:18px">
+        <span style="flex:none;width:36px;height:36px;border-radius:10px;background:#14807A;color:#fff;display:flex;align-items:center;justify-content:center;font:800 17px/1 Nunito,sans-serif">13</span>
+        <span style="font-size:18px">Call Caring Companions when you need help. Coaching you through attendant problems is part of our job.</span>
+      </div>
+    </div>
+
+    <h2 style="margin:24px 0 12px;font:700 26px/1.25 Nunito,sans-serif;color:#103860">Handling problems</h2>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px;margin:0 0 24px">
+      <div style="background:#EAF7F1;border:1px solid #B7DEC9;border-radius:14px;padding:18px">
+        <p style="margin:0 0 8px;font:700 18px/1.3 Nunito,sans-serif;color:#1E6B4C">Do</p>
+        <ul style="margin:0;padding-left:20px;font-size:17px;display:flex;flex-direction:column;gap:6px">
+          <li>Say something the first time, not the tenth</li>
+          <li>Be specific: what happened, what you need instead</li>
+          <li>Keep your own simple notes of dates and issues</li>
+          <li>Call us promptly about quality problems</li>
+          <li>Use your backup attendant when you need to</li>
+        </ul>
+      </div>
+      <div style="background:#FFF4EC;border:1px solid #F3CDB3;border-radius:14px;padding:18px">
+        <p style="margin:0 0 8px;font:700 18px/1.3 Nunito,sans-serif;color:#C4551B">Do not</p>
+        <ul style="margin:0;padding-left:20px;font-size:17px;display:flex;flex-direction:column;gap:6px">
+          <li>Let unpaid time or extra hours be a favor you trade later</li>
+          <li>Ask for tasks that are not on your plan of care</li>
+          <li>Ask an attendant to care for other people, children or pets</li>
+          <li>Wait months and then expect a quick fix</li>
+          <li>Handle a safety concern alone</li>
+        </ul>
+      </div>
+    </div>
+
+    <div style="background:#fff;border:2px solid #E4EDF0;border-radius:18px;padding:24px;margin:34px 0 26px">
+      <p style="margin:0 0 4px;font:700 13px/1 'Source Sans 3',sans-serif;letter-spacing:.14em;text-transform:uppercase;color:#14807A">What would you do?</p>
+      <p style="margin:0 0 16px;font:700 22px/1.35 Nunito,sans-serif;color:#103860">Your new attendant asks how you like to be helped in the shower. Who teaches them?</p>
+      <div style="display:flex;flex-direction:column;gap:10px">
+        <button type="button" onClick="{{ p_m5_0 }}" style="text-align:left;width:100%;min-height:56px;padding:14px 18px;border:2px solid #D5E0E6;border-radius:12px;background:#fff;font:500 18px/1.4 'Source Sans 3',sans-serif;cursor:pointer">Caring Companions trains them on my personal routine</button>
+        <button type="button" onClick="{{ p_m5_1 }}" style="text-align:left;width:100%;min-height:56px;padding:14px 18px;border:2px solid #D5E0E6;border-radius:12px;background:#fff;font:500 18px/1.4 'Source Sans 3',sans-serif;cursor:pointer">I do, because I know my routine and my body best</button>
+        
+        <button type="button" onClick="{{ p_m5_2 }}" style="text-align:left;width:100%;min-height:56px;padding:14px 18px;border:2px solid #D5E0E6;border-radius:12px;background:#fff;font:500 18px/1.4 'Source Sans 3',sans-serif;cursor:pointer">Nobody. A good attendant should already know how</button>
+      </div>
+      <div hidden="{{ hideOk_m5 }}" style="margin-top:14px;background:#EAF7F1;border-left:6px solid #1E8A5F;border-radius:12px;padding:16px;font-size:18px">Correct. Training your attendant on your own needs and routines is your responsibility as the consumer, and we will support you while you do it.</div>
+      <div hidden="{{ hideNo_m5 }}" style="margin-top:14px;background:#FFF4EC;border-left:6px solid #C4551B;border-radius:12px;padding:16px;font-size:18px">{{ fb_m5 }}</div>
+    </div>
+    <div class="no-print" style="display:flex;gap:12px;flex-wrap:wrap">
+      <button type="button" onClick="{{ next5 }}" style="min-height:58px;padding:0 26px;border:none;border-radius:12px;background:#103860;color:#fff;font:700 19px/1 'Source Sans 3',sans-serif;cursor:pointer">Mark complete and continue</button>
+      <button type="button" onClick="{{ goDash }}" style="min-height:58px;padding:0 22px;border:2px solid #C3D0D9;border-radius:12px;background:#fff;color:#103860;font:600 18px/1 'Source Sans 3',sans-serif;cursor:pointer">Back to modules</button>
+    </div>
+  </article>
+
+  <article hidden="{{ hideM6 }}" style="max-width:760px;margin:0 auto;padding:34px 20px 90px">
+    <p style="margin:0 0 10px;font:700 13px/1 'Source Sans 3',sans-serif;letter-spacing:.16em;text-transform:uppercase;color:#14807A">Module 6 of 8</p>
+    <h1 style="margin:0 0 16px;font:800 clamp(30px,5.4vw,42px)/1.14 Nunito,sans-serif;color:#103860">Hours, scheduling and clocking in</h1>
+    <p style="margin:0 0 26px;font-size:21px;color:#3D5164">Two ideas make this whole section simple: authorized hours are a maximum, and recorded time must match the care that actually happened.</p>
+
+    <h2 style="margin:24px 0 12px;font:700 26px/1.25 Nunito,sans-serif;color:#103860">The state approves your units. Not us.</h2>
+    <p style="margin:0 0 14px">The Department of Health and Senior Services assesses you and approves a set number of units for each month, plus how much care each authorized task gets. That approval is printed on your care plan, month by month, the way you saw in module 3.</p>
+    <p style="margin:0 0 14px">Caring Companions can only bill Medicaid for what the state approved, which means we can only pay your attendant for what the state approved. If your attendant works beyond your approved amount, there is no funding to pay them for it. That is not a policy choice on our end. It is the limit of the authorization.</p>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:14px;margin:0 0 20px">
+      <div style="background:#fff;border:1px solid #DCE5EA;border-radius:16px;padding:20px">
+        <p style="margin:0 0 6px;font:700 18px/1.3 Nunito,sans-serif;color:#103860">Monthly total</p>
+        <p style="margin:0;font-size:17px;color:#4C6070">Your care plan lists the units approved for each month. Short months are approved for fewer units.</p>
+      </div>
+      <div style="background:#fff;border:1px solid #DCE5EA;border-radius:16px;padding:20px">
+        <p style="margin:0 0 6px;font:700 18px/1.3 Nunito,sans-serif;color:#103860">Daily amount</p>
+        <p style="margin:0;font-size:17px;color:#4C6070">Your attendant may only work the amount of time per day that your approved plan supports.</p>
+      </div>
+      <div style="background:#fff;border:1px solid #DCE5EA;border-radius:16px;padding:20px">
+        <p style="margin:0 0 6px;font:700 18px/1.3 Nunito,sans-serif;color:#103860">Your choice</p>
+        <p style="margin:0;font-size:17px;color:#4C6070">You choose the time of day your services happen. Morning, evening, split up across the day, whatever fits your life.</p>
+      </div>
+    </div>
+
+    <div style="background:#EAF6F5;border:1px solid #B9E3DF;border-left:6px solid #14807A;border-radius:14px;padding:20px;margin:0 0 20px">
+      <p style="margin:0 0 6px;font:700 13px/1 'Source Sans 3',sans-serif;letter-spacing:.14em;text-transform:uppercase;color:#14807A">We can do the math for you</p>
+      <p style="margin:0 0 10px;font-size:19px">If you would like help, just ask. We will take the tasks on your plan of care, spread them across the days, and tell you how many days per week and how many hours per day your approval supports.</p>
+      <p style="margin:0;font-size:19px">Then the only decision left to you is the fun one: which days you want your attendant to come, and at what time.</p>
+    </div>
+    <p style="margin:0 0 14px">A quick example using the sample plan from module 3. 243 units in a month is about 60 hours, which works out to roughly two hours a day. So that consumer would build a schedule with their attendant of about two hours per day, at the times of day they prefer, and stop there.</p>
+    <div style="background:#FFF7E6;border:1px solid #F0DCA8;border-left:6px solid #C98A16;border-radius:14px;padding:20px;margin:0 0 22px">
+      <p style="margin:0 0 6px;font:700 13px/1 'Source Sans 3',sans-serif;letter-spacing:.14em;text-transform:uppercase;color:#8A6B18">Remember</p>
+      <p style="margin:0 0 10px;font-size:19px">Missouri does not give everyone the same number of units. Your amount comes from your own assessment. State rules cap what can be authorized at a cost that does not exceed the average monthly Medicaid cost of nursing facility care.</p>
+      <p style="margin:0;font-size:19px">If you believe you need more care than you were approved for, you can ask for an increase. Your needs are also reassessed at least once a year, and sooner if your condition changes.</p>
+    </div>
+
+    <h2 style="margin:24px 0 12px;font:700 26px/1.25 Nunito,sans-serif;color:#103860">Watching the hours is your job</h2>
+    <p style="margin:0 0 14px">You are responsible for making sure your attendant does not work more than your approved hours. Not us, and not your attendant. You are the employer, so tracking what has been used is part of the job.</p>
+    <div style="background:#FFF4EC;border:1px solid #F3CDB3;border-left:6px solid #C4551B;border-radius:14px;padding:20px;margin:0 0 18px">
+      <p style="margin:0 0 6px;font:700 13px/1 'Source Sans 3',sans-serif;letter-spacing:.14em;text-transform:uppercase;color:#C4551B">Stop</p>
+      <p style="margin:0 0 10px;font-size:19px">If your attendant works more hours than the state approved, the units run out before the end of the month. Once they are gone, they are gone. Any hours worked past the authorized limit will not be paid.</p>
+      <p style="margin:0;font-size:19px">That leaves you with no covered care for the rest of the month and your attendant working for free. Both of those are avoidable with simple tracking.</p>
+    </div>
+    <div style="background:#fff;border:1px solid #DCE5EA;border-radius:16px;padding:20px;margin:0 0 22px">
+      <p style="margin:0 0 10px;font:700 19px/1.3 Nunito,sans-serif;color:#103860">How to stay inside your hours</p>
+      <ul style="margin:0;padding-left:22px;display:flex;flex-direction:column;gap:8px;font-size:18px">
+        <li>Divide your monthly units into a weekly plan and stick to it</li>
+        <li>Write down the hours worked each shift, in your own record</li>
+        <li>Check your running total against your monthly total every week</li>
+        <li>Adjust the schedule mid month if a week ran long</li>
+        <li>Call us if you cannot tell where you stand. We monitor your usage monthly and will help you check</li>
+      </ul>
+    </div>
+
+    <h2 style="margin:24px 0 12px;font:700 26px/1.25 Nunito,sans-serif;color:#103860">Using your hours matters</h2>
+    <p style="margin:0 0 14px">Here is something consumers are often surprised by. If you regularly do not use the hours you were approved for, that can work against you. The state looks at what you actually use, so unused hours can make it harder for them to justify authorizing an increase later.</p>
+    <p style="margin:0 0 14px">This is not a reason to record time that was not worked. It is a reason to schedule and actually use the care you need, and to speak up if your approval no longer matches your life.</p>
+    <div style="background:#EAF6F5;border:1px solid #B9E3DF;border-left:6px solid #14807A;border-radius:14px;padding:20px;margin:0 0 20px">
+      <p style="margin:0 0 6px;font:700 13px/1 'Source Sans 3',sans-serif;letter-spacing:.14em;text-transform:uppercase;color:#14807A">How to ask for more hours</p>
+      <p style="margin:0 0 10px;font-size:19px">You may call the state directly and request an increase. Be ready to say three things:</p>
+      <ol style="margin:0 0 10px;padding-left:24px;display:flex;flex-direction:column;gap:8px;font-size:19px">
+        <li>Which tasks you need added to your plan of care</li>
+        <li>Which tasks you need more time for</li>
+        <li>Why, in plain terms. What changed, and what happens without the help</li>
+      </ol>
+      <p style="margin:0;font-size:19px">Call us first if you want help thinking it through or getting your examples together. We cannot approve hours, but we can help you prepare.</p>
+    </div>
+    <p style="margin:0 0 24px">One more billing rule worth knowing: only one attendant may be on the clock providing your CDS at any given moment, because Medicaid allows one service code per participant at a time. Two attendants may not clock in for the same hour, even for different tasks.</p>
+
+    <h2 style="margin:24px 0 12px;font:700 26px/1.25 Nunito,sans-serif;color:#103860">Authorized hours are a ceiling, not a target</h2>
+    <p style="margin:0 0 16px">Your plan of care authorizes a maximum number of units, and one unit is 15 minutes. You may use up to that amount when care is actually provided. There is no requirement to use every unit, and unused time is never a reason to record care that did not happen.</p>
+    <div style="background:#FFF7E6;border:1px solid #F0DCA8;border-left:6px solid #C98A16;border-radius:14px;padding:20px;margin:0 0 24px">
+      <p style="margin:0 0 6px;font:700 13px/1 'Source Sans 3',sans-serif;letter-spacing:.14em;text-transform:uppercase;color:#8A6B18">Remember</p>
+      <p style="margin:0;font-size:19px">Keeping your own simple record of your attendant's time is one of your responsibilities. It is how you catch a problem before payroll does.</p>
+    </div>
+
+    <h2 style="margin:24px 0 12px;font:700 26px/1.25 Nunito,sans-serif;color:#103860">The electronic time tracking system</h2>
+    <p style="margin:0 0 14px">Missouri requires every home and community based services vendor to use an electronic time tracking system. There are exactly two ways your attendant may clock in and out, and no others.</p>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:14px;margin:0 0 18px">
+      <div style="background:#fff;border:2px solid #38C0B8;border-radius:16px;padding:20px">
+        <p style="margin:0 0 4px;font:700 13px/1 'Source Sans 3',sans-serif;letter-spacing:.14em;text-transform:uppercase;color:#14807A">Option 1</p>
+        <p style="margin:0 0 8px;font:700 20px/1.3 Nunito,sans-serif;color:#103860">The WellSky Personal Care app</p>
+        <p style="margin:0;font-size:17px;color:#4C6070">Your attendant needs a smartphone that can download the app. They clock in and out in the app at the start and end of every shift.</p>
+      </div>
+      <div style="background:#fff;border:2px solid #38C0B8;border-radius:16px;padding:20px">
+        <p style="margin:0 0 4px;font:700 13px/1 'Source Sans 3',sans-serif;letter-spacing:.14em;text-transform:uppercase;color:#14807A">Option 2</p>
+        <p style="margin:0 0 8px;font:700 20px/1.3 Nunito,sans-serif;color:#103860">A call from your home phone</p>
+        <p style="margin:0;font-size:17px;color:#4C6070">Your attendant calls the time tracking line from your home telephone, the number registered to your residence or in your name.</p>
+      </div>
+    </div>
+    <div style="background:#FFF4EC;border:1px solid #F3CDB3;border-left:6px solid #C4551B;border-radius:14px;padding:20px;margin:0 0 18px">
+      <p style="margin:0 0 6px;font:700 13px/1 'Source Sans 3',sans-serif;letter-spacing:.14em;text-transform:uppercase;color:#C4551B">Stop</p>
+      <p style="margin:0;font-size:19px">Clocking in by calling from a cell phone does not work and is not allowed. It is the app, or your home phone. Nothing else.</p>
+    </div>
+    <p style="margin:0 0 14px">If you use the home phone option, you will sign a form authorizing that number to be used for attendant time tracking. Talk about this before you hire someone: if your attendant does not have a smartphone that can run the app, you need a working home telephone.</p>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:14px;margin:0 0 24px">
+      <div style="background:#fff;border:1px solid #DCE5EA;border-radius:16px;padding:20px">
+        <p style="margin:0 0 10px;font:700 19px/1.3 Nunito,sans-serif;color:#103860">Your part</p>
+        <ul style="margin:0;padding-left:20px;font-size:17px;display:flex;flex-direction:column;gap:7px">
+          <li>Keep your home phone available, or confirm your attendant can use the app</li>
+          <li>Make sure your attendant uses the system every shift</li>
+          <li>Keep your own separate record of time worked</li>
+          <li>Compare that record against your authorized hours</li>
+          <li>Make sure the time recorded with us is correct</li>
+        </ul>
+      </div>
+      <div style="background:#EAF6F5;border:1px solid #B9E3DF;border-radius:16px;padding:20px">
+        <p style="margin:0 0 10px;font:700 19px/1.3 Nunito,sans-serif;color:#103860">Your attendant's part</p>
+        <ul style="margin:0;padding-left:20px;font-size:17px;display:flex;flex-direction:column;gap:7px">
+          <li>Clock in on the app, or from your home phone, before starting work</li>
+          <li>Clock out the same way immediately when the work is done</li>
+          <li>Report the tasks actually completed</li>
+          <li>Verify their recorded times daily</li>
+          <li>Keep their own backup record of time worked</li>
+        </ul>
+      </div>
+    </div>
+
+    <h2 style="margin:24px 0 12px;font:700 26px/1.25 Nunito,sans-serif;color:#103860">No paper timesheets</h2>
+    <p style="margin:0 0 12px">Caring Companions does not use paper timesheets at all. Every shift is recorded electronically, in the app or from your home phone. There is no paper slip to fall back on, which is exactly why the clock in and clock out habit matters so much.</p>
+
+    <h2 style="margin:24px 0 12px;font:700 26px/1.25 Nunito,sans-serif;color:#103860">When a clock in or clock out is missed</h2>
+    <div style="background:#FFF4EC;border:1px solid #F3CDB3;border-left:6px solid #C4551B;border-radius:14px;padding:20px;margin:0 0 24px">
+      <p style="margin:0 0 6px;font:700 13px/1 'Source Sans 3',sans-serif;letter-spacing:.14em;text-transform:uppercase;color:#C4551B">Stop</p>
+      <p style="margin:0 0 10px;font-size:19px">Never fix a missed punch by recording time that was not worked, by adding the time onto another day, or by having your attendant stay clocked in while care is not being provided. That is falsification.</p>
+      <p style="margin:0;font-size:19px">When a genuine technical problem stops the clock in or clock out, there is one correct path: the online EVV Manual Correction Form.</p>
+    </div>
+
+    <div style="background:#fff;border:2px solid #38C0B8;border-radius:16px;padding:22px;margin:0 0 20px">
+      <p style="margin:0 0 8px;font:700 20px/1.3 Nunito,sans-serif;color:#103860">The EVV Manual Correction Form</p>
+      <p style="margin:0 0 12px;font-size:18px;color:#4C6070">Fill it in online at <a href="https://hub.caringcds.com/evv-form.html">hub.caringcds.com/evv-form.html</a>. It asks for the visit date, the original and corrected times, the reason, the tasks performed, and signatures from both you and your attendant.</p>
+      <ul style="margin:0 0 12px;padding-left:22px;display:flex;flex-direction:column;gap:8px;font-size:18px">
+        <li>It must be submitted by 11:59 PM Saturday of that pay period</li>
+        <li>Use it only when a technical problem prevented a normal clock in or clock out</li>
+        <li>Both signatures are required. You are confirming the services really were provided</li>
+      </ul>
+      <p style="margin:0;font-size:18px;color:#4C6070">Tell your attendant to save the form to their phone's home screen, so it is one tap when they need it.</p>
+    </div>
+    <div style="background:#FFF7E6;border:1px solid #F0DCA8;border-left:6px solid #C98A16;border-radius:14px;padding:20px;margin:0 0 24px">
+      <p style="margin:0 0 6px;font:700 13px/1 'Source Sans 3',sans-serif;letter-spacing:.14em;text-transform:uppercase;color:#8A6B18">Remember</p>
+      <p style="margin:0 0 10px;font-size:19px">The goal is 95 percent or more of visits clocked correctly the first time, with no manual change from us. Missouri Medicaid treats a high rate of manual corrections as a possible fraud indicator, and every correction is reviewed individually in an audit.</p>
+      <p style="margin:0;font-size:19px">So use the form when you truly need it, not as a normal way to record time. If corrections are happening most weeks, call us at {{ phone }} and we will find out what is going wrong with the app.</p>
+    </div>
+
+    <div style="background:#fff;border:2px solid #E4EDF0;border-radius:18px;padding:24px;margin:34px 0 26px">
+      <p style="margin:0 0 4px;font:700 13px/1 'Source Sans 3',sans-serif;letter-spacing:.14em;text-transform:uppercase;color:#14807A">What would you do?</p>
+      <p style="margin:0 0 16px;font:700 22px/1.35 Nunito,sans-serif;color:#103860">Your attendant arrives at 8:00 a.m. but forgets to clock in until 9:15 a.m. What should you do?</p>
+      <div style="display:flex;flex-direction:column;gap:10px">
+        <button type="button" onClick="{{ p_m6_0 }}" style="text-align:left;width:100%;min-height:56px;padding:14px 18px;border:2px solid #D5E0E6;border-radius:12px;background:#fff;font:500 18px/1.4 'Source Sans 3',sans-serif;cursor:pointer">Have them clock in now, write down the real start time, and call Caring Companions right away so the missed time is handled correctly</button>
+        <button type="button" onClick="{{ p_m6_1 }}" style="text-align:left;width:100%;min-height:56px;padding:14px 18px;border:2px solid #D5E0E6;border-radius:12px;background:#fff;font:500 18px/1.4 'Source Sans 3',sans-serif;cursor:pointer">Ask them to clock out at the end and add the missing time to another shift</button>
+        <button type="button" onClick="{{ p_m6_2 }}" style="text-align:left;width:100%;min-height:56px;padding:14px 18px;border:2px solid #D5E0E6;border-radius:12px;background:#fff;font:500 18px/1.4 'Source Sans 3',sans-serif;cursor:pointer">Have them stay clocked in an extra hour and 15 minutes later in the week to even it out</button>
+      </div>
+      <div hidden="{{ hideOk_m6 }}" style="margin-top:14px;background:#EAF7F1;border-left:6px solid #1E8A5F;border-radius:12px;padding:16px;font-size:18px">Correct. Report it to us immediately rather than trying to correct it yourselves. Never record time that was not actually worked.</div>
+      <div hidden="{{ hideNo_m6 }}" style="margin-top:14px;background:#FFF4EC;border-left:6px solid #C4551B;border-radius:12px;padding:16px;font-size:18px">{{ fb_m6 }}</div>
+    </div>
+    <div class="no-print" style="display:flex;gap:12px;flex-wrap:wrap">
+      <button type="button" onClick="{{ next6 }}" style="min-height:58px;padding:0 26px;border:none;border-radius:12px;background:#103860;color:#fff;font:700 19px/1 'Source Sans 3',sans-serif;cursor:pointer">Mark complete and continue</button>
+      <button type="button" onClick="{{ goDash }}" style="min-height:58px;padding:0 22px;border:2px solid #C3D0D9;border-radius:12px;background:#fff;color:#103860;font:600 18px/1 'Source Sans 3',sans-serif;cursor:pointer">Back to modules</button>
+    </div>
+  </article>
+
+  <article hidden="{{ hideM7 }}" style="max-width:760px;margin:0 auto;padding:34px 20px 90px">
+    <p style="margin:0 0 10px;font:700 13px/1 'Source Sans 3',sans-serif;letter-spacing:.16em;text-transform:uppercase;color:#14807A">Module 7 of 8</p>
+    <h1 style="margin:0 0 16px;font:800 clamp(30px,5.4vw,42px)/1.14 Nunito,sans-serif;color:#103860">Protecting the program</h1>
+    <p style="margin:0 0 26px;font-size:21px;color:#3D5164">CDS is paid for by Medicaid. Protecting it protects your care, your attendant, and every other family in the program.</p>
+
+    <h2 style="margin:24px 0 12px;font:700 26px/1.25 Nunito,sans-serif;color:#103860">What Medicaid fraud looks like here</h2>
+    <p style="margin:0 0 14px">Any falsification or misrepresentation of your attendant's time worked is Medicaid fraud. Examples from our policy include:</p>
+    <ul style="margin:0 0 20px;padding-left:24px;display:flex;flex-direction:column;gap:8px">
+      <li>Time submitted for days your attendant did not work</li>
+      <li>More hours submitted than were actually worked</li>
+      <li>Tasks marked that were not actually done</li>
+      <li>A timesheet filled out before the work happened, or for days that have not occurred yet</li>
+      <li>Time submitted for tasks not approved on your plan of care, such as yard work, pet care or home repair</li>
+      <li>Time submitted for days you were in the hospital, at the doctor, in rehab or in a facility</li>
+      <li>Time submitted while your attendant was working for someone else, or was in the hospital or jail</li>
+      <li>Work done by someone other than your approved attendant, submitted under their name</li>
+      <li>Signatures or initials that are not really yours or your attendant's</li>
+    </ul>
+    <div style="background:#FFF4EC;border:1px solid #F3CDB3;border-left:6px solid #C4551B;border-radius:14px;padding:20px;margin:0 0 22px">
+      <p style="margin:0 0 6px;font:700 13px/1 'Source Sans 3',sans-serif;letter-spacing:.14em;text-transform:uppercase;color:#C4551B">Stop</p>
+      <p style="margin:0;font-size:19px">Never ask an attendant to clock in for care they did not actually provide, even to avoid losing hours, even if you feel they earned it another way, and even if they offer.</p>
+    </div>
+
+    <h2 style="margin:24px 0 12px;font:700 26px/1.25 Nunito,sans-serif;color:#103860">What happens if it occurs</h2>
+    <p style="margin:0 0 12px">Caring Companions is required to report suspected Medicaid fraud to the Missouri Medicaid Audit and Compliance Unit, DHSS, and the Missouri Attorney General. All payments made from inaccurate time are recouped from the consumer and the attendant. We may stop payments, disqualify the attendant from working for any of our consumers, and withdraw as your CDS vendor. Individuals who violate Medicaid fraud rules may lose Medicaid eligibility for life, face criminal charges, financial penalties and prison time.</p>
+    <p style="margin:0 0 22px">We would much rather retrain than report. Mistakes reported honestly and promptly are handled very differently from concealed ones.</p>
+
+    <h2 style="margin:24px 0 12px;font:700 26px/1.25 Nunito,sans-serif;color:#103860">Never ask your attendant to</h2>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px;margin:0 0 24px">
+      <div style="background:#fff;border:1px solid #DCE5EA;border-radius:14px;padding:18px;font-size:18px">Clock in when they are not with you providing care</div>
+      <div style="background:#fff;border:1px solid #DCE5EA;border-radius:14px;padding:18px;font-size:18px">Do tasks that are not on your plan of care</div>
+      <div style="background:#fff;border:1px solid #DCE5EA;border-radius:14px;padding:18px;font-size:18px">Care for your visitors, children or pets</div>
+      <div style="background:#fff;border:1px solid #DCE5EA;border-radius:14px;padding:18px;font-size:18px">Sign or initial anything for you, or let someone else work under their name</div>
+      <div style="background:#fff;border:1px solid #DCE5EA;border-radius:14px;padding:18px;font-size:18px">Record time while you are in the hospital or a facility</div>
+      <div style="background:#fff;border:1px solid #DCE5EA;border-radius:14px;padding:18px;font-size:18px">Buy their own gloves, cleaning products or gas for your tasks</div>
+    </div>
+
+    <div style="background:#fff;border:2px solid #E4EDF0;border-radius:18px;padding:24px;margin:34px 0 26px">
+      <p style="margin:0 0 4px;font:700 13px/1 'Source Sans 3',sans-serif;letter-spacing:.14em;text-transform:uppercase;color:#14807A">Knowledge check</p>
+      <p style="margin:0 0 16px;font:700 22px/1.35 Nunito,sans-serif;color:#103860">Your authorized hours are best described as:</p>
+      <div style="display:flex;flex-direction:column;gap:10px">
+        <button type="button" onClick="{{ p_m7_0 }}" style="text-align:left;width:100%;min-height:56px;padding:14px 18px;border:2px solid #D5E0E6;border-radius:12px;background:#fff;font:500 18px/1.4 'Source Sans 3',sans-serif;cursor:pointer">A maximum amount of approved care you may use when services are actually provided</button>
+        <button type="button" onClick="{{ p_m7_1 }}" style="text-align:left;width:100%;min-height:56px;padding:14px 18px;border:2px solid #D5E0E6;border-radius:12px;background:#fff;font:500 18px/1.4 'Source Sans 3',sans-serif;cursor:pointer">Hours that must be used every month or you lose them</button>
+        <button type="button" onClick="{{ p_m7_2 }}" style="text-align:left;width:100%;min-height:56px;padding:14px 18px;border:2px solid #D5E0E6;border-radius:12px;background:#fff;font:500 18px/1.4 'Source Sans 3',sans-serif;cursor:pointer">A guaranteed paycheck for your attendant</button>
+      </div>
+      <div hidden="{{ hideOk_m7 }}" style="margin-top:14px;background:#EAF7F1;border-left:6px solid #1E8A5F;border-radius:12px;padding:16px;font-size:18px">Correct. Authorized units are a ceiling on care that actually happens.</div>
+      <div hidden="{{ hideNo_m7 }}" style="margin-top:14px;background:#FFF4EC;border-left:6px solid #C4551B;border-radius:12px;padding:16px;font-size:18px">{{ fb_m7 }}</div>
+    </div>
+    <div class="no-print" style="display:flex;gap:12px;flex-wrap:wrap">
+      <button type="button" onClick="{{ next7 }}" style="min-height:58px;padding:0 26px;border:none;border-radius:12px;background:#103860;color:#fff;font:700 19px/1 'Source Sans 3',sans-serif;cursor:pointer">Mark complete and continue</button>
+      <button type="button" onClick="{{ goDash }}" style="min-height:58px;padding:0 22px;border:2px solid #C3D0D9;border-radius:12px;background:#fff;color:#103860;font:600 18px/1 'Source Sans 3',sans-serif;cursor:pointer">Back to modules</button>
+    </div>
+  </article>
+
+  <article hidden="{{ hideM8 }}" style="max-width:760px;margin:0 auto;padding:34px 20px 90px">
+    <p style="margin:0 0 10px;font:700 13px/1 'Source Sans 3',sans-serif;letter-spacing:.16em;text-transform:uppercase;color:#14807A">Module 8 of 8</p>
+    <h1 style="margin:0 0 16px;font:800 clamp(30px,5.4vw,42px)/1.14 Nunito,sans-serif;color:#103860">Changes, safety and speaking up</h1>
+    <p style="margin:0 0 26px;font-size:21px;color:#3D5164">Life changes. When it does, one phone call keeps your services and your attendant's pay on track.</p>
+
+    <h2 style="margin:24px 0 12px;font:700 26px/1.25 Nunito,sans-serif;color:#103860">Tell us within ten days</h2>
+    <ul style="margin:0 0 20px;padding-left:24px;display:flex;flex-direction:column;gap:8px">
+      <li>Any change that affects your plan of care</li>
+      <li>A change in your address, phone number or living situation</li>
+      <li>A change in your condition or your care needs</li>
+      <li>A change in your Medicaid eligibility or your spenddown</li>
+      <li>A change of attendant, or an attendant who quits</li>
+    </ul>
+    <h2 style="margin:24px 0 12px;font:700 26px/1.25 Nunito,sans-serif;color:#103860">Tell us right away</h2>
+    <ul style="margin:0 0 22px;padding-left:24px;display:flex;flex-direction:column;gap:8px">
+      <li>You are hospitalized, or admitted to rehab or a facility</li>
+      <li>You will not be home for a scheduled shift, so your attendant knows too</li>
+      <li>A problem with the quality of your attendant's work</li>
+      <li>Any safety concern in your home</li>
+    </ul>
+
+    <h2 style="margin:24px 0 12px;font:700 26px/1.25 Nunito,sans-serif;color:#103860">Your backup and emergency plan</h2>
+    <p style="margin:0 0 20px">Every consumer needs a backup and emergency plan, and we will help you build one. It answers a simple question: what happens if your attendant does not come and you need care today? A hired backup attendant, a phone list, and a plan for weather or power outages cover most situations.</p>
+
+    <h2 style="margin:24px 0 12px;font:700 26px/1.25 Nunito,sans-serif;color:#103860">Abuse, neglect and exploitation</h2>
+    <p style="margin:0 0 12px">You have a right to be safe and treated with dignity. Abuse can be physical, sexual or emotional. Neglect is a failure to provide needed care. Exploitation is taking control of your property or money by deception, intimidation or force, including misuse of a power of attorney, theft or forged checks.</p>
+    <div style="background:#EAF6F5;border:1px solid #B9E3DF;border-left:6px solid #14807A;border-radius:14px;padding:20px;margin:0 0 22px">
+      <p style="margin:0 0 6px;font:700 13px/1 'Source Sans 3',sans-serif;letter-spacing:.14em;text-transform:uppercase;color:#14807A">Call us</p>
+      <p style="margin:0 0 10px;font-size:19px">If you are being harmed or feel unsafe, call the DHSS hotline at 800-392-0210. Every attendant is a mandated reporter and must report suspected abuse, neglect or exploitation to that same number.</p>
+      <p style="margin:0;font-size:19px">For anything about your services, your attendant or your hours, call Caring Companions at {{ phone }}.</p>
+    </div>
+
+    <h2 style="margin:24px 0 12px;font:700 26px/1.25 Nunito,sans-serif;color:#103860">If you are not satisfied</h2>
+    <p style="margin:0 0 12px">Concerns are meant to be solved at the lowest possible level, and most are. If yours is not, the grievance process is:</p>
+    <ol style="margin:0 0 22px;padding-left:26px;display:flex;flex-direction:column;gap:9px">
+      <li>Meet with the direct services staff and their immediate supervisor to talk it through</li>
+      <li>Put your concern in a letter to them. You get a response within five working days</li>
+      <li>If that does not resolve it, request a meeting with the Executive Director. It happens within ten days of your written request</li>
+      <li>If informal problem solving fails, file a written grievance with the Executive Director. You get a written response within ten workdays</li>
+      <li>You may appeal that written decision to the next level within 30 calendar days. The final decision is issued within thirty workdays</li>
+    </ol>
+    <p style="margin:0 0 22px">You may name someone to help you or speak for you at any point in this process. Using the grievance process never affects your services.</p>
+
+    <div style="background:#fff;border:2px solid #E4EDF0;border-radius:18px;padding:24px;margin:34px 0 26px">
+      <p style="margin:0 0 4px;font:700 13px/1 'Source Sans 3',sans-serif;letter-spacing:.14em;text-transform:uppercase;color:#14807A">What would you do?</p>
+      <p style="margin:0 0 16px;font:700 22px/1.35 Nunito,sans-serif;color:#103860">You are admitted to the hospital for three days. What should you do?</p>
+      <div style="display:flex;flex-direction:column;gap:10px">
+        <button type="button" onClick="{{ p_m8_0 }}" style="text-align:left;width:100%;min-height:56px;padding:14px 18px;border:2px solid #D5E0E6;border-radius:12px;background:#fff;font:500 18px/1.4 'Source Sans 3',sans-serif;cursor:pointer">Notify Caring Companions that you are hospitalized, and let your attendant know not to work those days</button>
+        <button type="button" onClick="{{ p_m8_1 }}" style="text-align:left;width:100%;min-height:56px;padding:14px 18px;border:2px solid #D5E0E6;border-radius:12px;background:#fff;font:500 18px/1.4 'Source Sans 3',sans-serif;cursor:pointer">Nothing. It is only a few days</button>
+        <button type="button" onClick="{{ p_m8_2 }}" style="text-align:left;width:100%;min-height:56px;padding:14px 18px;border:2px solid #D5E0E6;border-radius:12px;background:#fff;font:500 18px/1.4 'Source Sans 3',sans-serif;cursor:pointer">Have your attendant clock in anyway so you do not lose the hours</button>
+      </div>
+      <div hidden="{{ hideOk_m8 }}" style="margin-top:14px;background:#EAF7F1;border-left:6px solid #1E8A5F;border-radius:12px;padding:16px;font-size:18px">Correct. Notifying us when you are hospitalized is one of your listed responsibilities, and no time may be recorded for days you were in a facility.</div>
+      <div hidden="{{ hideNo_m8 }}" style="margin-top:14px;background:#FFF4EC;border-left:6px solid #C4551B;border-radius:12px;padding:16px;font-size:18px">{{ fb_m8 }}</div>
+    </div>
+    <div class="no-print" style="display:flex;gap:12px;flex-wrap:wrap">
+      <button type="button" onClick="{{ next8 }}" style="min-height:58px;padding:0 26px;border:none;border-radius:12px;background:#103860;color:#fff;font:700 19px/1 'Source Sans 3',sans-serif;cursor:pointer">Mark complete and continue</button>
+      <button type="button" onClick="{{ goDash }}" style="min-height:58px;padding:0 22px;border:2px solid #C3D0D9;border-radius:12px;background:#fff;color:#103860;font:600 18px/1 'Source Sans 3',sans-serif;cursor:pointer">Back to modules</button>
+    </div>
+  </article>
+
+  <article hidden="{{ hideFinal }}" style="max-width:760px;margin:0 auto;padding:34px 20px 90px">
+    <p style="margin:0 0 10px;font:700 13px/1 'Source Sans 3',sans-serif;letter-spacing:.16em;text-transform:uppercase;color:#14807A">Final knowledge check</p>
+    <h1 style="margin:0 0 12px;font:800 clamp(30px,5.4vw,42px)/1.14 Nunito,sans-serif;color:#103860">Twelve questions</h1>
+    <p style="margin:0 0 8px;font-size:20px;color:#3D5164">Answer each one. If you miss it, you will see why, and you can pick again. Nothing here is a test of your worth as a person.</p>
+    <p style="margin:0 0 26px;font-size:19px"><strong style="color:#14807A">Answered correctly: {{ score }} of 12</strong></p>
+
+    <sc-for list="{{ finalQuestions }}" as="q" hint-placeholder-count="12">
+      <div style="background:#fff;border:2px solid #E4EDF0;border-radius:18px;padding:22px;margin:0 0 16px">
+        <p style="margin:0 0 4px;font:700 13px/1 'Source Sans 3',sans-serif;letter-spacing:.14em;text-transform:uppercase;color:#7A8C99">Question {{ q.num }}</p>
+        <p style="margin:0 0 14px;font:700 21px/1.35 Nunito,sans-serif;color:#103860">{{ q.q }}</p>
+        <div style="display:flex;flex-direction:column;gap:10px">
+          <sc-for list="{{ q.opts }}" as="o" hint-placeholder-count="3">
+            <button type="button" onClick="{{ o.pick }}" style="text-align:left;width:100%;min-height:54px;padding:13px 18px;border:2px solid #D5E0E6;border-radius:12px;background:#fff;font:500 18px/1.4 'Source Sans 3',sans-serif;cursor:pointer">{{ o.label }}</button>
+          </sc-for>
+        </div>
+        <div hidden="{{ q.hideOk }}" style="margin-top:14px;background:#EAF7F1;border-left:6px solid #1E8A5F;border-radius:12px;padding:16px;font-size:18px">{{ q.ok }}</div>
+        <div hidden="{{ q.hideNo }}" style="margin-top:14px;background:#FFF4EC;border-left:6px solid #C4551B;border-radius:12px;padding:16px;font-size:18px">{{ q.fb }}</div>
+      </div>
+    </sc-for>
+
+    <p hidden="{{ hideAckLock }}" style="margin:22px 0 0;font-size:18px;font-weight:600;color:#C4551B">{{ ackLockMsg }}</p>
+    <div class="no-print" style="display:flex;gap:12px;flex-wrap:wrap;margin-top:22px">
+      <button type="button" disabled="{{ ackLocked }}" onClick="{{ goAck }}" style="min-height:58px;padding:0 26px;border:none;border-radius:12px;background:{{ ackBtnBg }};color:#fff;font:700 19px/1 'Source Sans 3',sans-serif;cursor:pointer">Continue to acknowledgment</button>
+      <button type="button" onClick="{{ goDash }}" style="min-height:58px;padding:0 22px;border:2px solid #C3D0D9;border-radius:12px;background:#fff;color:#103860;font:600 18px/1 'Source Sans 3',sans-serif;cursor:pointer">Back to modules</button>
+    </div>
+  </article>
+
+  <article hidden="{{ hideAck }}" style="max-width:760px;margin:0 auto;padding:34px 20px 90px">
+    <p style="margin:0 0 10px;font:700 13px/1 'Source Sans 3',sans-serif;letter-spacing:.16em;text-transform:uppercase;color:#14807A">Almost done</p>
+    <h1 style="margin:0 0 12px;font:800 clamp(30px,5.4vw,42px)/1.14 Nunito,sans-serif;color:#103860">Orientation acknowledgment</h1>
+    <p style="margin:0 0 24px;font-size:20px;color:#3D5164">Please check each statement, then type your name and today's date.</p>
+
+    <div style="display:flex;flex-direction:column;gap:12px;margin:0 0 24px">
+      <label style="display:flex;gap:14px;align-items:flex-start;background:#fff;border:1px solid #DCE5EA;border-radius:14px;padding:18px;cursor:pointer">
+        <input type="checkbox" checked="{{ a1 }}" onChange="{{ t1 }}" style="width:26px;height:26px;flex:none;margin-top:2px;accent-color:#14807A" />
+        <span style="font-size:18px">I understand my responsibilities as a CDS consumer, including selecting, hiring, training and supervising my attendant.</span>
+      </label>
+      <label style="display:flex;gap:14px;align-items:flex-start;background:#fff;border:1px solid #DCE5EA;border-radius:14px;padding:18px;cursor:pointer">
+        <input type="checkbox" checked="{{ a2 }}" onChange="{{ t2 }}" style="width:26px;height:26px;flex:none;margin-top:2px;accent-color:#14807A" />
+        <span style="font-size:18px">I understand that I am responsible for training and directing my attendant on the tasks authorized in my plan of care.</span>
+      </label>
+      <label style="display:flex;gap:14px;align-items:flex-start;background:#fff;border:1px solid #DCE5EA;border-radius:14px;padding:18px;cursor:pointer">
+        <input type="checkbox" checked="{{ a3 }}" onChange="{{ t3 }}" style="width:26px;height:26px;flex:none;margin-top:2px;accent-color:#14807A" />
+        <span style="font-size:18px">I understand I must use the designated electronic time tracking system and keep my own record of my attendant's time worked.</span>
+      </label>
+      <label style="display:flex;gap:14px;align-items:flex-start;background:#fff;border:1px solid #DCE5EA;border-radius:14px;padding:18px;cursor:pointer">
+        <input type="checkbox" checked="{{ a4 }}" onChange="{{ t4 }}" style="width:26px;height:26px;flex:none;margin-top:2px;accent-color:#14807A" />
+        <span style="font-size:18px">I understand that time submitted may never exceed the units authorized in my plan of care.</span>
+      </label>
+      <label style="display:flex;gap:14px;align-items:flex-start;background:#fff;border:1px solid #DCE5EA;border-radius:14px;padding:18px;cursor:pointer">
+        <input type="checkbox" checked="{{ a5 }}" onChange="{{ t5 }}" style="width:26px;height:26px;flex:none;margin-top:2px;accent-color:#14807A" />
+        <span style="font-size:18px">I understand that falsifying time or tasks is Medicaid fraud, that payments will be recouped, and that it may be reported to the proper authorities.</span>
+      </label>
+      <label style="display:flex;gap:14px;align-items:flex-start;background:#fff;border:1px solid #DCE5EA;border-radius:14px;padding:18px;cursor:pointer">
+        <input type="checkbox" checked="{{ a6 }}" onChange="{{ t6 }}" style="width:26px;height:26px;flex:none;margin-top:2px;accent-color:#14807A" />
+        <span style="font-size:18px">I understand I must report changes affecting my plan of care within ten days, keep my Medicaid active, and notify Caring Companions of hospitalizations.</span>
+      </label>
+      <label style="display:flex;gap:14px;align-items:flex-start;background:#fff;border:1px solid #DCE5EA;border-radius:14px;padding:18px;cursor:pointer">
+        <input type="checkbox" checked="{{ a7 }}" onChange="{{ t7 }}" style="width:26px;height:26px;flex:none;margin-top:2px;accent-color:#14807A" />
+        <span style="font-size:18px">I understand what Caring Companions does as my CDS vendor, and how to contact them for help or to file a grievance.</span>
+      </label>
+    </div>
+
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px;margin:0 0 22px">
+      <label style="display:flex;flex-direction:column;gap:8px;font:600 17px/1.3 'Source Sans 3',sans-serif;color:#103860">Your full name
+        <input type="text" value="{{ name }}" onChange="{{ setName }}" placeholder="Type your full name" style="min-height:56px;padding:0 16px;border:2px solid #C3D0D9;border-radius:12px;font:400 19px/1 'Source Sans 3',sans-serif;background:#fff" />
+      </label>
+      <label style="display:flex;flex-direction:column;gap:8px;font:600 17px/1.3 'Source Sans 3',sans-serif;color:#103860">Today's date
+        <input type="date" value="{{ date }}" onChange="{{ setDate }}" style="min-height:56px;padding:0 16px;border:2px solid #C3D0D9;border-radius:12px;font:400 19px/1 'Source Sans 3',sans-serif;background:#fff" />
+      </label>
+    </div>
+    <p style="margin:0 0 22px;font-size:17px;color:#5A6E7C">Typing your name here records your acknowledgment of this orientation. A Caring Companions staff witness signature is collected separately.</p>
+    <p hidden="{{ hideFinishLock }}" style="margin:0 0 16px;font-size:18px;font-weight:600;color:#C4551B">{{ finishLockMsg }}</p>
+    <div class="no-print" style="display:flex;gap:12px;flex-wrap:wrap">
+      <button type="button" disabled="{{ ackDisabled }}" onClick="{{ finish }}" style="min-height:58px;padding:0 26px;border:none;border-radius:12px;background:{{ ackBg }};color:#fff;font:700 19px/1 'Source Sans 3',sans-serif;cursor:pointer">Complete my orientation</button>
+      <button type="button" onClick="{{ goFinal }}" style="min-height:58px;padding:0 22px;border:2px solid #C3D0D9;border-radius:12px;background:#fff;color:#103860;font:600 18px/1 'Source Sans 3',sans-serif;cursor:pointer">Back to the check</button>
+    </div>
+  </article>
+
+  <article hidden="{{ hideDone }}" style="max-width:760px;margin:0 auto;padding:48px 20px 90px;text-align:center">
+    <div style="width:84px;height:84px;border-radius:50%;background:#EAF7F1;border:3px solid #38C0B8;margin:0 auto 22px;display:flex;align-items:center;justify-content:center;font:800 40px/1 Nunito,sans-serif;color:#14807A">&#10003;</div>
+    <h1 style="margin:0 0 10px;font:800 clamp(32px,6vw,48px)/1.1 Nunito,sans-serif;color:#103860">You are finished</h1>
+    <p style="margin:0 0 30px;font-size:22px;color:#3D5164">Consumer CDS Orientation complete</p>
+    <div style="background:#fff;border:1px solid #DCE5EA;border-radius:18px;padding:24px;text-align:left;max-width:520px;margin:0 auto 26px">
+      <div style="display:flex;justify-content:space-between;gap:14px;padding:10px 0;border-bottom:1px solid #EDF2F4"><span style="color:#5A6E7C">Name</span><strong style="color:#103860">{{ name }}</strong></div>
+      <div style="display:flex;justify-content:space-between;gap:14px;padding:10px 0;border-bottom:1px solid #EDF2F4"><span style="color:#5A6E7C">Date</span><strong style="color:#103860">{{ date }}</strong></div>
+      <div style="display:flex;justify-content:space-between;gap:14px;padding:10px 0;border-bottom:1px solid #EDF2F4"><span style="color:#5A6E7C">Modules completed</span><strong style="color:#103860">{{ doneCount }} of 8</strong></div>
+      <div style="display:flex;justify-content:space-between;gap:14px;padding:10px 0;border-bottom:1px solid #EDF2F4"><span style="color:#5A6E7C">Final check score</span><strong style="color:#103860">{{ score }} of 12</strong></div>
+      <div style="display:flex;justify-content:space-between;gap:14px;padding:10px 0"><span style="color:#5A6E7C">Time spent</span><strong style="color:#103860">{{ elapsed }}</strong></div>
+    </div>
+    <p style="margin:0 0 26px;font-size:19px;color:#3D5164">Keep this page or print it for your records. Questions about anything you learned? Call us at {{ phone }}.</p>
+    <div class="no-print" style="display:flex;gap:12px;flex-wrap:wrap;justify-content:center">
+      <button type="button" onClick="{{ doPrint }}" style="min-height:58px;padding:0 26px;border:none;border-radius:12px;background:#103860;color:#fff;font:700 19px/1 'Source Sans 3',sans-serif;cursor:pointer">Print or save as PDF</button>
+      <button type="button" onClick="{{ goDash }}" style="min-height:58px;padding:0 22px;border:2px solid #C3D0D9;border-radius:12px;background:#fff;color:#103860;font:600 18px/1 'Source Sans 3',sans-serif;cursor:pointer">Review the modules</button>
+    </div>
+  </article>
+
+  <footer style="border-top:1px solid #DCE5EA;background:#fff">
+    <div style="max-width:840px;margin:0 auto;padding:26px 20px;display:flex;gap:16px;flex-wrap:wrap;align-items:center;justify-content:space-between">
+      <span style="font-size:17px;color:#5A6E7C">Caring Companions Consumer Directed Services</span>
+      <span style="font-size:17px;color:#5A6E7C">Office 417-218-2888 &nbsp;·&nbsp; Toll free 866-863-5151</span>
+    </div>
+  </footer>
+</div></x-dc>
+<script type="text/x-dc" data-dc-script>
+const KEY = 'ccCdsConsumerV1';
+const PHONE = '417-218-2888, or toll free at 866-863-5151';
+
+const MODS = [
+  { n: 1, t: 'Welcome to CDS', d: "What the program is, the words you'll hear, and how it differs from a home care agency.", min: '6 min' },
+  { n: 2, t: 'Who Does What', d: "Your role, our role, your attendant's role, and what we do not do.", min: '6 min' },
+  { n: 3, t: 'Your Responsibilities', d: 'Your plan of care, your duties as the employer, and keeping your eligibility active.', min: '7 min' },
+  { n: 4, t: 'Hiring Your Attendant', d: 'Who can be hired, who cannot, how many, and how to choose well.', min: '8 min' },
+  { n: 5, t: 'How to Train Your Attendant', d: '13 steps for teaching someone how you like things done.', min: '10 min' },
+  { n: 6, t: 'Hours, Scheduling and Clocking In', d: 'Authorized hours, the time tracking system, and missed clock-ins.', min: '9 min' },
+  { n: 7, t: 'Protecting the Program', d: 'What Medicaid fraud is, and what you must never ask an attendant to do.', min: '8 min' },
+  { n: 8, t: 'Changes, Safety and Speaking Up', d: 'What to report, staying safe, your rights, and how to raise a concern.', min: '8 min' }
+];
+
+const CHECKS = {
+  m1: { c: 1, w: ['Not quite. In CDS you choose, hire, train and direct your attendant. Caring Companions handles the vendor duties such as payroll, screening and monitoring.', ''] },
+  m2: { c: 1, w: ['Not quite. Caring Companions is not a staffing agency and does not send a substitute attendant. Covering a call off is the consumer\u2019s responsibility, which is why a backup attendant matters.', '', 'Not quite. DHSS assesses your needs and authorizes your hours, but it does not assign or replace attendants. That is yours to do.'] },
+  m3: { c: 0, w: ['', 'Not quite. Caring Companions pays your attendant on your behalf through Medicaid. You never pay wages out of pocket.', 'Not quite. We handle the Family Care Safety Registry, Employee Disqualification List and federal exclusion screenings.'] },
+  m4: { c: 1, w: ['Not quite. An adult child may be hired if they pass screening and meet the qualifications.', '', 'Not quite. A neighbor may be hired if they pass screening and meet the qualifications.'] },
+  m5: { c: 1, w: ['Not quite. We help you prepare and will assist with general orientation, but only you can teach your own routine and preferences.', '', 'Not quite. Even an experienced attendant does not know your body, your home or your preferences. Showing them is your job as the consumer.'] },
+  m6: { c: 0, w: ['', 'Not quite. Missing time is never added onto another shift. Recorded time must match the day and hours actually worked, and a missed punch is reported to us.', 'Not quite. Recorded time must match the day and the hours actually worked. Moving time to another day is falsification.'] },
+  m7: { c: 0, w: ['', 'Not quite. Authorized hours are a maximum amount of approved care. They are not hours that must be used regardless of whether services were actually provided.', 'Not quite. Pay follows care that was actually delivered and correctly recorded, not the size of your authorization.'] },
+  m8: { c: 0, w: ['', 'Not quite. Notifying Caring Companions when you are hospitalized is one of your listed consumer responsibilities.', 'Not quite. No time may be recorded for days you were in a hospital or facility. Doing so is Medicaid fraud.'] }
+};
+
+const FINAL = [
+  { q: 'In CDS, who is the employer of the attendant?', o: ['Caring Companions', 'The consumer', 'DHSS'], c: 1,
+    ok: 'Right. The consumer is the employer. The attendant is never an employee of the vendor, DHSS or the state.',
+    w: ['Not quite. Caring Companions is the vendor. We handle payroll and screening, but the consumer is the employer.', '', 'Not quite. DHSS determines eligibility and authorizes services. The consumer is the employer.'] },
+  { q: 'How long is one unit of service?', o: ['15 minutes', '30 minutes', 'One hour'], c: 0,
+    ok: 'Right. One unit equals 15 minutes.',
+    w: ['', 'Not quite. A unit is 15 minutes.', 'Not quite. A unit is 15 minutes.'] },
+  { q: 'Your attendant cannot come today. What is the best first step?', o: ['Wait and see if they show up tomorrow', 'Contact your backup attendant, then let us know if you are left without care', 'Ask Caring Companions to send a replacement today'], c: 1,
+    ok: 'Right. You arrange coverage, and we help if you are stuck. This is why hiring a backup attendant matters.',
+    w: ['Not quite. Going without needed care is not the plan. Use your backup and call us if you need help.', '', 'Not quite. We do not send substitute attendants. We can help you problem solve and recruit.'] },
+  { q: 'True or false: you may ask your attendant to also do yard work while they are clocked in.', o: ['True', 'False'], c: 1,
+    ok: 'Right. Only tasks authorized on your plan of care may be performed and recorded. Yard work is listed in our policy as an example of unapproved work.',
+    w: ['Not quite. Time recorded for tasks not approved on the plan of care is an example of falsification in our policy.', ''] },
+  { q: 'Who provides the cleaning supplies, gloves, gas and vehicle needed for your authorized tasks?', o: ['The attendant', 'Caring Companions', 'You, the consumer'], c: 2,
+    ok: 'Right. Supplies and equipment for authorized tasks are the consumer\u2019s responsibility.',
+    w: ['Not quite. Attendants are not responsible for providing supplies, protective gear, gas or a vehicle.', 'Not quite. The vendor does not supply these. They are the consumer\u2019s responsibility.', ''] },
+  { q: 'How many attendants may a consumer hire?', o: ['Up to two', 'Up to four', 'As many as needed'], c: 1,
+    ok: 'Right. Up to four, because of workers\u2019 compensation law. A primary plus at least one backup is strongly encouraged.',
+    w: ['Not quite. Up to four attendants may be hired.', '', 'Not quite. The limit is four.'] },
+  { q: 'Which change must be reported within ten days?', o: ['A move to a new address', 'A new favorite meal', 'A change in your television service'], c: 0,
+    ok: 'Right. Any change affecting your plan of care, including a change of residence, must be reported within ten days.',
+    w: ['', 'Not quite. The ten day rule covers changes affecting your plan of care or your residence.', 'Not quite. The ten day rule covers changes affecting your plan of care or your residence.'] },
+  { q: 'How may your attendant clock in and out?', o: ['The WellSky Personal Care app, or a call from your home phone', 'By calling from their own cell phone', 'On a paper timesheet at the end of the week'], c: 0,
+    ok: 'Right. Those are the only two methods. Caring Companions does not use paper timesheets at all.',
+    w: ['', 'Not quite. Calling from a cell phone does not work and is not allowed. It is the app, or your home phone.', 'Not quite. We do not use paper timesheets. Every shift is recorded electronically.'] },
+  { q: 'Your attendant offers to clock in while you go to a family event alone, so you do not lose the hours. What do you do?', o: ['Accept, since the hours are already approved', 'Decline, and only record time when care is actually provided', 'Accept, but only for a short shift'], c: 1,
+    ok: 'Right. Recording care that did not happen is Medicaid fraud, no matter how small or how well intended.',
+    w: ['Not quite. Approved hours are a maximum for care actually provided. Recording unworked time is fraud.', '', 'Not quite. There is no small amount of unworked time that becomes acceptable.'] },
+  { q: 'If falsified time is discovered, what can happen?', o: ['Nothing, as long as it is corrected quietly', 'Payments are recouped, the attendant can be disqualified, and the matter can be reported to state authorities', 'Only the attendant is affected'], c: 1,
+    ok: 'Right. Payments made on inaccurate time are recouped from the consumer and the attendant, and we are required to report suspected fraud.',
+    w: ['Not quite. We are required to report suspected Medicaid fraud to MMAC, DHSS and the Attorney General.', '', 'Not quite. Recovery and referral can involve both the consumer and the attendant.'] },
+  { q: 'Who must report suspected abuse, neglect or exploitation to the DHSS hotline?', o: ['Only Caring Companions staff', 'Every attendant, as a mandated reporter', 'Only a doctor'], c: 1,
+    ok: 'Right. All attendants providing CDS are mandated reporters and must report immediately to 800-392-0210.',
+    w: ['Not quite. Every CDS attendant is a mandated reporter.', '', 'Not quite. Every CDS attendant is a mandated reporter.'] },
+  { q: 'You are unhappy with how a concern was handled by staff. What is the next step?', o: ['Nothing can be done', 'Put your concern in writing to the staff member and supervisor, then escalate to the Executive Director if needed', 'Stop your services'], c: 1,
+    ok: 'Right. Concerns are resolved at the lowest level first, in writing with a response in five working days, then escalated if needed. Using the process never affects your services.',
+    w: ['Not quite. There is a written grievance and appeal process, and you may name someone to help you.', '', 'Not quite. You never have to give up services to raise a concern.'] }
+];
+
+const VIDEO = {
+  1: { file: 'audio/consumer-01-what-is-cds.mp3', scenes: [
+    { k: 'Module 1', t: 'What Consumer Directed Services is', l: ['A Missouri Medicaid program', 'You stay in your own home', 'You hire your own caregiver, called an attendant'],
+      say: ['Consumer Directed Services, or CDS, is a Missouri Medicaid program. It lets you stay in your own home and hire your own caregiver. That caregiver is called an attendant.'] },
+    { k: 'The difference', t: 'An agency directs care. In CDS, you do.', l: ['An agency picks the caregiver and sets the schedule', 'In CDS you hire, train, supervise and direct', 'Your care fits your life, not a standard checklist'],
+      say: ['With an agency, the agency picks the caregiver, sets the schedule, and tells that caregiver what to do. In CDS, you do those things. You are the employer of your attendant. That means you are responsible for hiring, training, supervising, and directing them.', 'That is real responsibility, and it is also real freedom. Your care gets to look like your life instead of somebody\u2019s standard checklist.'] },
+    { k: 'Words you will hear', t: 'Consumer, attendant, vendor', l: ['Consumer: you, found eligible by the state', 'Attendant: the person you hire. Your employee, not ours', 'Vendor: Caring Companions, holding the state agreement'],
+      say: ['You are the consumer. That means the state has found you eligible for CDS.', 'Your attendant is the person you hire to help with your daily tasks. Your attendant is your employee. Not ours, not the state\u2019s.', 'Caring Companions is the vendor. We hold the agreement with the Department of Health and Senior Services to handle payroll, background screening, monitoring, and your training and support.'] },
+    { k: 'Words you will hear', t: 'Plan of care, units, unmet needs', l: ['Plan of care: your approved tasks and maximum care', 'One unit of service equals 15 minutes', 'Unmet needs: what your household cannot reasonably cover'],
+      say: ['Your plan of care is the document that comes out of your state assessment. It lists the tasks you are approved for, how often, and the maximum amount of care you may use.', 'A unit of service is fifteen minutes. When you hear units, think quarter hours.', 'And unmet needs are the daily tasks that cannot reasonably be met by the people already in your household. CDS pays for unmet needs.'] },
+    { k: 'What CDS can cover', t: 'Everyday help, on your terms', l: ['Bathing, grooming, dressing, help in and out of bed', 'Meals, bowel and bladder needs, walking, equipment', 'Shopping, transportation and housekeeping'],
+      say: ['Your plan of care may cover things like bathing and grooming, dressing, getting in and out of bed, meals, bowel and bladder needs, shopping and transportation, walking, using your equipment, and housekeeping. Your own plan of care is always the final word on what you are approved for.'] }
+  ] },
+  2: { file: 'audio/consumer-02-who-does-what.mp3', scenes: [
+    { k: 'Module 2', t: 'Three people share the work', l: ['You, the consumer', 'Your attendant', 'Caring Companions, your vendor'],
+      say: ['Three people share the work in CDS. You, your attendant, and us.'] },
+    { k: 'Your part', t: 'You direct the care', l: ['Choose, hire and train your attendant', 'Set the schedule and supervise the work', 'Report changes and keep your Medicaid active'],
+      say: ['You choose and hire your attendant. You train them. You set the schedule. You supervise the work. You report changes, and you keep your Medicaid active.'] },
+    { k: 'Your attendant', t: 'Show up, follow the plan, record it right', l: ['Work the schedule you set', 'Only tasks on your plan of care', 'Clock in and out accurately, keep your information private'],
+      say: ['Your attendant shows up as scheduled, does only the tasks on your plan of care, clocks in and out accurately, and keeps your information private.'] },
+    { k: 'Caring Companions', t: 'We handle the machinery', l: ['Payroll, taxes and Medicaid billing', 'Background screening of every attendant', 'Monthly check ins, unit monitoring, training and support'],
+      say: ['Caring Companions handles payroll and taxes. We collect your attendant\u2019s time and pay them on your behalf. We run the background screenings. We bill Medicaid. We check in with you at least monthly, we watch your unit usage, we help you build a backup and emergency plan, and we train and support you.'] },
+    { k: 'Be clear on this', t: 'What we do not do', l: ['We do not pick your attendant or send substitutes', 'We do not set your schedule or direct your attendant', 'We do not decide your hours. The state does', 'We do not supply gloves, cleaning products, gas or a vehicle'],
+      say: ['Now let me be just as clear about what we do not do, because this is where confusion usually starts.', 'We do not choose your attendant for you, and we do not send a substitute when yours cannot come. We do not set your schedule, and we do not tell your attendant how you like things done. We do not decide how many hours you get. The state does that through your assessment. We do not supply cleaning products, gloves, gas, or a vehicle. Those are yours to provide. And your attendant is never our employee, so the day to day direction comes from you.'] },
+    { k: 'Call us', t: 'You are not on your own', l: ['Unsure whether something is allowed? Call before you do it', 'Two minutes on the phone prevents most problems'],
+      say: ['One more thing. You do not have to figure everything out by yourself. If you are ever unsure whether something is allowed, call us before you do it. That call takes two minutes and can save you a great deal of trouble.'] }
+  ] },
+  3: { file: 'audio/consumer-03-responsibilities.mp3', scenes: [
+    { k: 'Module 3', t: 'Your plan of care', l: ['Built from an assessment done in your home', 'Lists approved services, frequency and maximum units', 'Signed by you and the state, reassessed at least yearly'],
+      say: ['Let\u2019s talk about your responsibilities. These come straight from the CDS rules, and none of them are hard on their own.', 'First, your plan of care. It comes from an assessment done in your home. It lists the maximum units of care you may use, which services you get and how often, when services start, and when you will be reassessed. You and the state both sign it. You get a copy, and so do we. Your needs are reassessed at least once a year.'] },
+    { k: 'As the employer', t: 'Hire, train, supervise, track', l: ['Select, hire, train and supervise your attendant', 'Use the designated time tracking system every shift', 'Never let submitted time exceed your authorized units'],
+      say: ['Now, your responsibilities as the employer. Select, hire, train, and supervise your attendant. Use the electronic time tracking system we designate, every shift. Make sure the time submitted never goes over the units authorized in your plan of care.'] },
+    { k: 'Keep us informed', t: 'Report changes and problems', l: ['Changes affecting your plan of care within ten days', 'Quality problems with your attendant, promptly', 'Hospitalizations, and days you will not be home'],
+      say: ['Tell us and the state within ten days about any change that affects your plan of care, including a move. Tell us promptly about any problem with the quality of your attendant\u2019s work. Let your attendant and Caring Companions know if you will not be home for a scheduled shift. And tell us when you are hospitalized.'] },
+    { k: 'Keep it active', t: 'Medicaid, supplies, training', l: ['Keep Medicaid active and meet any spenddown monthly', 'Train your attendant on your authorized tasks', 'Provide supplies, vehicle and gas for those tasks'],
+      say: ['Keep your Medicaid active. If you have a spenddown, it has to be met every month, or your attendant cannot be paid. Train your attendant on the tasks authorized in your plan of care. And provide the supplies and equipment your attendant needs, such as cleaning supplies, a vehicle, and gas.'] },
+    { k: 'Staying in the program', t: 'You always get it in writing', l: ['The state may reduce, deny or end services in some cases', 'Decisions come in writing', 'You have the right to request a hearing'],
+      say: ['One last thing on staying in the program. The state can reduce, deny, or end CDS in certain situations. If that ever happens, you get the decision in writing, and you have the right to request a hearing.'] }
+  ] },
+  4: { file: 'audio/consumer-04-hiring.mp3', scenes: [
+    { k: 'Module 4', t: 'You get to choose', l: ['Often a family member, friend or neighbor', 'Skill, reliability and fit are yours to judge'],
+      say: ['Now the part most people are excited about. You get to choose who cares for you. Very often that is a family member, a friend, or a neighbor.'] },
+    { k: 'Who may work', t: 'Attendant qualifications', l: ['At least 18 years old', 'Able to meet the physical and mental demands', 'Confidential, dependable, calm in an emergency', 'Clear registry screening, not on either exclusion list'],
+      say: ['Here is who may work as your attendant. They must be at least eighteen years old. They must be able to meet the physical and mental demands of your tasks. They have to agree to keep your information confidential. They should be emotionally mature, dependable, and able to handle an emergency.', 'They must be registered with the Family Care Safety Registry with a clear screening, or hold a good cause waiver from the state that is still in good standing. And they cannot be on the Employee Disqualification List or the federal exclusion list.'] },
+    { k: 'Two firm rules', t: 'Spouses, and screening first', l: ['Your spouse cannot be paid as your attendant', 'Nobody works or gets paid before screening and paperwork are done'],
+      say: ['Two firm rules. Your spouse cannot be paid as your attendant. And nobody starts working, or gets paid, until we have finished their screening and paperwork.'] },
+    { k: 'How many', t: 'Up to four, and always a backup', l: ['Up to four attendants, because of workers compensation law', 'Hire a primary plus at least one backup', 'A backup is how you avoid a day without care'],
+      say: ['You may hire up to four attendants. That limit comes from workers\u2019 compensation law. I strongly encourage you to hire a primary attendant and at least one backup, so you are not left without care when your primary attendant is sick or away.'] },
+    { k: 'Fair hiring', t: 'You are an equal opportunity employer', l: ['No decisions based on race, color, national origin, sex, age, religion, politics or disability', 'You may absolutely choose on skill, reliability and fit'],
+      say: ['As an employer, you must select attendants without regard to race, color, national origin, sex, age, religion, political beliefs, or disability. You absolutely may choose based on skill, reliability, availability, and whether the person is a good fit for you.'] },
+    { k: 'Before you hire', t: 'Ask these six questions', l: ['Which days and hours can you truly commit to?', 'Are you comfortable with bathing and toileting help?', 'Do you have reliable transportation?', 'How will you tell me if you cannot come?', 'Do you have a smartphone for the WellSky app?', 'Can you stay calm in an emergency?'],
+      say: ['A few questions worth asking before you hire. Which days and hours can you truly commit to. Are you comfortable with personal care like bathing and toileting. Do you have reliable transportation. How will you tell me if you cannot come. Do you have a smartphone that can run the WellSky app, or will you be clocking in from my home phone every shift. And can you stay calm in an emergency.'] }
+  ] },
+  5: { file: 'audio/consumer-05-training.mp3', scenes: [
+    { k: 'Module 5', t: 'You are responsible for training your attendant', l: ['This is the heart of Consumer Directed Services', 'Nobody knows your routine, home or body like you do'],
+      say: ['This is the most important module in this orientation, so stay with me. You are responsible for training your attendant.', 'That surprises people, and I understand why. But think about it for a second. Nobody knows your routine, your home, or your body the way you do. We can help you get ready, and we will help with general orientation when you ask. What we cannot do is teach someone how you like your coffee, how you get out of bed, or which shirt goes with which day.', 'That is your job, and it is exactly what makes CDS care fit you instead of fitting a standard care plan.'] },
+    { k: 'Steps 1 to 4', t: 'Start by showing, not telling', l: ['1. Show them how you like things done', '2. Review your care needs and authorized tasks together', '3. Explain your normal routine', '4. Show them where the supplies are kept'],
+      say: ['Here is how to do it. One. Show them how you like things done. Walk through the task together the first time instead of describing it. Two. Review your care needs and your authorized tasks together, using your plan of care. Three. Explain your normal routine. When you get up, when you eat, when you rest, what happens first. Four. Show them where the supplies are. Linens, cleaning products, gloves, laundry, trash.'] },
+    { k: 'Steps 5 to 7', t: 'Safety, medication limits, household rules', l: ['5. Explain mobility and safety needs', '6. Medications only as authorized on your plan of care', '7. Set household expectations'],
+      say: ['Five. Explain your mobility and safety needs. How you transfer, which side to stand on, what hurts, what helps. Six. Talk about medications only as they relate to your routine and your approved tasks. Never ask an attendant to do something with medication that is not authorized on your plan of care. Seven. Set your household expectations. Shoes on or off, pets, phone use, visitors, quiet hours.'] },
+    { k: 'Steps 8 to 11', t: 'Schedule, call offs, clocking in', l: ['8. Put the schedule in writing, inside your units', '9. Explain call off expectations', '10. Teach the clock in and clock out process, app or home phone', '11. Never clock in when care is not happening'],
+      say: ['Eight. Establish a written schedule that fits inside your authorized units. Nine. Explain your call off expectations. How much notice you need, who to call, and what you will do for backup. Ten. Teach them the clock in and clock out process, and watch them do it the first few shifts. Eleven. Make sure they understand they may never clock in when they are not actually providing your care.'] },
+    { k: 'Steps 12 and 13', t: 'Correct early, and call us', l: ['12. Fix small problems in week one, kindly and specifically', '13. Call Caring Companions when you need help'],
+      say: ['Twelve. Correct problems early, and kindly. A small habit fixed in week one does not become a crisis in month six. Thirteen. Call us when you need help. Coaching you through attendant problems is part of our job, not an imposition.', 'And one honest word about correcting people. Say something the first time, not the tenth. Be specific about what happened and what you need instead. Keep simple notes of dates and issues. If it does not improve, call us.'] }
+  ] },
+  6: { file: 'audio/consumer-06-hours-evv.mp3', scenes: [
+    { k: 'Module 6', t: 'Two ideas make this simple', l: ['Authorized hours are a maximum, not a target', 'Recorded time must match care that actually happened'],
+      say: ['Two ideas make this whole subject simple. Authorized hours are a maximum. And recorded time must match the care that actually happened.'] },
+    { k: 'The state decides', t: 'Your units are approved by the state', l: ['A set number of units approved for each month', 'A daily amount your plan supports', 'We can only bill and pay what was approved', 'Ask us and we will turn your tasks into days per week and hours per day', 'You choose which days, and what time of day'],
+      say: ['Here is something important. The state approves your units, not us. The Department of Health and Senior Services assesses you and approves a set number of units for each month, and how much care each task gets. It is printed right on your care plan.', 'Caring Companions can only bill Medicaid for what the state approved, which means we can only pay your attendant for what the state approved. If your attendant works past your approved amount, there is no funding to pay them for it. That is not our choice. That is the limit of your authorization.', 'What you do choose is when. You pick the time of day your services happen. Morning, evening, or split across the day, whatever fits your life.', 'And if the math feels like a lot, just ask us. We will take the tasks on your plan of care, spread them across the days, and tell you how many days per week and how many hours per day your approval supports. Then the only decision left to you is which days you want your attendant to come, and at what time.', 'Missouri does not give everyone the same number of units. Yours comes from your own assessment, and state rules cap what can be authorized at a cost that does not exceed the average monthly cost of nursing facility care. If you believe you need more care than you were approved for, call us. Your needs are reassessed at least once a year, and sooner if your condition changes.', 'And one billing rule to remember. Only one attendant may be on the clock for your CDS at a time, because Medicaid allows one service code per participant at once. Two attendants cannot clock in for the same hour, even for different tasks.'] },
+    { k: 'Your job to watch', t: 'Go over, and the month runs dry', l: ['You make sure your attendant does not work over the approved hours', 'Units used early are gone for the rest of the month', 'Hours past the authorized limit will not be paid', 'Track weekly and adjust before it happens'],
+      say: ['Here is a responsibility people underestimate. You are responsible for making sure your attendant does not work more than your approved hours. Not us, and not your attendant. You are the employer, so tracking what has been used is part of the job.', 'If your attendant works more hours than the state approved, the units run out before the end of the month. Once they are gone, they are gone. Any hours worked past the authorized limit will not be paid. That leaves you with no covered care for the rest of the month, and your attendant working for free.', 'Both of those are avoidable. Divide your monthly units into a weekly plan. Write down the hours worked each shift. Check your running total every week, and adjust mid month if a week ran long. And call us if you cannot tell where you stand. We monitor your usage monthly and we will help you check.'] },
+    { k: 'Need more hours?', t: 'Unused hours can cost you an increase', l: ['The state looks at the care you actually use', 'Regularly unused hours make an increase harder to justify', 'You may call the state and request an increase', 'Say which tasks to add, which need more time, and why'],
+      say: ['One more thing, and this one surprises people. If you regularly do not use the hours you were approved for, that can work against you. The state looks at what you actually use, so unused hours can make it harder for them to justify authorizing an increase later.', 'That is not a reason to record time that was not worked. It is a reason to schedule and actually use the care you need.', 'And if your approval no longer matches your life, you may call the state directly and ask for an increase. Be ready to say three things. Which tasks you need added to your plan of care. Which tasks you need more time for. And why, in plain terms. What changed, and what happens without the help.', 'Call us first if you want help thinking it through. We cannot approve hours, but we can help you get your examples together.'] },
+    { k: 'Your hours', t: 'A ceiling, not a quota', l: ['One unit equals 15 minutes', 'Use up to your maximum when care is provided', 'Unused time is never a reason to record care that did not happen'],
+      say: ['Your plan of care authorizes a maximum number of units, and one unit is fifteen minutes. You may use up to that amount when care is actually provided. There is no requirement to use every unit. And unused time is never a reason to record care that did not happen.', 'Keeping your own simple record of your attendant\u2019s time is one of your responsibilities. It is how you catch a problem before payroll does.'] },
+    { k: 'The system', t: 'Two ways to clock in. Only two.', l: ['The WellSky Personal Care app on a smartphone', 'Or a call from your home telephone', 'Calling from a cell phone does not work and is not allowed', 'No smartphone? You need a working home phone'],
+      say: ['Missouri requires every home and community based services vendor to use an electronic time tracking system. There are exactly two ways your attendant may clock in and out, and no others.', 'Option one is the WellSky Personal Care app. Your attendant needs a smartphone that can download it, and they clock in and out in the app at the start and end of every shift.', 'Option two is a call from your home telephone, the number registered to your residence or in your name. If you use that option, you will sign a form authorizing the number for time tracking.', 'And here is the part people get wrong. Clocking in by calling from a cell phone does not work and is not allowed. It is the app, or your home phone. Nothing else. So talk about this before you hire someone. If your attendant does not have a smartphone that can run the app, you need a working home telephone.'] },
+    { k: 'Who does what', t: 'Your part and your attendant\u2019s part', l: ['You: keep your home phone available, or confirm they can use the app', 'You: keep your own separate record of hours', 'Attendant: clock in on the app or your home phone before work', 'Attendant: clock out right after, report real tasks, verify daily'],
+      say: ['Your part. Keep your home phone available, or confirm your attendant can use the app. Make sure they clock in and out every shift. Keep your own separate record. Compare it against your authorized hours. And make sure the time recorded with us is correct.', 'Your attendant\u2019s part. Clock in on the app, or from your home phone, before starting work. Clock out the same way as soon as the work is finished. Report the tasks they actually completed. Verify their times daily. And keep their own backup record.'] },
+    { k: 'No paper', t: 'We do not use paper timesheets', l: ['Every shift is recorded electronically', 'App, or a call from your home phone', 'There is no paper slip to fall back on'],
+      say: ['One thing to be very clear about. Caring Companions does not use paper timesheets at all. Every shift is recorded electronically, in the app or from your home phone. There is no paper slip to fall back on, which is exactly why the clock in and clock out habit matters so much.'] },
+    { k: 'Missed a punch?', t: 'Report it. Never repair it yourself.', l: ['Do not record time that was not worked', 'Do not move time to another day', 'Do not stay clocked in while no care is happening'],
+      say: ['Now the question I get most often. What if a clock in or clock out is missed. Never fix a missed punch by recording time that was not worked, by moving the time to another day, or by leaving your attendant clocked in while no care is happening. That is falsification.'] },
+    { k: 'The correct path', t: 'The EVV Manual Correction Form', l: ['Online at hub.caringcds.com/evv-form.html', 'Visit date, original and corrected times, reason, tasks', 'Both attendant and consumer sign', 'Due by 11:59 PM Saturday of that pay period'],
+      say: ['When a genuine technical problem stops the clock in or clock out, there is one correct path. The E V V Manual Correction Form, online at hub dot caring c d s dot com. It asks for the visit date, the original and corrected times, the reason, the tasks performed, and signatures from both you and your attendant. It has to be submitted by eleven fifty nine P M Saturday of that pay period. Tell your attendant to save it to their phone, so it is one tap when they need it.'] },
+    { k: 'One caution', t: 'Corrections are watched closely', l: ['Goal: 95 percent or more clocked correctly the first time', 'Missouri Medicaid treats frequent corrections as a fraud indicator', 'Every correction is reviewed individually in an audit', 'Happening most weeks? Call us instead'],
+      say: ['One caution about that form. Our goal is that ninety five percent or more of visits are clocked correctly the first time, with no manual change from us. Missouri Medicaid treats a high rate of manual corrections as a possible fraud indicator, and every correction is reviewed individually in an audit. So use the form when you truly need it, and not as a normal way to record time. If corrections are happening most weeks, call us and we will find out what is going wrong with the app.'] }
+  ] },
+  7: { file: 'audio/consumer-07-integrity.mp3', scenes: [
+    { k: 'Module 7', t: 'Protecting the program protects your care', l: ['CDS is paid for by Medicaid', 'Falsifying time or tasks is Medicaid fraud'],
+      say: ['CDS is paid for by Medicaid. Protecting it protects your care, your attendant, and every other family in the program. So let\u2019s be direct about this one. Any falsification or misrepresentation of your attendant\u2019s time worked is Medicaid fraud.'] },
+    { k: 'What it looks like', t: 'Examples from our policy', l: ['Days not worked, or more hours than worked', 'Tasks marked that were not done', 'Time for unapproved work like yard work or pet care', 'Time for days you were in a hospital or facility', 'Work done by someone other than your approved attendant'],
+      say: ['That includes time submitted for days your attendant did not work. More hours than were actually worked. Tasks marked that were not done. A timesheet filled out before the work happened. Time for tasks not approved on your plan of care, like yard work, pet care, or home repair. Time for days you were in the hospital, at the doctor, in rehab, or in a facility. Time while your attendant was working somewhere else. Work done by someone other than your approved attendant. And signatures or initials that are not really yours or theirs.'] },
+    { k: 'Stop', t: 'Never ask for time that was not worked', l: ['Not to avoid losing hours', 'Not because they earned it another way', 'Not even if they offer'],
+      say: ['So never ask an attendant to clock in for care they did not actually provide. Not to avoid losing hours. Not because you feel they earned it another way. Not even if they offer.'] },
+    { k: 'Consequences', t: 'What happens if it occurs', l: ['We must report to MMAC, the state and the Attorney General', 'Payments are recouped from consumer and attendant', 'Attendants can be disqualified, vendors can withdraw', 'Lifetime loss of eligibility, charges, penalties, prison time'],
+      say: ['Here is what happens if it does occur. We are required to report suspected Medicaid fraud to the state Medicaid Audit and Compliance Unit, to the Department of Health and Senior Services, and to the Attorney General. Payments made from inaccurate time are recouped from the consumer and the attendant. Attendants can be disqualified from working for any of our consumers. We can withdraw as your vendor. People who violate these rules can lose Medicaid eligibility for life and can face criminal charges, financial penalties, and prison time.'] },
+    { k: 'The honest part', t: 'We would rather retrain than report', l: ['Mistakes happen', 'Told promptly, they are handled very differently than hidden ones'],
+      say: ['I tell you all of that because I would much rather retrain someone than report them. A mistake you tell us about honestly and promptly is handled very differently from one that is hidden.'] }
+  ] },
+  8: { file: 'audio/consumer-08-changes-safety.mp3', scenes: [
+    { k: 'Module 8', t: 'When life changes, call us', l: ['One phone call keeps services and pay on track'],
+      say: ['Life changes. When it does, one phone call keeps your services and your attendant\u2019s pay on track.'] },
+    { k: 'Within ten days', t: 'Report these changes', l: ['Anything affecting your plan of care', 'Address or phone number', 'Your condition or care needs', 'Medicaid or spenddown status, or a change of attendant'],
+      say: ['Tell us within ten days about any change that affects your plan of care, a change of address or phone number, a change in your condition or care needs, a change in your Medicaid or spenddown, or a change of attendant.'] },
+    { k: 'Right away', t: 'Do not wait on these', l: ['Hospital, rehab or facility admission', 'Days you will not be home for a shift', 'Quality problems with your attendant', 'Any safety concern in your home'],
+      say: ['Tell us right away if you are hospitalized or admitted to rehab or a facility, if you will not be home for a scheduled shift, if there is a problem with the quality of your attendant\u2019s work, or if you have any safety concern in your home.'] },
+    { k: 'Be ready', t: 'Your backup and emergency plan', l: ['Answers one question: what if no one comes today?', 'A hired backup, a phone list, a weather plan', 'We help you build it'],
+      say: ['Every consumer needs a backup and emergency plan, and we will help you build one. It answers a simple question. What happens if your attendant does not come and you need care today.'] },
+    { k: 'Your safety', t: 'Abuse, neglect and exploitation', l: ['Abuse can be physical, sexual or emotional', 'Neglect is failing to provide needed care', 'Exploitation is taking property or money by deception or force', 'State hotline: 800-392-0210'],
+      say: ['Now something serious. You have the right to be safe and to be treated with dignity. Abuse can be physical, sexual, or emotional. Neglect is a failure to provide needed care. Exploitation is taking control of your property or money by deception, intimidation, or force, including misuse of a power of attorney, theft, or forged checks.', 'If you are being harmed or you feel unsafe, call the state hotline at eight hundred, three nine two, zero two one zero. Every attendant is a mandated reporter and has to report suspected abuse, neglect, or exploitation to that same number.'] },
+    { k: 'Speaking up', t: 'If you are unhappy with us, say so', l: ['Concerns are solved at the lowest level first', 'Written concern, response in five working days', 'Executive Director meeting within ten days of a written request', 'You may name someone to speak for you. Services are never affected'],
+      say: ['And if you are ever unhappy with us, say so. Concerns are meant to be solved at the lowest level, and most are. If yours is not, there is a written grievance process, with a response in five working days, a meeting with the Executive Director within ten days of your written request, and a written decision you may appeal. You may name someone to help you or speak for you. Using that process never affects your services.'] }
+  ] }
+};
+
+const WPS = 2.45;
+
+const STAGES = [
+  { bg: '#0B2740', a: '#123B5C', b: '#14545C' },
+  { bg: '#0E3352', a: '#17608A', b: '#0F4A52' },
+  { bg: '#10394A', a: '#14666B', b: '#1A4E6E' },
+  { bg: '#12303F', a: '#1B5E6B', b: '#123B5C' }
+];
+
+const ART = {
+  '1-0': { k: 'count', big: 'CDS', small: 'Consumer Directed Services', cap: 'Missouri Medicaid, your home, your caregiver' },
+  '1-1': { k: 'compare', rows: [['x', 'Agency picks your caregiver'], ['x', 'Agency sets the schedule'], ['ok', 'In CDS you hire and direct'], ['ok', 'Care shaped around your life']] },
+  '1-2': { k: 'orbit', center: 'You', dots: ['Attendant', 'Vendor', 'The state'] },
+  '1-3': { k: 'clock', big: '15', small: 'minutes', cap: 'One unit of service equals 15 minutes', turn: 0.25 },
+  '1-4': { k: 'grid', cap: 'Everyday tasks your plan may cover' },
+  '2-0': { k: 'orbit', center: 'Your care', dots: ['You', 'Attendant', 'Caring Companions'] },
+  '2-1': { k: 'count', big: '1', small: 'You direct the care', cap: 'Hiring, training, scheduling, supervising' },
+  '2-2': { k: 'compare', rows: [['ok', 'Work the schedule you set'], ['ok', 'Only tasks on your plan'], ['ok', 'Clock in and out honestly'], ['ok', 'Keep your information private']] },
+  '2-3': { k: 'grid', cap: 'Payroll, taxes, screening, billing, monitoring' },
+  '2-4': { k: 'compare', rows: [['x', 'We do not pick your attendant'], ['x', 'We do not send substitutes'], ['x', 'We do not set your schedule'], ['x', 'We do not supply gloves or gas']] },
+  '2-5': { k: 'phone', big: 'Call us', cap: 'Unsure if something is allowed? Ask before you do it' },
+  '3-0': { k: 'grid', cap: 'Your plan of care, built from your assessment' },
+  '3-1': { k: 'count', big: '4', small: 'Employer duties', cap: 'Select, hire, train, supervise' },
+  '3-2': { k: 'count', big: '10', small: 'Days to report a change', cap: 'Anything affecting your plan of care' },
+  '3-3': { k: 'compare', rows: [['ok', 'Medicaid active every month'], ['ok', 'Spenddown met if you have one'], ['ok', 'Supplies and gas provided'], ['ok', 'Attendant trained on your tasks']] },
+  '3-4': { k: 'phone', big: 'In writing', cap: 'Decisions come in writing, and you may request a hearing' },
+  '4-0': { k: 'orbit', center: 'You choose', dots: ['Family', 'Friend', 'Neighbor'] },
+  '4-1': { k: 'compare', rows: [['ok', 'At least 18 years old'], ['ok', 'Meets the demands of your tasks'], ['ok', 'Clear registry screening'], ['x', 'Not on either exclusion list']] },
+  '4-2': { k: 'stop', big: 'STOP', cap: 'No spouse as paid attendant. No work before screening is done' },
+  '4-3': { k: 'count', big: '4', small: 'Attendants maximum', cap: 'Hire a primary plus at least one backup' },
+  '4-4': { k: 'grid', cap: 'Choose on skill, reliability and fit' },
+  '4-5': { k: 'compare', rows: [['ok', 'Which hours can you commit to?'], ['ok', 'Comfortable with personal care?'], ['ok', 'Reliable transportation?'], ['ok', 'Will you clock in every shift?']] },
+  '5-0': { k: 'count', big: 'YOU', small: 'Train your attendant', cap: 'Nobody knows your routine like you do' },
+  '5-1': { k: 'grid', cap: 'Steps 1 to 4: show, review, explain, locate' },
+  '5-2': { k: 'compare', rows: [['ok', 'Mobility and safety needs'], ['ok', 'Household expectations'], ['x', 'No unauthorized medication tasks']] },
+  '5-3': { k: 'phone', big: 'Clock in', cap: 'Teach it, then watch them do it the first few shifts' },
+  '5-4': { k: 'count', big: '13', small: 'Steps, start to finish', cap: 'Correct early, kindly, and call us when you need help' },
+  '6-0': { k: 'meter', cap: 'Authorized hours are a ceiling, not a target' },
+  '6-1': { k: 'count', big: '243', small: 'Units approved for the month', cap: 'About 60 hours, or roughly two hours a day. You pick which hours' },
+  '6-2': { k: 'stop', big: 'NOT PAID', cap: 'Hours worked past the authorized limit cannot be paid' },
+  '6-3': { k: 'phone', big: 'Ask', cap: 'Call the state: which tasks, how much more time, and why' },
+  '6-4': { k: 'clock', big: '15', small: 'minutes', cap: 'Use up to your maximum when care actually happens', turn: 0.25 },
+  '6-5': { k: 'compare', rows: [['ok', 'WellSky Personal Care app'], ['ok', 'Call from the consumer home phone'], ['x', 'Calling from a cell phone'], ['x', 'Any other method']] },
+  '6-6': { k: 'compare', rows: [['ok', 'You verify the recorded time'], ['ok', 'You keep your own record'], ['ok', 'Attendant clocks in before work'], ['ok', 'Attendant clocks out right after']] },
+  '6-7': { k: 'stop', big: 'NO PAPER', cap: 'Every shift is recorded electronically. No paper timesheets' },
+  '6-8': { k: 'stop', big: 'STOP', cap: 'Never repair a missed punch yourself' },
+  '6-9': { k: 'phone', big: 'EVV form', cap: 'hub.caringcds.com/evv-form.html, signed by both, due Saturday 11:59 PM' },
+  '6-10': { k: 'meter', cap: 'Aim for 95 percent or more clocked correctly the first time' },
+  '7-0': { k: 'stop', big: 'FRAUD', cap: 'Falsifying time or tasks is Medicaid fraud' },
+  '7-1': { k: 'compare', rows: [['x', 'Days not worked'], ['x', 'More hours than worked'], ['x', 'Tasks never done'], ['x', 'Yard work, pet care, home repair']] },
+  '7-2': { k: 'stop', big: 'NEVER', cap: 'Not to save hours. Not as a favor. Not even if they offer' },
+  '7-3': { k: 'count', big: '3', small: 'Agencies notified', cap: 'MMAC, DHSS and the Attorney General' },
+  '7-4': { k: 'phone', big: 'Tell us', cap: 'We would much rather retrain than report' },
+  '8-0': { k: 'phone', big: 'One call', cap: 'Keeps your services and your attendant pay on track' },
+  '8-1': { k: 'count', big: '10', small: 'Days to report', cap: 'Address, condition, Medicaid, attendant changes' },
+  '8-2': { k: 'compare', rows: [['x', 'Hospital or facility stay'], ['x', 'Days you will not be home'], ['x', 'Attendant quality problems'], ['x', 'Any safety concern']] },
+  '8-3': { k: 'grid', cap: 'Your backup and emergency plan' },
+  '8-4': { k: 'count', big: '800', small: '392-0210', cap: 'State hotline for abuse, neglect or exploitation' },
+  '8-5': { k: 'compare', rows: [['ok', 'Response in 5 working days'], ['ok', 'Director meeting within 10 days'], ['ok', 'You may name someone to speak for you'], ['ok', 'Your services are never affected']] }
+};
+
+const ART_FALLBACK = ['grid', 'compare', 'count', 'orbit'];
+
+const PLAN_MONTHS = [
+  ['08/04/2025 - 08/31/2025', 243], ['09/2025', 239], ['10/2025', 243], ['11/2025', 239],
+  ['12/2025', 243], ['01/2026', 243], ['02/2026', 234], ['03/2026', 243],
+  ['04/2026', 239], ['05/2026', 243], ['06/2026', 239]
+];
+
+const PLAN_TASKS = [
+  ['Bathing', 15, 3], ['Change linens', 10, 2], ['Clean bath', 30, 1], ['Clean floors', 30, 1],
+  ['Clean kitchen', 30, 1], ['Clean and maintain equipment', 30, 1], ['Dressing and grooming', 15, 7],
+  ['Essential transportation', 40, 'As needed'], ['Laundry (off site)', 60, 1], ['Medications', 5, 7],
+  ['Tidy and dust', 15, 1], ['Trash', 5, 1], ['Treatments', 15, 7], ['Meal prep and eating', 60, 1],
+  ['Wash dishes', 10, 7]
+];
+
+function sceneTiming(mod) {
+  const scenes = VIDEO[mod].scenes;
+  let total = 0;
+  const spans = scenes.map((s) => {
+    const words = s.say.join(' ').split(/\s+/).length;
+    const dur = Math.max(4, words / WPS);
+    const start = total;
+    total += dur;
+    return { start: start, dur: dur };
+  });
+  return { spans: spans, total: total };
+}
+
+class Component extends DCLogic {
+  state = { view: 'welcome', done: [], picks: {}, name: '', date: '', started: 0, finishedAt: 0, mode: 'watch', playing: false, t: 0, dur: 0, audioOk: true };
+
+  componentDidMount() {
+    let s = null;
+    try { s = JSON.parse(localStorage.getItem(KEY) || 'null'); } catch (e) { s = null; }
+    const base = { started: Date.now() };
+    if (s && typeof s === 'object') Object.assign(base, s);
+    if (!base.started) base.started = Date.now();
+    if (!base.date) base.date = new Date().toISOString().slice(0, 10);
+    this.setState(base);
+  }
+
+  persist(patch) {
+    this.setState(patch, () => {
+      try { localStorage.setItem(KEY, JSON.stringify(this.state)); } catch (e) {}
+    });
+  }
+
+  go(view) {
+    if (this.audio) { try { this.audio.pause(); } catch (e) {} }
+    this.persist({ view: view, t: 0, dur: 0, playing: false, audioOk: true });
+    if (typeof window !== 'undefined') window.scrollTo(0, 0);
+  }
+
+  complete(n) {
+    if (this.audio) { try { this.audio.pause(); } catch (e) {} }
+    const done = this.state.done.indexOf(n) === -1 ? this.state.done.concat([n]) : this.state.done;
+    this.persist({ done: done, view: n < 8 ? n + 1 : 'final', t: 0, dur: 0, playing: false, audioOk: true });
+    if (typeof window !== 'undefined') window.scrollTo(0, 0);
+  }
+
+  pick(id, i) {
+    const picks = Object.assign({}, this.state.picks);
+    picks[id] = i;
+    this.persist({ picks: picks });
+  }
+
+  componentWillUnmount() { if (this.tick) clearInterval(this.tick); }
+
+  startClock() {
+    if (this.tick) clearInterval(this.tick);
+    this.tick = setInterval(() => {
+      const a = this.audio;
+      const st = this.state;
+      if (!st.playing) return;
+      if (a && st.audioOk && a.duration) {
+        this.setState({ t: a.currentTime, dur: a.duration, playing: !a.paused });
+      } else {
+        const total = this.state.dur || sceneTiming(this.state.view).total;
+        const nt = st.t + 0.1;
+        if (nt >= total) this.setState({ t: total, playing: false });
+        else this.setState({ t: nt });
+      }
+    }, 100);
+  }
+
+  setAudio(el) {
+    this.audio = el;
+    if (!el) return;
+    const mod = VIDEO[this.state.view];
+    if (mod && mod.file && el.getAttribute('src') !== mod.file) el.setAttribute('src', mod.file);
+    el.onerror = () => this.setState({ audioOk: false });
+    el.onloadedmetadata = () => this.setState({ audioOk: true, dur: el.duration });
+    el.onended = () => this.setState({ playing: false });
+  }
+
+  togglePlayback() {
+    const a = this.audio;
+    const next = !this.state.playing;
+    if (a && this.state.audioOk) {
+      if (next) { const p = a.play(); if (p && p.catch) p.catch(() => this.setState({ audioOk: false })); }
+      else a.pause();
+    }
+    this.setState({ playing: next }, () => this.startClock());
+  }
+
+  restartPlayback() {
+    const a = this.audio;
+    if (a && this.state.audioOk) { a.currentTime = 0; const p = a.play(); if (p && p.catch) p.catch(() => {}); }
+    this.setState({ t: 0, playing: true }, () => this.startClock());
+  }
+
+  renderVals() {
+    const st = this.state;
+    const doneCount = st.done.length;
+    if ((st.view === 'ack' || st.view === 'done') && doneCount < 8) {
+      setTimeout(() => { if (this.state.done.length < 8) this.persist({ view: 'dash' }); }, 0);
+    }
+    const v = {
+      phone: PHONE,
+      pct: Math.round((doneCount / 8) * 100) + '%',
+      doneCount: doneCount,
+      hideProgress: st.view === 'welcome',
+      hideWelcome: st.view !== 'welcome',
+      hideDash: st.view !== 'dash',
+      hideFinal: st.view !== 'final',
+      hideAck: st.view !== 'ack',
+      hideDone: st.view !== 'done',
+      goDash: () => this.go('dash'),
+      goFinal: () => { if (this.state.done.length >= 8) this.go('final'); },
+      doPrint: () => { if (typeof window !== 'undefined') window.print(); },
+      name: st.name,
+      date: st.date,
+      setName: (e) => this.persist({ name: e.target.value }),
+      setDate: (e) => this.persist({ date: e.target.value }),
+      planMonths: PLAN_MONTHS.map((r) => ({ m: r[0], u: r[1], h: (r[1] / 4).toFixed(2) })),
+      planTasks: PLAN_TASKS.map((r) => ({ t: r[0], m: r[1], d: r[2] })),
+      modules: MODS.map((m) => {
+        const done = st.done.indexOf(m.n) > -1;
+        return {
+          n: m.n,
+          t: m.t,
+          d: m.d,
+          meta: 'Module ' + m.n + ' \u00b7 about ' + m.min,
+          status: done ? 'Complete' : 'Not started',
+          badgeBg: done ? '#1E8A5F' : '#EDF2F4',
+          badgeColor: done ? '#FFFFFF' : '#5A6E7C',
+          numBg: done ? '#1E8A5F' : '#EAF6F5',
+          numColor: done ? '#FFFFFF' : '#14807A',
+          numMark: done ? '\u2713' : m.n,
+          border: done ? '#1E8A5F' : '#DCE5EA',
+          bg: done ? '#F4FBF7' : '#FFFFFF',
+          open: () => this.go(m.n)
+        };
+      })
+    };
+
+    const inModule = typeof st.view === 'number';
+    const watching = inModule;
+    v.hidePlayer = !watching;
+    v.watching = watching;
+    v.hideModeToggle = !inModule;
+    v.modeLabel = watching ? 'Read the text' : 'Watch the video';
+    v.toggleMode = () => {
+      const a = this.audio;
+      if (a) { try { a.pause(); } catch (e) {} }
+      this.persist({ mode: st.mode === 'watch' ? 'read' : 'watch', playing: false });
+      if (typeof window !== 'undefined') window.scrollTo(0, 0);
+    };
+
+    if (watching) {
+      const mod = VIDEO[st.view];
+      const timing = sceneTiming(st.view);
+      const total = (st.audioOk && st.dur) ? st.dur : timing.total;
+      const scale = total / timing.total;
+      const t = Math.min(st.t, total);
+      let idx = 0;
+      for (let s = 0; s < timing.spans.length; s++) {
+        if (t >= timing.spans[s].start * scale) idx = s;
+      }
+      const span = timing.spans[idx];
+      const local = Math.max(0, Math.min(1, (t - span.start * scale) / (span.dur * scale)));
+      const scene = mod.scenes[idx];
+      const started = st.t > 0.05 || st.playing;
+      v.vidEyebrow = 'Module ' + st.view + ' of 8 \u00b7 narrated by Samantha';
+      v.vidTitle = MODS[st.view - 1].t;
+      v.sceneKicker = scene.k;
+      v.sceneTitle = scene.t;
+      v.sceneKickerOpacity = 1;
+      v.sceneTitleOpacity = 1;
+      v.sceneTitleY = '0px';
+      v.sceneLines = scene.l.map((txt, li) => {
+        const at = 0.18 + li * (0.6 / Math.max(1, scene.l.length));
+        const on = !started ? true : local >= at;
+        return { t: txt, o: on ? 1 : 0.4, y: on ? '0px' : '12px' };
+      });
+      v.sceneCounter = 'Scene ' + (idx + 1) + ' of ' + mod.scenes.length;
+
+      const stage = STAGES[(st.view + idx) % STAGES.length];
+      v.stageBg = stage.bg;
+      v.blobA = stage.a;
+      v.blobB = stage.b;
+
+      const art = ART[st.view + '-' + idx] || { k: ART_FALLBACK[idx % ART_FALLBACK.length], cap: scene.t };
+      const kinds = ['orbit', 'clock', 'meter', 'phone', 'stop', 'count', 'compare', 'grid'];
+      kinds.forEach((k) => { v['art' + k.charAt(0).toUpperCase() + k.slice(1)] = art.k === k; });
+      v.artBig = art.big || '';
+      v.artSmall = art.small || '';
+      v.artCaption = art.cap || '';
+      v.artCenter = art.center || '';
+
+      const dots = art.dots || [];
+      v.artOrbitDots = dots.map((t2, di) => {
+        const ang = (-90 + (360 / Math.max(1, dots.length)) * di) * (Math.PI / 180);
+        return {
+          t: t2,
+          x: (50 + Math.cos(ang) * 44) + '%',
+          y: (50 + Math.sin(ang) * 44) + '%',
+          o: (!started || local > 0.15 + di * 0.16) ? 1 : 0.35
+        };
+      });
+
+      v.artTurn = ((art.turn || 0.25) * Math.min(1, local * 1.6)) + 'turn';
+
+      const heights = [62, 78, 54, 88, 70];
+      v.artBars = heights.map((h, bi) => ({
+        h: ((!started || local > 0.1 + bi * 0.12) ? h : 4) + '%',
+        c: bi === 3 ? '#F0B44B' : '#38C0B8'
+      }));
+
+      const rows = art.rows || [];
+      v.artRows = rows.map((r, ri) => {
+        const on = !started || local > 0.12 + ri * 0.17;
+        const good = r[0] === 'ok';
+        return {
+          t: r[1],
+          mark: good ? '\u2713' : '\u2715',
+          dot: good ? '#1E8A5F' : '#B3341F',
+          bg: good ? 'rgba(30,138,95,.18)' : 'rgba(179,52,31,.18)',
+          o: on ? 1 : 0.12,
+          x: on ? '0px' : '18px'
+        };
+      });
+
+      const cells = [];
+      for (let ci = 0; ci < 15; ci++) {
+        const on = !started || local > 0.08 + ci * 0.045;
+        cells.push({ bg: on ? (ci % 4 === 0 ? '#38C0B8' : '#1D5C7E') : '#123B5C', s: on ? 1 : 0.55 });
+      }
+      v.artCells = cells;
+      v.playPct = Math.round((t / total) * 100) + '%';
+      v.playLabel = st.playing ? 'Pause' : (st.t > 0.05 ? 'Resume' : 'Play video');
+      const fmt = (sec) => {
+        const m = Math.floor(sec / 60);
+        const s2 = Math.floor(sec % 60);
+        return m + ':' + (s2 < 10 ? '0' : '') + s2;
+      };
+      v.timeLabel = fmt(t) + ' / ' + fmt(total);
+      v.audioSrc = mod.file;
+      v.hideAudioNotice = st.audioOk;
+      v.audioRef = (el) => this.setAudio(el);
+      v.togglePlay = () => this.togglePlayback();
+      v.restart = () => this.restartPlayback();
+      v.nextFromVideo = () => { if (this.audio) { try { this.audio.pause(); } catch (e) {} } this.setState({ playing: false }); this.complete(st.view); };
+      const paras = [];
+      mod.scenes.forEach((s, si) => {
+        s.say.forEach((p) => paras.push({ t: p, color: si === idx ? '#0E2438' : '#5A6E7C' }));
+      });
+      v.transcript = st.showTranscript ? paras : [];
+      v.hideTranscript = !st.showTranscript;
+      v.transcriptLabel = st.showTranscript ? 'Hide the transcript' : 'Read the transcript';
+      v.transcriptSign = st.showTranscript ? '\u2212' : '+';
+      v.toggleTranscript = () => this.persist({ showTranscript: !this.state.showTranscript });
+    } else {
+      v.sceneLines = [];
+      v.transcript = [];
+      v.hideTranscript = true;
+      v.transcriptLabel = '';
+      v.transcriptSign = '+';
+      v.toggleTranscript = () => {};
+      v.audioSrc = '';
+      v.hideAudioNotice = true;
+      v.playPct = '0%';
+      v.vidEyebrow = '';
+      v.vidTitle = '';
+      v.sceneKicker = '';
+      v.sceneTitle = '';
+      v.sceneKickerOpacity = 0;
+      v.sceneTitleOpacity = 0;
+      v.sceneTitleY = '0px';
+      v.playLabel = '';
+      v.timeLabel = '';
+      v.sceneCounter = '';
+      v.stageBg = '#0B2740';
+      v.blobA = '#123B5C';
+      v.blobB = '#14545C';
+      v.artBig = '';
+      v.artSmall = '';
+      v.artCaption = '';
+      v.artCenter = '';
+      v.artTurn = '0turn';
+      v.artOrbitDots = [];
+      v.artBars = [];
+      v.artRows = [];
+      v.artCells = [];
+      ['Orbit', 'Clock', 'Meter', 'Phone', 'Stop', 'Count', 'Compare', 'Grid'].forEach((k) => { v['art' + k] = false; });
+      v.togglePlay = () => {};
+      v.restart = () => {};
+      v.nextFromVideo = () => {};
+      v.audioRef = (el) => this.setAudio(el);
+    }
+
+    for (let i = 1; i <= 8; i++) {
+      v['hideM' + i] = st.view !== i;
+      v['goM' + i] = () => this.go(i);
+      v['next' + i] = () => this.complete(i);
+      const id = 'm' + i;
+      const ch = CHECKS[id];
+      const p = st.picks[id];
+      v['hideOk_' + id] = !(p != null && p === ch.c);
+      v['hideNo_' + id] = !(p != null && p !== ch.c);
+      v['fb_' + id] = p != null && p !== ch.c ? ch.w[p] : '';
+      for (let k = 0; k < ch.w.length; k++) {
+        v['p_' + id + '_' + k] = ((idx) => () => this.pick(id, idx))(k);
+      }
+    }
+
+    let score = 0;
+    v.finalQuestions = FINAL.map((q, qi) => {
+      const id = 'f' + qi;
+      const p = st.picks[id];
+      if (p === q.c) score++;
+      return {
+        num: qi + 1,
+        q: q.q,
+        ok: q.ok,
+        fb: p != null && p !== q.c ? q.w[p] : '',
+        hideOk: !(p != null && p === q.c),
+        hideNo: !(p != null && p !== q.c),
+        opts: q.o.map((label, oi) => ({ label: label, pick: () => this.pick(id, oi) }))
+      };
+    });
+    v.score = score;
+
+    const finalLocked = doneCount < 8;
+    v.finalLocked = finalLocked;
+    v.hideFinalLock = !finalLocked;
+    v.finalBtnBg = finalLocked ? '#9FB2BF' : '#103860';
+    v.finalLockMsg = 'Finish all 8 modules first. You have completed ' + doneCount + ' of 8.';
+
+    const answered = FINAL.filter((q, qi) => st.picks['f' + qi] != null).length;
+    const ackLocked = finalLocked || answered < FINAL.length || score < 10;
+    v.ackLocked = ackLocked;
+    v.hideAckLock = !ackLocked;
+    v.ackBtnBg = ackLocked ? '#9FB2BF' : '#103860';
+    v.ackLockMsg = answered < FINAL.length
+      ? 'Answer all 12 questions to continue. You have answered ' + answered + '.'
+      : (score < 10 ? 'You need at least 10 of 12 correct to continue. Read the explanations above and choose again on the ones you missed.' : '');
+    v.goAck = () => { if (!ackLocked) this.go('ack'); };
+
+    const acks = [1, 2, 3, 4, 5, 6, 7];
+    let allAck = true;
+    acks.forEach((n) => {
+      const on = !!st['ack' + n];
+      v['a' + n] = on;
+      if (!on) allAck = false;
+      v['t' + n] = () => {
+        const patch = {};
+        patch['ack' + n] = !this.state['ack' + n];
+        this.persist(patch);
+      };
+    });
+    const ready = !ackLocked && allAck && (st.name || '').trim().length > 1 && !!st.date;
+    v.hideFinishLock = ready || !ackLocked;
+    v.finishLockMsg = 'Finish all 8 modules and pass the final check before completing your orientation.';
+    v.ackDisabled = !ready;
+    v.ackBg = ready ? '#103860' : '#9FB2BF';
+    v.finish = () => {
+      if (!ready) return;
+      this.persist({ finishedAt: Date.now(), view: 'done' });
+      if (typeof window !== 'undefined') window.scrollTo(0, 0);
+    };
+
+    const end = st.finishedAt || Date.now();
+    const mins = Math.max(1, Math.round((end - (st.started || end)) / 60000));
+    v.elapsed = mins + (mins === 1 ? ' minute' : ' minutes');
+    return v;
+  }
+}
+</script>
+</body>
+</html>
