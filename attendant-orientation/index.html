@@ -1,0 +1,1361 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous" />
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@600;700;800&family=Source+Sans+3:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+  html, body { margin: 0; padding: 0; background: #F5F9FA; }
+  * { box-sizing: border-box; }
+  a { color: #14807A; text-decoration: underline; text-underline-offset: 3px; }
+  a:hover { color: #103860; }
+  button { font-family: 'Source Sans 3', system-ui, sans-serif; }
+  @media print { .no-print { display: none !important; } }
+  @keyframes ccSpin { to { transform: rotate(360deg); } }
+  @keyframes ccSpinSlow { to { transform: rotate(-360deg); } }
+  @keyframes ccPulse { 0%,100% { transform: scale(1); opacity: .9 } 50% { transform: scale(1.06); opacity: 1 } }
+  @keyframes ccRing { 0% { transform: scale(.6); opacity: .75 } 100% { transform: scale(1.5); opacity: 0 } }
+  @keyframes ccFloat { 0%,100% { transform: translateY(0) } 50% { transform: translateY(-10px) } }
+  @keyframes ccDrift { 0% { transform: translate3d(0,0,0) } 50% { transform: translate3d(14px,-12px,0) } 100% { transform: translate3d(0,0,0) } }
+</style>
+</helmet>
+<div style="min-height:100vh;background:#F5F9FA;color:#0E2438;font:400 19px/1.62 'Source Sans 3',system-ui,sans-serif;text-wrap:pretty">
+
+  <header class="no-print" style="position:sticky;top:0;z-index:20;background:#FFFFFFF2;backdrop-filter:blur(6px);border-bottom:1px solid #DCE5EA">
+    <div style="max-width:840px;margin:0 auto;padding:12px 20px;display:flex;align-items:center;gap:16px;flex-wrap:wrap">
+      <img src="cc-logo.png" alt="Caring Companions Consumer Directed Services" style="height:38px;width:auto;margin-right:auto" />
+      <div style="display:{{ progressDisplay }};align-items:center;gap:10px;min-width:150px;flex:1">
+        <div style="flex:1;height:10px;background:#E4EDF0;border-radius:99px;overflow:hidden">
+          <div style="width:{{ pct }};height:100%;background:#38C0B8;border-radius:99px;transition:width .35s ease"></div>
+        </div>
+        <span style="font:700 15px/1 'Source Sans 3',sans-serif;color:#103860;white-space:nowrap">{{ pct }}</span>
+      </div>
+      <button type="button" hidden="{{ hideProgress }}" onClick="{{ goDash }}" style="min-height:44px;padding:0 16px;border:2px solid #C3D0D9;border-radius:10px;background:#fff;color:#103860;font:600 16px/1 'Source Sans 3',sans-serif;cursor:pointer">All modules</button>
+    </div>
+  </header>
+
+  <section hidden="{{ hideWelcome }}" style="max-width:840px;margin:0 auto;padding:42px 20px 80px">
+    <p style="margin:0 0 14px;font:700 13px/1 'Source Sans 3',sans-serif;letter-spacing:.16em;text-transform:uppercase;color:#14807A">Attendant Orientation</p>
+    <h1 style="margin:0 0 18px;font:800 clamp(36px,6.6vw,54px)/1.1 Nunito,system-ui,sans-serif;color:#103860;letter-spacing:-.015em">Welcome. Let us show you how this job works.</h1>
+    <p style="margin:0 0 28px;font-size:22px;line-height:1.55;color:#3D5164;max-width:660px">You are about to be paid to care for someone in their own home through Missouri's Consumer Directed Services program. This orientation covers who you work for, what you may and may not do, how to record your time so you get paid, and where the serious lines are.</p>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:14px;margin:0 0 32px">
+      <div style="background:#fff;border:1px solid #DCE5EA;border-radius:16px;padding:20px">
+        <p style="margin:0 0 6px;font:700 18px/1.3 Nunito,sans-serif;color:#103860">8 short modules</p>
+        <p style="margin:0;font-size:17px;color:#4C6070">Watch or read, whichever you prefer. Your place is saved.</p>
+      </div>
+      <div style="background:#fff;border:1px solid #DCE5EA;border-radius:16px;padding:20px">
+        <p style="margin:0 0 6px;font:700 18px/1.3 Nunito,sans-serif;color:#103860">About 60 minutes</p>
+        <p style="margin:0;font-size:17px;color:#4C6070">Stop any time and come back where you left off.</p>
+      </div>
+      <div style="background:#fff;border:1px solid #DCE5EA;border-radius:16px;padding:20px">
+        <p style="margin:0 0 6px;font:700 18px/1.3 Nunito,sans-serif;color:#103860">Ends with a check</p>
+        <p style="margin:0;font-size:17px;color:#4C6070">12 questions, then an acknowledgment you sign.</p>
+      </div>
+    </div>
+    <button type="button" onClick="{{ goDash }}" style="display:inline-flex;align-items:center;justify-content:center;min-height:62px;padding:0 34px;border:none;border-radius:14px;background:#103860;color:#fff;font:700 21px/1 'Source Sans 3',sans-serif;cursor:pointer">Start Orientation</button>
+    <p style="margin:22px 0 0;font-size:17px;color:#5A6E7C">Questions at any point? Call Caring Companions at {{ phone }}.</p>
+  </section>
+
+  <section hidden="{{ hideDash }}" style="max-width:840px;margin:0 auto;padding:34px 20px 80px">
+    <h1 style="margin:0 0 8px;font:800 clamp(30px,5vw,40px)/1.12 Nunito,sans-serif;color:#103860">Your orientation</h1>
+    <p style="margin:0 0 26px;font-size:19px;color:#4C6070">Orientation progress: <strong style="color:#14807A">{{ pct }}</strong>, {{ doneCount }} of 8 modules complete.</p>
+    <div style="display:flex;flex-direction:column;gap:12px">
+      <sc-for list="{{ modules }}" as="m" hint-placeholder-count="8">
+        <button type="button" onClick="{{ m.open }}" style="display:flex;gap:16px;align-items:flex-start;text-align:left;width:100%;padding:20px;border:2px solid {{ m.border }};border-radius:16px;background:{{ m.bg }};cursor:pointer">
+          <span style="flex:none;width:46px;height:46px;border-radius:12px;background:{{ m.numBg }};color:{{ m.numColor }};display:flex;align-items:center;justify-content:center;font:800 20px/1 Nunito,sans-serif">{{ m.numMark }}</span>
+          <span style="flex:1;min-width:0">
+            <span style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
+              <span style="font:700 21px/1.3 Nunito,sans-serif;color:#103860">{{ m.t }}</span>
+              <span style="display:inline-flex;align-items:center;padding:5px 12px;border-radius:99px;background:{{ m.badgeBg }};color:{{ m.badgeColor }};font:700 14px/1 'Source Sans 3',sans-serif;letter-spacing:.04em;text-transform:uppercase;white-space:nowrap">{{ m.status }}</span>
+            </span>
+            <span style="display:block;font-size:17px;color:#4C6070;margin-top:6px">{{ m.d }}</span>
+            <span style="display:block;font:600 15px/1 'Source Sans 3',sans-serif;color:#7A8C99;margin-top:10px">{{ m.meta }}</span>
+          </span>
+        </button>
+      </sc-for>
+    </div>
+    <div style="margin-top:26px;background:#fff;border:2px solid #38C0B8;border-radius:16px;padding:22px">
+      <p style="margin:0 0 6px;font:700 21px/1.3 Nunito,sans-serif;color:#103860">Final knowledge check and acknowledgment</p>
+      <p style="margin:0 0 16px;font-size:17px;color:#4C6070">12 questions, then a short acknowledgment you sign with your name and the date.</p>
+      <p hidden="{{ hideFinalLock }}" style="margin:0 0 16px;font-size:18px;font-weight:600;color:#C4551B">{{ finalLockMsg }}</p>
+      <button type="button" disabled="{{ finalLocked }}" onClick="{{ goFinal }}" style="display:inline-flex;align-items:center;justify-content:center;min-height:56px;padding:0 26px;border:none;border-radius:12px;background:{{ finalBtnBg }};color:#fff;font:700 19px/1 'Source Sans 3',sans-serif;cursor:pointer">Go to the final check</button>
+    </div>
+  </section>
+
+  <section hidden="{{ hidePlayer }}" style="max-width:900px;margin:0 auto;padding:28px 20px 10px">
+    <p style="margin:0 0 8px;font:700 13px/1 'Source Sans 3',sans-serif;letter-spacing:.16em;text-transform:uppercase;color:#14807A">{{ vidEyebrow }}</p>
+    <h1 style="margin:0 0 18px;font:800 clamp(28px,5vw,40px)/1.14 Nunito,sans-serif;color:#103860">{{ vidTitle }}</h1>
+
+    <div style="position:relative;border-radius:20px;overflow:hidden;background:{{ stageBg }};border:1px solid #0B2740;transition:background .9s ease">
+      <div style="position:absolute;width:46%;aspect-ratio:1;border-radius:50%;background:{{ blobA }};filter:blur(2px);opacity:.5;top:-14%;right:-10%;animation:ccDrift 16s ease-in-out infinite"></div>
+      <div style="position:absolute;width:34%;aspect-ratio:1;border-radius:50%;background:{{ blobB }};filter:blur(2px);opacity:.4;bottom:-16%;left:-8%;animation:ccDrift 22s ease-in-out infinite reverse"></div>
+
+      <div style="position:relative;aspect-ratio:16/9;width:100%;padding:clamp(18px,3.4vw,40px);display:flex;align-items:center;gap:clamp(16px,3vw,36px)">
+        <div style="flex:1 1 56%;min-width:0;display:flex;flex-direction:column;justify-content:center;gap:clamp(8px,1.4vw,16px)">
+          <p style="margin:0;font:700 clamp(10px,1.2vw,14px)/1 'Source Sans 3',sans-serif;letter-spacing:.18em;text-transform:uppercase;color:#7FE3DC">{{ sceneKicker }}</p>
+          <p style="margin:0;font:800 clamp(19px,2.9vw,38px)/1.13 Nunito,sans-serif;color:#fff">{{ sceneTitle }}</p>
+          <div style="display:flex;flex-direction:column;gap:clamp(5px,.9vw,11px)">
+            <sc-for list="{{ sceneLines }}" as="l" hint-placeholder-count="4">
+              <div style="display:flex;gap:11px;align-items:flex-start;opacity:{{ l.o }};transform:translateY({{ l.y }});transition:opacity .5s ease,transform .5s ease">
+                <span style="flex:none;width:9px;height:9px;border-radius:3px;background:#38C0B8;margin-top:clamp(5px,.9vw,10px)"></span>
+                <span style="font:500 clamp(12px,1.55vw,20px)/1.4 'Source Sans 3',sans-serif;color:#DCEAF2">{{ l.t }}</span>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+
+        <div style="flex:1 1 40%;align-self:stretch;position:relative;display:flex;align-items:center;justify-content:center">
+          <sc-if value="{{ artOrbit }}" hint-placeholder-val="{{ false }}">
+            <div style="position:relative;width:min(100%,300px);aspect-ratio:1;display:flex;align-items:center;justify-content:center">
+              <div style="position:absolute;inset:0;border-radius:50%;border:2px dashed #2C5C82;animation:ccSpin 40s linear infinite"></div>
+              <div style="position:absolute;inset:16%;border-radius:50%;border:2px solid #1D4B6E;animation:ccSpinSlow 28s linear infinite"></div>
+              <div style="width:34%;aspect-ratio:1;border-radius:50%;background:#38C0B8;display:flex;align-items:center;justify-content:center;font:800 clamp(11px,1.4vw,17px)/1.15 Nunito,sans-serif;color:#08283C;text-align:center;animation:ccPulse 3.4s ease-in-out infinite">{{ artCenter }}</div>
+              <sc-for list="{{ artOrbitDots }}" as="d" hint-placeholder-count="3">
+                <div style="position:absolute;left:{{ d.x }};top:{{ d.y }};transform:translate(-50%,-50%);display:flex;flex-direction:column;align-items:center;gap:6px;opacity:{{ d.o }};transition:opacity .6s ease">
+                  <span style="width:clamp(30px,4.4vw,52px);height:clamp(30px,4.4vw,52px);border-radius:50%;background:#0E3352;border:2px solid #7FE3DC"></span>
+                  <span style="font:700 clamp(9px,1.1vw,14px)/1.2 'Source Sans 3',sans-serif;color:#BFE6E3;white-space:nowrap">{{ d.t }}</span>
+                </div>
+              </sc-for>
+            </div>
+          </sc-if>
+
+          <sc-if value="{{ artClock }}" hint-placeholder-val="{{ false }}">
+            <div style="display:flex;flex-direction:column;align-items:center;gap:14px">
+              <div style="width:min(100%,230px);aspect-ratio:1;border-radius:50%;background:conic-gradient(#38C0B8 0turn {{ artTurn }},#123B5C {{ artTurn }} 1turn);display:flex;align-items:center;justify-content:center;box-shadow:0 0 0 6px #0E3352">
+                <div style="width:62%;aspect-ratio:1;border-radius:50%;background:#0B2740;display:flex;flex-direction:column;align-items:center;justify-content:center">
+                  <span style="font:800 clamp(20px,3vw,34px)/1 Nunito,sans-serif;color:#fff">{{ artBig }}</span>
+                  <span style="font:600 clamp(9px,1.1vw,13px)/1.2 'Source Sans 3',sans-serif;color:#7FE3DC;letter-spacing:.1em;text-transform:uppercase">{{ artSmall }}</span>
+                </div>
+              </div>
+              <span style="font:600 clamp(11px,1.3vw,16px)/1.3 'Source Sans 3',sans-serif;color:#BFE6E3;text-align:center">{{ artCaption }}</span>
+            </div>
+          </sc-if>
+
+          <sc-if value="{{ artMeter }}" hint-placeholder-val="{{ false }}">
+            <div style="width:min(100%,300px);display:flex;flex-direction:column;gap:12px">
+              <div style="position:relative;height:clamp(90px,13vw,150px);display:flex;align-items:flex-end;gap:10px;padding-top:14px">
+                <sc-for list="{{ artBars }}" as="b" hint-placeholder-count="5">
+                  <div style="flex:1;height:{{ b.h }};border-radius:8px 8px 0 0;background:{{ b.c }};transition:height .8s ease"></div>
+                </sc-for>
+                <div style="position:absolute;left:0;right:0;top:8px;border-top:3px dashed #F0B44B"></div>
+                <span style="position:absolute;right:0;top:-12px;font:700 clamp(9px,1.05vw,13px)/1 'Source Sans 3',sans-serif;color:#F0B44B;letter-spacing:.08em;text-transform:uppercase">Approved limit</span>
+              </div>
+              <span style="font:600 clamp(11px,1.3vw,16px)/1.35 'Source Sans 3',sans-serif;color:#BFE6E3">{{ artCaption }}</span>
+            </div>
+          </sc-if>
+
+          <sc-if value="{{ artPhone }}" hint-placeholder-val="{{ false }}">
+            <div style="position:relative;display:flex;flex-direction:column;align-items:center;gap:16px">
+              <div style="position:relative;width:clamp(84px,11vw,124px);height:clamp(140px,18vw,206px);border-radius:20px;border:3px solid #7FE3DC;background:#0E3352;display:flex;align-items:center;justify-content:center;animation:ccFloat 5s ease-in-out infinite">
+                <span style="font:800 clamp(13px,1.7vw,21px)/1.2 Nunito,sans-serif;color:#fff;text-align:center;padding:0 8px">{{ artBig }}</span>
+                <span style="position:absolute;inset:-18px;border-radius:30px;border:2px solid #38C0B8;animation:ccRing 2.6s ease-out infinite"></span>
+                <span style="position:absolute;inset:-18px;border-radius:30px;border:2px solid #38C0B8;animation:ccRing 2.6s ease-out .9s infinite"></span>
+              </div>
+              <span style="font:600 clamp(11px,1.3vw,16px)/1.35 'Source Sans 3',sans-serif;color:#BFE6E3;text-align:center;max-width:260px">{{ artCaption }}</span>
+            </div>
+          </sc-if>
+
+          <sc-if value="{{ artStop }}" hint-placeholder-val="{{ false }}">
+            <div style="display:flex;flex-direction:column;align-items:center;gap:16px">
+              <div style="width:min(100%,210px);aspect-ratio:1;border-radius:26px;background:#B3341F;transform:rotate(45deg);display:flex;align-items:center;justify-content:center;animation:ccPulse 2.8s ease-in-out infinite;box-shadow:0 0 0 8px rgba(179,52,31,.22)">
+                <span style="transform:rotate(-45deg);font:800 clamp(18px,2.9vw,34px)/1 Nunito,sans-serif;color:#fff;letter-spacing:.04em;text-align:center">{{ artBig }}</span>
+              </div>
+              <span style="font:700 clamp(11px,1.35vw,17px)/1.35 'Source Sans 3',sans-serif;color:#FFD9CC;text-align:center;max-width:280px">{{ artCaption }}</span>
+            </div>
+          </sc-if>
+
+          <sc-if value="{{ artCount }}" hint-placeholder-val="{{ false }}">
+            <div style="display:flex;flex-direction:column;align-items:center;gap:10px">
+              <span style="font:800 clamp(50px,10vw,132px)/1 Nunito,sans-serif;color:#38C0B8;text-align:center">{{ artBig }}</span>
+              <span style="font:700 clamp(12px,1.5vw,19px)/1.3 'Source Sans 3',sans-serif;color:#fff;text-align:center;max-width:270px">{{ artSmall }}</span>
+              <span style="font:500 clamp(10px,1.2vw,15px)/1.35 'Source Sans 3',sans-serif;color:#BFE6E3;text-align:center;max-width:270px">{{ artCaption }}</span>
+            </div>
+          </sc-if>
+
+          <sc-if value="{{ artCompare }}" hint-placeholder-val="{{ false }}">
+            <div style="width:100%;display:flex;flex-direction:column;gap:12px">
+              <sc-for list="{{ artRows }}" as="r" hint-placeholder-count="4">
+                <div style="display:flex;gap:10px;align-items:center;background:{{ r.bg }};border-radius:12px;padding:clamp(7px,1.1vw,13px) clamp(9px,1.3vw,15px);opacity:{{ r.o }};transform:translateX({{ r.x }});transition:all .55s ease">
+                  <span style="flex:none;width:clamp(20px,2.5vw,30px);height:clamp(20px,2.5vw,30px);border-radius:50%;background:{{ r.dot }};display:flex;align-items:center;justify-content:center;font:800 clamp(11px,1.4vw,17px)/1 Nunito,sans-serif;color:#fff">{{ r.mark }}</span>
+                  <span style="font:600 clamp(11px,1.35vw,17px)/1.3 'Source Sans 3',sans-serif;color:#fff">{{ r.t }}</span>
+                </div>
+              </sc-for>
+            </div>
+          </sc-if>
+
+          <sc-if value="{{ artGrid }}" hint-placeholder-val="{{ false }}">
+            <div style="width:min(100%,290px);display:grid;grid-template-columns:repeat(5,1fr);gap:clamp(6px,1vw,11px)">
+              <sc-for list="{{ artCells }}" as="c" hint-placeholder-count="15">
+                <div style="aspect-ratio:1;border-radius:8px;background:{{ c.bg }};transform:scale({{ c.s }});transition:all .5s ease"></div>
+              </sc-for>
+            </div>
+          </sc-if>
+        </div>
+      </div>
+      <div style="position:absolute;left:0;right:0;bottom:0;height:5px;background:#123B5C"></div>
+      <div style="position:absolute;left:0;bottom:0;height:5px;width:{{ playPct }};background:#38C0B8;transition:width .2s linear"></div>
+    </div>
+
+    <div class="no-print" style="display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin:16px 0 0">
+      <button type="button" onClick="{{ togglePlay }}" style="min-height:56px;padding:0 26px;border:none;border-radius:12px;background:#103860;color:#fff;font:700 19px/1 'Source Sans 3',sans-serif;cursor:pointer">{{ playLabel }}</button>
+      <button type="button" onClick="{{ restart }}" style="min-height:56px;padding:0 20px;border:2px solid #C3D0D9;border-radius:12px;background:#fff;color:#103860;font:600 17px/1 'Source Sans 3',sans-serif;cursor:pointer">Start over</button>
+      <span style="font:600 17px/1 'Source Sans 3',sans-serif;color:#5A6E7C">{{ timeLabel }}</span>
+      <span style="margin-left:auto;font:600 16px/1.3 'Source Sans 3',sans-serif;color:#5A6E7C">{{ sceneCounter }}</span>
+    </div>
+
+    <div hidden="{{ hideAudioNotice }}" style="margin-top:14px;background:#FFF7E6;border:1px solid #F0DCA8;border-left:6px solid #C98A16;border-radius:12px;padding:16px;font-size:17px">
+      Voiceover not found yet. Drop the recorded file at <strong>{{ audioSrc }}</strong> and it will play here automatically. The visuals are running on estimated timing for now.
+    </div>
+
+    <div class="no-print" style="display:flex;gap:12px;flex-wrap:wrap;margin-top:20px">
+      <button type="button" onClick="{{ nextFromVideo }}" style="min-height:58px;padding:0 26px;border:none;border-radius:12px;background:#103860;color:#fff;font:700 19px/1 'Source Sans 3',sans-serif;cursor:pointer">Mark complete and continue</button>
+      <button type="button" onClick="{{ goDash }}" style="min-height:58px;padding:0 22px;border:2px solid #C3D0D9;border-radius:12px;background:#fff;color:#103860;font:600 18px/1 'Source Sans 3',sans-serif;cursor:pointer">Back to modules</button>
+    </div>
+
+    <div style="margin-top:18px;background:#fff;border:1px solid #DCE5EA;border-radius:18px;overflow:hidden">
+      <button type="button" onClick="{{ toggleTranscript }}" style="display:flex;width:100%;align-items:center;gap:12px;text-align:left;padding:18px 20px;border:none;background:#fff;cursor:pointer">
+        <span style="flex:none;width:32px;height:32px;border-radius:9px;background:#EAF6F5;color:#14807A;display:flex;align-items:center;justify-content:center;font:800 17px/1 Nunito,sans-serif">{{ transcriptSign }}</span>
+        <span style="flex:1;font:700 19px/1.3 Nunito,sans-serif;color:#103860">{{ transcriptLabel }}</span>
+      </button>
+      <div style="padding:{{ transcriptPad }};display:{{ transcriptDisplay }};flex-direction:column;gap:12px">
+        <sc-for list="{{ transcript }}" as="p" hint-placeholder-count="6">
+          <p style="margin:0;font-size:18px;line-height:1.6;color:{{ p.color }}">{{ p.t }}</p>
+        </sc-for>
+      </div>
+    </div>
+    <sc-if value="{{ watching }}" hint-placeholder-val="{{ true }}">
+      <audio ref="{{ audioRef }}" preload="auto" style="display:none"></audio>
+    </sc-if>
+  </section>
+
+  <article hidden="{{ hideM1 }}" style="max-width:760px;margin:0 auto;padding:34px 20px 90px">
+    <h2 style="margin:0 0 12px;font:700 26px/1.25 Nunito,sans-serif;color:#103860">What CDS is</h2>
+    <p style="margin:0 0 18px">Consumer Directed Services is a Missouri Medicaid program that lets a person with a disability stay in their own home and hire their own caregiver instead of moving into a facility. That caregiver is you, and the job title is attendant.</p>
+    <p style="margin:0 0 20px">The person you care for is called the consumer. Caring Companions is the vendor. We hold the agreement with the Department of Health and Senior Services, and we handle payroll, taxes, background screening, Medicaid billing and support.</p>
+
+    <h2 style="margin:28px 0 12px;font:700 26px/1.25 Nunito,sans-serif;color:#103860">Who you actually work for</h2>
+    <div style="background:#FFF7E6;border:1px solid #F0DCA8;border-left:6px solid #C98A16;border-radius:14px;padding:20px;margin:0 0 20px">
+      <p style="margin:0 0 6px;font:700 13px/1 'Source Sans 3',sans-serif;letter-spacing:.14em;text-transform:uppercase;color:#8A6B18">Remember</p>
+      <p style="margin:0;font-size:19px">You are the employee of your consumer, for the time paid by CDS funds. You are never an employee of Caring Companions, of the Department of Health and Senior Services, or of the state of Missouri.</p>
+    </div>
+    <p style="margin:0 0 18px">That is not a technicality. It shapes the whole job. Your consumer hired you, trains you, sets your schedule, and directs your work. We pay you on their behalf and keep the program running correctly.</p>
+
+    <h2 style="margin:28px 0 12px;font:700 26px/1.25 Nunito,sans-serif;color:#103860">How this differs from an agency job</h2>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px;margin:0 0 22px">
+      <div style="background:#fff;border:1px solid #DCE5EA;border-radius:16px;padding:20px">
+        <p style="margin:0 0 10px;font:700 19px/1.3 Nunito,sans-serif;color:#103860">Traditional agency</p>
+        <ul style="margin:0;padding-left:20px;font-size:17px;color:#4C6070;display:flex;flex-direction:column;gap:7px">
+          <li>The agency assigns your clients</li>
+          <li>A supervisor sets the schedule</li>
+          <li>Staff train you on a standard care plan</li>
+          <li>You may be sent to several homes</li>
+        </ul>
+      </div>
+      <div style="background:#EAF6F5;border:1px solid #B9E3DF;border-radius:16px;padding:20px">
+        <p style="margin:0 0 10px;font:700 19px/1.3 Nunito,sans-serif;color:#103860">CDS</p>
+        <ul style="margin:0;padding-left:20px;font-size:17px;color:#3D5164;display:flex;flex-direction:column;gap:7px">
+          <li>Your consumer chose and hired you</li>
+          <li>Your consumer sets the schedule</li>
+          <li>Your consumer trains you on their own routine</li>
+          <li>You work for the consumer who hired you</li>
+        </ul>
+      </div>
+    </div>
+    <p style="margin:0 0 22px">There is a real freedom in that. There is also a real limit, and it is the subject of the next module: the consumer directs the work, but nobody, including the consumer, can direct you outside the rules of the program.</p>
+
+    <div style="background:#fff;border:2px solid #E4EDF0;border-radius:18px;padding:24px;margin:34px 0 26px">
+      <p style="margin:0 0 4px;font:700 13px/1 'Source Sans 3',sans-serif;letter-spacing:.14em;text-transform:uppercase;color:#14807A">Knowledge check</p>
+      <p style="margin:0 0 16px;font:700 22px/1.35 Nunito,sans-serif;color:#103860">Whose employee are you?</p>
+      <div style="display:flex;flex-direction:column;gap:10px">
+        <button type="button" onClick="{{ p_m1_0 }}" style="text-align:left;width:100%;min-height:56px;padding:14px 18px;border:2px solid #D5E0E6;border-radius:12px;background:#fff;font:500 18px/1.4 'Source Sans 3',sans-serif;cursor:pointer">Caring Companions</button>
+        <button type="button" onClick="{{ p_m1_1 }}" style="text-align:left;width:100%;min-height:56px;padding:14px 18px;border:2px solid #D5E0E6;border-radius:12px;background:#fff;font:500 18px/1.4 'Source Sans 3',sans-serif;cursor:pointer">The consumer who hired you</button>
+        <button type="button" onClick="{{ p_m1_2 }}" style="text-align:left;width:100%;min-height:56px;padding:14px 18px;border:2px solid #D5E0E6;border-radius:12px;background:#fff;font:500 18px/1.4 'Source Sans 3',sans-serif;cursor:pointer">The state of Missouri</button>
+      </div>
+      <div hidden="{{ hideOk_m1 }}" style="margin-top:14px;background:#EAF7F1;border-left:6px solid #1E8A5F;border-radius:12px;padding:16px;font-size:18px">Correct. You are the consumer's employee for the time paid by CDS funds, never the employee of the vendor, DHSS or the state.</div>
+      <div hidden="{{ hideNo_m1 }}" style="margin-top:14px;background:#FFF4EC;border-left:6px solid #C4551B;border-radius:12px;padding:16px;font-size:18px">{{ fb_m1 }}</div>
+    </div>
+    <div class="no-print" style="display:flex;gap:12px;flex-wrap:wrap">
+      <button type="button" onClick="{{ next1 }}" style="min-height:58px;padding:0 26px;border:none;border-radius:12px;background:#103860;color:#fff;font:700 19px/1 'Source Sans 3',sans-serif;cursor:pointer">Mark complete and continue</button>
+      <button type="button" onClick="{{ goDash }}" style="min-height:58px;padding:0 22px;border:2px solid #C3D0D9;border-radius:12px;background:#fff;color:#103860;font:600 18px/1 'Source Sans 3',sans-serif;cursor:pointer">Back to modules</button>
+    </div>
+  </article>
+
+  <article hidden="{{ hideM2 }}" style="max-width:760px;margin:0 auto;padding:34px 20px 90px">
+    <h2 style="margin:0 0 12px;font:700 26px/1.25 Nunito,sans-serif;color:#103860">The consumer directs their care</h2>
+    <p style="margin:0 0 18px">Your consumer decides how their care happens. Which tasks, in what order, in what way, at what time of day. They know their body, their home and their routine better than anyone else does, and part of your job is to learn their way of doing things rather than importing your own.</p>
+    <p style="margin:0 0 18px">We are not sending you into the home to carry out a standardized agency care plan. Ask them how they like things done. Then do it that way.</p>
+
+    <h2 style="margin:28px 0 12px;font:700 26px/1.25 Nunito,sans-serif;color:#103860">What Caring Companions does</h2>
+    <ul style="margin:0 0 22px;padding-left:24px;display:flex;flex-direction:column;gap:8px">
+      <li>Screen you and keep your eligibility to work current</li>
+      <li>Collect your time, run payroll, and pay all payroll taxes</li>
+      <li>Bill Medicaid for the services provided</li>
+      <li>Monitor the program and answer questions from you or your consumer</li>
+      <li>Train and support consumers so they can direct your work well</li>
+    </ul>
+
+    <h2 style="margin:28px 0 12px;font:700 26px/1.25 Nunito,sans-serif;color:#103860">The line that matters most</h2>
+    <div style="background:#FFF4EC;border:1px solid #F3CDB3;border-left:6px solid #C4551B;border-radius:14px;padding:20px;margin:0 0 20px">
+      <p style="margin:0 0 6px;font:700 13px/1 'Source Sans 3',sans-serif;letter-spacing:.14em;text-transform:uppercase;color:#C4551B">Stop</p>
+      <p style="margin:0 0 10px;font-size:19px">"The consumer told me to" does not make something allowable if it breaks CDS rules, Medicaid requirements, employment rules or the law.</p>
+      <p style="margin:0;font-size:19px">Your consumer directs how the approved work is done. They cannot authorize unapproved tasks, unworked time, or anything illegal. If you do it anyway, you are the one holding the consequences, along with them.</p>
+    </div>
+
+    <h2 style="margin:28px 0 12px;font:700 26px/1.25 Nunito,sans-serif;color:#103860">When you are not sure: four steps</h2>
+    <div style="display:flex;flex-direction:column;gap:12px;margin:0 0 22px">
+      <div style="display:flex;gap:14px;background:#fff;border:1px solid #DCE5EA;border-radius:14px;padding:18px">
+        <span style="flex:none;width:36px;height:36px;border-radius:10px;background:#103860;color:#fff;display:flex;align-items:center;justify-content:center;font:800 17px/1 Nunito,sans-serif">1</span>
+        <span style="font-size:18px"><strong>Stop.</strong> Do not do the thing you are unsure about, and do not clock time for it.</span>
+      </div>
+      <div style="display:flex;gap:14px;background:#fff;border:1px solid #DCE5EA;border-radius:14px;padding:18px">
+        <span style="flex:none;width:36px;height:36px;border-radius:10px;background:#103860;color:#fff;display:flex;align-items:center;justify-content:center;font:800 17px/1 Nunito,sans-serif">2</span>
+        <span style="font-size:18px"><strong>Ask.</strong> Ask your consumer what they need and why, kindly and without accusation.</span>
+      </div>
+      <div style="display:flex;gap:14px;background:#fff;border:1px solid #DCE5EA;border-radius:14px;padding:18px">
+        <span style="flex:none;width:36px;height:36px;border-radius:10px;background:#103860;color:#fff;display:flex;align-items:center;justify-content:center;font:800 17px/1 Nunito,sans-serif">3</span>
+        <span style="font-size:18px"><strong>Document</strong> when it matters. Write down the date, the time, and what was said or happened.</span>
+      </div>
+      <div style="display:flex;gap:14px;background:#EAF6F5;border:1px solid #B9E3DF;border-radius:14px;padding:18px">
+        <span style="flex:none;width:36px;height:36px;border-radius:10px;background:#14807A;color:#fff;display:flex;align-items:center;justify-content:center;font:800 17px/1 Nunito,sans-serif">4</span>
+        <span style="font-size:18px"><strong>Contact Caring Companions</strong> at {{ phone }}. Asking first is always cheaper than fixing afterward.</span>
+      </div>
+    </div>
+
+    <div style="background:#fff;border:2px solid #E4EDF0;border-radius:18px;padding:24px;margin:34px 0 26px">
+      <p style="margin:0 0 4px;font:700 13px/1 'Source Sans 3',sans-serif;letter-spacing:.14em;text-transform:uppercase;color:#14807A">What would you do?</p>
+      <p style="margin:0 0 16px;font:700 22px/1.35 Nunito,sans-serif;color:#103860">Your consumer asks you to clock in while they go to the store alone, because they do not want to lose their authorized hours. What do you do?</p>
+      <div style="display:flex;flex-direction:column;gap:10px">
+        <button type="button" onClick="{{ p_m2_0 }}" style="text-align:left;width:100%;min-height:56px;padding:14px 18px;border:2px solid #D5E0E6;border-radius:12px;background:#fff;font:500 18px/1.4 'Source Sans 3',sans-serif;cursor:pointer">Do it. They are the employer, and the hours were already approved</button>
+        <button type="button" onClick="{{ p_m2_1 }}" style="text-align:left;width:100%;min-height:56px;padding:14px 18px;border:2px solid #D5E0E6;border-radius:12px;background:#fff;font:500 18px/1.4 'Source Sans 3',sans-serif;cursor:pointer">Refuse politely, explain you can only record time you actually work, and call Caring Companions</button>
+        <button type="button" onClick="{{ p_m2_2 }}" style="text-align:left;width:100%;min-height:56px;padding:14px 18px;border:2px solid #D5E0E6;border-radius:12px;background:#fff;font:500 18px/1.4 'Source Sans 3',sans-serif;cursor:pointer">Do it this once, then explain it cannot happen again</button>
+      </div>
+      <div hidden="{{ hideOk_m2 }}" style="margin-top:14px;background:#EAF7F1;border-left:6px solid #1E8A5F;border-radius:12px;padding:16px;font-size:18px">Correct. Stop, ask, document, contact us. Recording time you did not work is Medicaid fraud, and being asked by the consumer is not a defense.</div>
+      <div hidden="{{ hideNo_m2 }}" style="margin-top:14px;background:#FFF4EC;border-left:6px solid #C4551B;border-radius:12px;padding:16px;font-size:18px">{{ fb_m2 }}</div>
+    </div>
+    <div class="no-print" style="display:flex;gap:12px;flex-wrap:wrap">
+      <button type="button" onClick="{{ next2 }}" style="min-height:58px;padding:0 26px;border:none;border-radius:12px;background:#103860;color:#fff;font:700 19px/1 'Source Sans 3',sans-serif;cursor:pointer">Mark complete and continue</button>
+      <button type="button" onClick="{{ goDash }}" style="min-height:58px;padding:0 22px;border:2px solid #C3D0D9;border-radius:12px;background:#fff;color:#103860;font:600 18px/1 'Source Sans 3',sans-serif;cursor:pointer">Back to modules</button>
+    </div>
+  </article>
+
+  <article hidden="{{ hideM3 }}" style="max-width:760px;margin:0 auto;padding:34px 20px 90px">
+    <h2 style="margin:0 0 12px;font:700 26px/1.25 Nunito,sans-serif;color:#103860">Who may work as an attendant</h2>
+    <ul style="margin:0 0 20px;padding-left:24px;display:flex;flex-direction:column;gap:8px">
+      <li>At least 18 years old</li>
+      <li>Able to meet the physical and mental demands of the tasks a particular consumer needs</li>
+      <li>Willing to keep the consumer's information confidential</li>
+      <li>Emotionally mature and dependable</li>
+      <li>Able to handle emergency situations</li>
+      <li>Not the consumer's spouse</li>
+      <li>Registered with the Family Care Safety Registry with a clear screening, or holding a Good Cause Waiver from DHSS that is still in good standing</li>
+      <li>Not listed on the Employee Disqualification List maintained by DHSS</li>
+      <li>Not on the federal List of Excluded Individuals and Entities maintained by the Office of Inspector General</li>
+    </ul>
+
+    <h2 style="margin:28px 0 12px;font:700 26px/1.25 Nunito,sans-serif;color:#103860">Screening does not stop after you are hired</h2>
+    <p style="margin:0 0 18px">Caring Companions screens the registry and the disqualification list every quarter, and the federal exclusion list every month, for as long as you work in the program. Something that lands on any of those lists can end your eligibility to work, even mid assignment.</p>
+    <div style="background:#EAF6F5;border:1px solid #B9E3DF;border-left:6px solid #14807A;border-radius:14px;padding:20px;margin:0 0 20px">
+      <p style="margin:0 0 6px;font:700 13px/1 'Source Sans 3',sans-serif;letter-spacing:.14em;text-transform:uppercase;color:#14807A">Call us</p>
+      <p style="margin:0;font-size:19px">If your name, address, phone number or legal situation changes, tell us. Paperwork that is out of date can hold up your pay or your eligibility.</p>
+    </div>
+
+    <h2 style="margin:28px 0 12px;font:700 26px/1.25 Nunito,sans-serif;color:#103860">Before your first shift</h2>
+    <p style="margin:0 0 18px">No attendant may begin working or be paid until screening and employment paperwork are complete. If someone asks you to start early "just to help out," the answer is no. That time cannot be paid.</p>
+    <p style="margin:0 0 22px">You will also choose how you want to be paid: direct deposit into a checking or savings account, or a Rapid Pay card.</p>
+
+    <div style="background:#fff;border:2px solid #E4EDF0;border-radius:18px;padding:24px;margin:34px 0 26px">
+      <p style="margin:0 0 4px;font:700 13px/1 'Source Sans 3',sans-serif;letter-spacing:.14em;text-transform:uppercase;color:#14807A">Knowledge check</p>
+      <p style="margin:0 0 16px;font:700 22px/1.35 Nunito,sans-serif;color:#103860">Your consumer wants you to start tomorrow, but your screening is not finished yet. What is true?</p>
+      <div style="display:flex;flex-direction:column;gap:10px">
+        <button type="button" onClick="{{ p_m3_0 }}" style="text-align:left;width:100%;min-height:56px;padding:14px 18px;border:2px solid #D5E0E6;border-radius:12px;background:#fff;font:500 18px/1.4 'Source Sans 3',sans-serif;cursor:pointer">You cannot work or be paid until screening and paperwork are complete</button>
+        <button type="button" onClick="{{ p_m3_1 }}" style="text-align:left;width:100%;min-height:56px;padding:14px 18px;border:2px solid #D5E0E6;border-radius:12px;background:#fff;font:500 18px/1.4 'Source Sans 3',sans-serif;cursor:pointer">You can start now and the hours will be paid later once screening clears</button>
+        <button type="button" onClick="{{ p_m3_2 }}" style="text-align:left;width:100%;min-height:56px;padding:14px 18px;border:2px solid #D5E0E6;border-radius:12px;background:#fff;font:500 18px/1.4 'Source Sans 3',sans-serif;cursor:pointer">It is up to the consumer, since they are the employer</button>
+      </div>
+      <div hidden="{{ hideOk_m3 }}" style="margin-top:14px;background:#EAF7F1;border-left:6px solid #1E8A5F;border-radius:12px;padding:16px;font-size:18px">Correct. Screening and paperwork come first. Work done before that cannot be paid.</div>
+      <div hidden="{{ hideNo_m3 }}" style="margin-top:14px;background:#FFF4EC;border-left:6px solid #C4551B;border-radius:12px;padding:16px;font-size:18px">{{ fb_m3 }}</div>
+    </div>
+    <div class="no-print" style="display:flex;gap:12px;flex-wrap:wrap">
+      <button type="button" onClick="{{ next3 }}" style="min-height:58px;padding:0 26px;border:none;border-radius:12px;background:#103860;color:#fff;font:700 19px/1 'Source Sans 3',sans-serif;cursor:pointer">Mark complete and continue</button>
+      <button type="button" onClick="{{ goDash }}" style="min-height:58px;padding:0 22px;border:2px solid #C3D0D9;border-radius:12px;background:#fff;color:#103860;font:600 18px/1 'Source Sans 3',sans-serif;cursor:pointer">Back to modules</button>
+    </div>
+  </article>
+
+  <article hidden="{{ hideM4 }}" style="max-width:760px;margin:0 auto;padding:34px 20px 90px">
+    <h2 style="margin:0 0 12px;font:700 26px/1.25 Nunito,sans-serif;color:#103860">The plan of care is the whole list</h2>
+    <p style="margin:0 0 18px">Your consumer has a plan of care from their state assessment. It lists the tasks they are approved for, how often, and the maximum units of care per month. One unit is 15 minutes.</p>
+    <p style="margin:0 0 18px">Only the tasks on that plan may be performed and recorded. Ask to see it, and ask your consumer to walk you through how they want each task done.</p>
+
+    <h2 style="margin:28px 0 12px;font:700 26px/1.25 Nunito,sans-serif;color:#103860">May and may not</h2>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px;margin:0 0 22px">
+      <div style="background:#EAF7F1;border:1px solid #B7DEC9;border-radius:14px;padding:18px">
+        <p style="margin:0 0 8px;font:700 18px/1.3 Nunito,sans-serif;color:#1E6B4C">You may</p>
+        <ul style="margin:0;padding-left:20px;font-size:17px;display:flex;flex-direction:column;gap:7px">
+          <li>Do the tasks listed on the plan of care</li>
+          <li>Do them the way your consumer teaches you</li>
+          <li>Be actively working the whole time you are clocked in</li>
+          <li>Ask questions any time you are unsure</li>
+        </ul>
+      </div>
+      <div style="background:#FFF4EC;border:1px solid #F3CDB3;border-radius:14px;padding:18px">
+        <p style="margin:0 0 8px;font:700 18px/1.3 Nunito,sans-serif;color:#C4551B">You may not</p>
+        <ul style="margin:0;padding-left:20px;font-size:17px;display:flex;flex-direction:column;gap:7px">
+          <li>Do tasks that are not on the plan of care</li>
+          <li>Provide services to visitors, children, pets or anyone else in the household</li>
+          <li>Do medication tasks that are not authorized</li>
+          <li>Sit idle or run personal errands while clocked in</li>
+        </ul>
+      </div>
+    </div>
+    <div style="background:#FFF4EC;border:1px solid #F3CDB3;border-left:6px solid #C4551B;border-radius:14px;padding:20px;margin:0 0 20px">
+      <p style="margin:0 0 6px;font:700 13px/1 'Source Sans 3',sans-serif;letter-spacing:.14em;text-transform:uppercase;color:#C4551B">Stop</p>
+      <p style="margin:0;font-size:19px">You provide services only to the consumer named on the plan of care. Not their spouse, not their adult children, not their grandchildren, not their pets. This is one of the most common ways good attendants get into trouble.</p>
+    </div>
+
+    <h2 style="margin:28px 0 12px;font:700 26px/1.25 Nunito,sans-serif;color:#103860">Supplies are not yours to buy</h2>
+    <p style="margin:0 0 18px">You are not responsible for providing cleaning supplies, gloves or other protective gear, gasoline, or a vehicle. Those are the consumer's responsibility. If what you need is not there, tell your consumer, and tell us if it does not get resolved.</p>
+
+    <h2 style="margin:28px 0 12px;font:700 26px/1.25 Nunito,sans-serif;color:#103860">Hours have a hard ceiling</h2>
+    <p style="margin:0 0 18px">The state approves a set number of units each month and how much time each task gets. Caring Companions can only bill Medicaid, and therefore only pay you, for what was approved.</p>
+    <div style="background:#FFF7E6;border:1px solid #F0DCA8;border-left:6px solid #C98A16;border-radius:14px;padding:20px;margin:0 0 22px">
+      <p style="margin:0 0 6px;font:700 13px/1 'Source Sans 3',sans-serif;letter-spacing:.14em;text-transform:uppercase;color:#8A6B18">Remember</p>
+      <p style="margin:0;font-size:19px">If you work more than the approved hours, the units run out before the end of the month, and hours worked past the limit will not be paid. Your consumer is responsible for tracking this, but protect yourself: know the schedule you agreed to and speak up if you are being asked to work beyond it.</p>
+    </div>
+
+    <div style="background:#fff;border:2px solid #E4EDF0;border-radius:18px;padding:24px;margin:34px 0 26px">
+      <p style="margin:0 0 4px;font:700 13px/1 'Source Sans 3',sans-serif;letter-spacing:.14em;text-transform:uppercase;color:#14807A">What would you do?</p>
+      <p style="margin:0 0 16px;font:700 22px/1.35 Nunito,sans-serif;color:#103860">While you are clocked in, your consumer's daughter asks you to run her laundry too, since the machine is already going. What do you do?</p>
+      <div style="display:flex;flex-direction:column;gap:10px">
+        <button type="button" onClick="{{ p_m4_0 }}" style="text-align:left;width:100%;min-height:56px;padding:14px 18px;border:2px solid #D5E0E6;border-radius:12px;background:#fff;font:500 18px/1.4 'Source Sans 3',sans-serif;cursor:pointer">Kindly explain you can only provide services to your consumer, and continue their authorized tasks</button>
+        <button type="button" onClick="{{ p_m4_1 }}" style="text-align:left;width:100%;min-height:56px;padding:14px 18px;border:2px solid #D5E0E6;border-radius:12px;background:#fff;font:500 18px/1.4 'Source Sans 3',sans-serif;cursor:pointer">Do it, since the machine is running anyway and it costs no extra time</button>
+        <button type="button" onClick="{{ p_m4_2 }}" style="text-align:left;width:100%;min-height:56px;padding:14px 18px;border:2px solid #D5E0E6;border-radius:12px;background:#fff;font:500 18px/1.4 'Source Sans 3',sans-serif;cursor:pointer">Clock out, do her laundry unpaid, then clock back in</button>
+      </div>
+      <div hidden="{{ hideOk_m4 }}" style="margin-top:14px;background:#EAF7F1;border-left:6px solid #1E8A5F;border-radius:12px;padding:16px;font-size:18px">Correct. Services go to the consumer named on the plan of care, and only to them. Saying no politely protects you both.</div>
+      <div hidden="{{ hideNo_m4 }}" style="margin-top:14px;background:#FFF4EC;border-left:6px solid #C4551B;border-radius:12px;padding:16px;font-size:18px">{{ fb_m4 }}</div>
+    </div>
+    <div class="no-print" style="display:flex;gap:12px;flex-wrap:wrap">
+      <button type="button" onClick="{{ next4 }}" style="min-height:58px;padding:0 26px;border:none;border-radius:12px;background:#103860;color:#fff;font:700 19px/1 'Source Sans 3',sans-serif;cursor:pointer">Mark complete and continue</button>
+      <button type="button" onClick="{{ goDash }}" style="min-height:58px;padding:0 22px;border:2px solid #C3D0D9;border-radius:12px;background:#fff;color:#103860;font:600 18px/1 'Source Sans 3',sans-serif;cursor:pointer">Back to modules</button>
+    </div>
+  </article>
+
+  <article hidden="{{ hideM5 }}" style="max-width:760px;margin:0 auto;padding:34px 20px 90px">
+    <h2 style="margin:0 0 12px;font:700 26px/1.25 Nunito,sans-serif;color:#103860">Showing up is most of the job</h2>
+    <p style="margin:0 0 18px">Your consumer planned their day around you. When you do not come, they may not eat, bathe or get out of bed. Be on time, every shift, and treat the schedule as a promise.</p>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px;margin:0 0 22px">
+      <div style="background:#EAF7F1;border:1px solid #B7DEC9;border-radius:14px;padding:18px">
+        <p style="margin:0 0 8px;font:700 18px/1.3 Nunito,sans-serif;color:#1E6B4C">Do</p>
+        <ul style="margin:0;padding-left:20px;font-size:17px;display:flex;flex-direction:column;gap:6px">
+          <li>Arrive at the agreed time</li>
+          <li>Call your consumer as early as you possibly can if you cannot come</li>
+          <li>Agree in advance how much notice they need</li>
+          <li>Tell them when you will be away for vacation or appointments</li>
+        </ul>
+      </div>
+      <div style="background:#FFF4EC;border:1px solid #F3CDB3;border-radius:14px;padding:18px">
+        <p style="margin:0 0 8px;font:700 18px/1.3 Nunito,sans-serif;color:#C4551B">Do not</p>
+        <ul style="margin:0;padding-left:20px;font-size:17px;display:flex;flex-direction:column;gap:6px">
+          <li>No show, or text a few minutes before a shift</li>
+          <li>Leave early without saying so</li>
+          <li>Bring friends, family or children to work</li>
+          <li>Assume someone else will cover for you</li>
+        </ul>
+      </div>
+    </div>
+
+    <h2 style="margin:28px 0 12px;font:700 26px/1.25 Nunito,sans-serif;color:#103860">Dignity and boundaries</h2>
+    <p style="margin:0 0 14px">You are in someone's home, helping with the most private parts of their life. Knock. Ask before moving their things. Cover them during personal care. Talk to them, not about them, and never in a demeaning way, even as a joke. Referring to a person in their presence with profanity or in a degrading way can be reported as emotional abuse.</p>
+    <p style="margin:0 0 18px">Keep the relationship professional. Do not borrow money, do not lend money, do not accept gifts of value, do not use their car for personal errands, and do not bring your own household tasks into their home.</p>
+
+    <h2 style="margin:28px 0 12px;font:700 26px/1.25 Nunito,sans-serif;color:#103860">Confidentiality</h2>
+    <p style="margin:0 0 14px">You agreed to keep your consumer's information confidential, and that is a condition of working in the program. Health information is protected by federal law. In practice this means:</p>
+    <ul style="margin:0 0 18px;padding-left:24px;display:flex;flex-direction:column;gap:8px">
+      <li>Do not discuss your consumer's health, finances or household with friends or family</li>
+      <li>Never post about them, or photograph them or their home, on social media</li>
+      <li>Do not share their address, phone number or documents with anyone</li>
+      <li>Speak about their care only with them, their chosen representative, and Caring Companions</li>
+    </ul>
+    <div style="background:#EAF6F5;border:1px solid #B9E3DF;border-left:6px solid #14807A;border-radius:14px;padding:20px;margin:0 0 22px">
+      <p style="margin:0 0 6px;font:700 13px/1 'Source Sans 3',sans-serif;letter-spacing:.14em;text-transform:uppercase;color:#14807A">Call us</p>
+      <p style="margin:0;font-size:19px">Because of privacy rules, we cannot discuss your payroll by email. Call us at {{ phone }} for anything about your pay.</p>
+    </div>
+
+    <div style="background:#fff;border:2px solid #E4EDF0;border-radius:18px;padding:24px;margin:34px 0 26px">
+      <p style="margin:0 0 4px;font:700 13px/1 'Source Sans 3',sans-serif;letter-spacing:.14em;text-transform:uppercase;color:#14807A">Knowledge check</p>
+      <p style="margin:0 0 16px;font:700 22px/1.35 Nunito,sans-serif;color:#103860">Which of these is allowed?</p>
+      <div style="display:flex;flex-direction:column;gap:10px">
+        <button type="button" onClick="{{ p_m5_0 }}" style="text-align:left;width:100%;min-height:56px;padding:14px 18px;border:2px solid #D5E0E6;border-radius:12px;background:#fff;font:500 18px/1.4 'Source Sans 3',sans-serif;cursor:pointer">Posting a photo of your consumer's cat on social media, with no caption</button>
+        <button type="button" onClick="{{ p_m5_1 }}" style="text-align:left;width:100%;min-height:56px;padding:14px 18px;border:2px solid #D5E0E6;border-radius:12px;background:#fff;font:500 18px/1.4 'Source Sans 3',sans-serif;cursor:pointer">Telling your sister about your consumer's new diagnosis</button>
+        <button type="button" onClick="{{ p_m5_2 }}" style="text-align:left;width:100%;min-height:56px;padding:14px 18px;border:2px solid #D5E0E6;border-radius:12px;background:#fff;font:500 18px/1.4 'Source Sans 3',sans-serif;cursor:pointer">Calling Caring Companions to ask how to handle a care question</button>
+      </div>
+      <div hidden="{{ hideOk_m5 }}" style="margin-top:14px;background:#EAF7F1;border-left:6px solid #1E8A5F;border-radius:12px;padding:16px;font-size:18px">Correct. We are one of the few places you may discuss your consumer's care. Call us any time you are unsure.</div>
+      <div hidden="{{ hideNo_m5 }}" style="margin-top:14px;background:#FFF4EC;border-left:6px solid #C4551B;border-radius:12px;padding:16px;font-size:18px">{{ fb_m5 }}</div>
+    </div>
+    <div class="no-print" style="display:flex;gap:12px;flex-wrap:wrap">
+      <button type="button" onClick="{{ next5 }}" style="min-height:58px;padding:0 26px;border:none;border-radius:12px;background:#103860;color:#fff;font:700 19px/1 'Source Sans 3',sans-serif;cursor:pointer">Mark complete and continue</button>
+      <button type="button" onClick="{{ goDash }}" style="min-height:58px;padding:0 22px;border:2px solid #C3D0D9;border-radius:12px;background:#fff;color:#103860;font:600 18px/1 'Source Sans 3',sans-serif;cursor:pointer">Back to modules</button>
+    </div>
+  </article>
+
+  <article hidden="{{ hideM6 }}" style="max-width:760px;margin:0 auto;padding:34px 20px 90px">
+    <h2 style="margin:0 0 12px;font:700 26px/1.25 Nunito,sans-serif;color:#103860">Two ways to clock in. Only two.</h2>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:14px;margin:0 0 18px">
+      <div style="background:#fff;border:2px solid #38C0B8;border-radius:16px;padding:20px">
+        <p style="margin:0 0 4px;font:700 13px/1 'Source Sans 3',sans-serif;letter-spacing:.14em;text-transform:uppercase;color:#14807A">Option 1</p>
+        <p style="margin:0 0 8px;font:700 20px/1.3 Nunito,sans-serif;color:#103860">The WellSky Personal Care app</p>
+        <p style="margin:0;font-size:17px;color:#4C6070">You need a smartphone that can download the app. Clock in when you start and out when you finish, every shift.</p>
+      </div>
+      <div style="background:#fff;border:2px solid #38C0B8;border-radius:16px;padding:20px">
+        <p style="margin:0 0 4px;font:700 13px/1 'Source Sans 3',sans-serif;letter-spacing:.14em;text-transform:uppercase;color:#14807A">Option 2</p>
+        <p style="margin:0 0 8px;font:700 20px/1.3 Nunito,sans-serif;color:#103860">The consumer's home phone</p>
+        <p style="margin:0;font-size:17px;color:#4C6070">Call the time tracking line from the consumer's home telephone, the number registered to their residence.</p>
+      </div>
+    </div>
+    <div style="background:#FFF4EC;border:1px solid #F3CDB3;border-left:6px solid #C4551B;border-radius:14px;padding:20px;margin:0 0 20px">
+      <p style="margin:0 0 6px;font:700 13px/1 'Source Sans 3',sans-serif;letter-spacing:.14em;text-transform:uppercase;color:#C4551B">Stop</p>
+      <p style="margin:0 0 10px;font-size:19px">Calling to clock in from your own cell phone does not work and is not allowed. It is the app, or the consumer's home phone. Nothing else.</p>
+      <p style="margin:0;font-size:19px">Caring Companions does not use paper timesheets at all. There is no paper slip to fall back on.</p>
+    </div>
+
+    <h2 style="margin:28px 0 12px;font:700 26px/1.25 Nunito,sans-serif;color:#103860">Your clock in habits</h2>
+    <ul style="margin:0 0 20px;padding-left:24px;display:flex;flex-direction:column;gap:8px">
+      <li>Clock in before you start any authorized work, not after</li>
+      <li>Clock out immediately when the work is finished, not later from the car</li>
+      <li>Report the tasks you actually completed</li>
+      <li>Check your recorded times daily so a problem is caught the same day</li>
+      <li>Keep your own simple record of hours worked, in case an electronic record is missing</li>
+      <li>Be actively providing care the entire time you are clocked in</li>
+    </ul>
+
+    <h2 style="margin:28px 0 12px;font:700 26px/1.25 Nunito,sans-serif;color:#103860">When something genuinely goes wrong</h2>
+    <div style="background:#fff;border:2px solid #38C0B8;border-radius:16px;padding:22px;margin:0 0 20px">
+      <p style="margin:0 0 8px;font:700 20px/1.3 Nunito,sans-serif;color:#103860">The EVV Manual Correction Form</p>
+      <p style="margin:0 0 12px;font-size:18px;color:#4C6070">Dead phone, no signal, an app crash, a genuinely forgotten punch: fill in the form online at <a href="https://hub.caringcds.com/evv-form.html">hub.caringcds.com/evv-form.html</a>.</p>
+      <ul style="margin:0 0 12px;padding-left:22px;display:flex;flex-direction:column;gap:8px;font-size:18px">
+        <li>Visit date, the original and corrected times, and the reason</li>
+        <li>The tasks you actually performed</li>
+        <li>Signatures from both you and your consumer</li>
+        <li>Submit by 11:59 PM Saturday of that pay period</li>
+      </ul>
+      <p style="margin:0;font-size:18px;color:#4C6070">Save the form to your phone's home screen so it is one tap when you need it.</p>
+    </div>
+    <div style="background:#FFF7E6;border:1px solid #F0DCA8;border-left:6px solid #C98A16;border-radius:14px;padding:20px;margin:0 0 22px">
+      <p style="margin:0 0 6px;font:700 13px/1 'Source Sans 3',sans-serif;letter-spacing:.14em;text-transform:uppercase;color:#8A6B18">Remember</p>
+      <p style="margin:0 0 10px;font-size:19px">The goal is that 95 percent or more of visits are clocked correctly the first time, with no manual correction. Missouri Medicaid treats a high rate of manual corrections as a possible fraud indicator, and every correction is reviewed individually in an audit.</p>
+      <p style="margin:0;font-size:19px">Frequent corrections can affect your standing and may trigger a compliance review. If you are submitting them most weeks, call us instead and we will work out what is going wrong.</p>
+    </div>
+
+    <div style="background:#fff;border:2px solid #E4EDF0;border-radius:18px;padding:24px;margin:34px 0 26px">
+      <p style="margin:0 0 4px;font:700 13px/1 'Source Sans 3',sans-serif;letter-spacing:.14em;text-transform:uppercase;color:#14807A">What would you do?</p>
+      <p style="margin:0 0 16px;font:700 22px/1.35 Nunito,sans-serif;color:#103860">You arrive at 8:00 AM and realize at 9:15 that you never clocked in. What do you do?</p>
+      <div style="display:flex;flex-direction:column;gap:10px">
+        <button type="button" onClick="{{ p_m6_0 }}" style="text-align:left;width:100%;min-height:56px;padding:14px 18px;border:2px solid #D5E0E6;border-radius:12px;background:#fff;font:500 18px/1.4 'Source Sans 3',sans-serif;cursor:pointer">Clock in now, note the real start time, and submit the EVV correction form with your consumer's signature before Saturday</button>
+        <button type="button" onClick="{{ p_m6_1 }}" style="text-align:left;width:100%;min-height:56px;padding:14px 18px;border:2px solid #D5E0E6;border-radius:12px;background:#fff;font:500 18px/1.4 'Source Sans 3',sans-serif;cursor:pointer">Work an extra hour and 15 minutes another day to make it even</button>
+        <button type="button" onClick="{{ p_m6_2 }}" style="text-align:left;width:100%;min-height:56px;padding:14px 18px;border:2px solid #D5E0E6;border-radius:12px;background:#fff;font:500 18px/1.4 'Source Sans 3',sans-serif;cursor:pointer">Say nothing and accept the shorter shift, since it was your mistake</button>
+      </div>
+      <div hidden="{{ hideOk_m6 }}" style="margin-top:14px;background:#EAF7F1;border-left:6px solid #1E8A5F;border-radius:12px;padding:16px;font-size:18px">Correct. The correction form exists for exactly this. Use it, submit it on time, and keep it rare.</div>
+      <div hidden="{{ hideNo_m6 }}" style="margin-top:14px;background:#FFF4EC;border-left:6px solid #C4551B;border-radius:12px;padding:16px;font-size:18px">{{ fb_m6 }}</div>
+    </div>
+    <div class="no-print" style="display:flex;gap:12px;flex-wrap:wrap">
+      <button type="button" onClick="{{ next6 }}" style="min-height:58px;padding:0 26px;border:none;border-radius:12px;background:#103860;color:#fff;font:700 19px/1 'Source Sans 3',sans-serif;cursor:pointer">Mark complete and continue</button>
+      <button type="button" onClick="{{ goDash }}" style="min-height:58px;padding:0 22px;border:2px solid #C3D0D9;border-radius:12px;background:#fff;color:#103860;font:600 18px/1 'Source Sans 3',sans-serif;cursor:pointer">Back to modules</button>
+    </div>
+  </article>
+
+  <article hidden="{{ hideM7 }}" style="max-width:760px;margin:0 auto;padding:34px 20px 90px">
+    <h2 style="margin:0 0 12px;font:700 26px/1.25 Nunito,sans-serif;color:#103860">What Medicaid fraud is in this job</h2>
+    <p style="margin:0 0 18px">Every hour you work is billed to Medicaid. If time or tasks are submitted that are not accurate, that is Medicaid fraud, and it does not require bad intentions to count.</p>
+    <p style="margin:0 0 14px">Falsification examples from our policy include:</p>
+    <ul style="margin:0 0 20px;padding-left:24px;display:flex;flex-direction:column;gap:8px">
+      <li>Time submitted for days you did not work</li>
+      <li>More hours than you actually worked</li>
+      <li>Tasks marked that you did not complete</li>
+      <li>Time recorded before the work happened, or for a day that has not occurred</li>
+      <li>Time for tasks not approved on the plan of care, such as yard work, pet care or home repair</li>
+      <li>Time for days the consumer was in the hospital, at an appointment, in rehab or in a facility</li>
+      <li>Time for days you were in the hospital, in rehab, in jail or otherwise unavailable</li>
+      <li>Time while you were working for another consumer, agency or employer</li>
+      <li>Work performed by someone other than you, submitted under your name</li>
+      <li>Signatures or initials that are not genuinely yours or your consumer's</li>
+    </ul>
+    <div style="background:#FFF4EC;border:1px solid #F3CDB3;border-left:6px solid #C4551B;border-radius:14px;padding:20px;margin:0 0 20px">
+      <p style="margin:0 0 6px;font:700 13px/1 'Source Sans 3',sans-serif;letter-spacing:.14em;text-transform:uppercase;color:#C4551B">Stop</p>
+      <p style="margin:0 0 10px;font-size:19px">Never let anyone else provide services under your name or your login. Never clock in for someone else, and never let another person clock in for you.</p>
+      <p style="margin:0;font-size:19px">Two specific allegations apply to CDS attendants: misappropriation, which is diverting a consumer's property or money, including borrowing with a promise to repay, and falsification of documentation, which is falsifying your time.</p>
+    </div>
+
+    <h2 style="margin:28px 0 12px;font:700 26px/1.25 Nunito,sans-serif;color:#103860">What happens</h2>
+    <p style="margin:0 0 14px">Caring Companions is required to report suspected Medicaid fraud to the Missouri Medicaid Audit and Compliance Unit, to DHSS, and to the Missouri Attorney General. We can stop or suspend payments, disqualify you from working for any of our consumers, and withdraw as the consumer's vendor.</p>
+    <p style="margin:0 0 18px">According to the Missouri Attorney General, falsifying timesheets or signatures in connection with personal care services is Medicaid fraud. People who violate these rules may lose Medicaid eligibility for life, face criminal charges, financial penalties, and prison time. Money paid on inaccurate time is recovered from the attendant and the consumer.</p>
+
+    <h2 style="margin:28px 0 12px;font:700 26px/1.25 Nunito,sans-serif;color:#103860">If you are overpaid</h2>
+    <p style="margin:0 0 14px">Overpayments happen, and they get corrected. You may repay by personal check, or authorize a reduction in your pay. Your pay is never reduced without your written authorization or proof that you were given due process first, and repayment normally has to happen inside the same tax year.</p>
+    <p style="margin:0 0 22px">If you dispute an overpayment, say so. You will receive written notice and an opportunity to show that no overpayment occurred.</p>
+
+    <div style="background:#fff;border:2px solid #E4EDF0;border-radius:18px;padding:24px;margin:34px 0 26px">
+      <p style="margin:0 0 4px;font:700 13px/1 'Source Sans 3',sans-serif;letter-spacing:.14em;text-transform:uppercase;color:#14807A">Knowledge check</p>
+      <p style="margin:0 0 16px;font:700 22px/1.35 Nunito,sans-serif;color:#103860">You are sick, and your sister offers to cover your shift and let you record the time. What is true?</p>
+      <div style="display:flex;flex-direction:column;gap:10px">
+        <button type="button" onClick="{{ p_m7_0 }}" style="text-align:left;width:100%;min-height:56px;padding:14px 18px;border:2px solid #D5E0E6;border-radius:12px;background:#fff;font:500 18px/1.4 'Source Sans 3',sans-serif;cursor:pointer">That is fraud. Only the approved attendant may provide and record the services</button>
+        <button type="button" onClick="{{ p_m7_1 }}" style="text-align:left;width:100%;min-height:56px;padding:14px 18px;border:2px solid #D5E0E6;border-radius:12px;background:#fff;font:500 18px/1.4 'Source Sans 3',sans-serif;cursor:pointer">It is fine if the consumer agrees to it</button>
+        <button type="button" onClick="{{ p_m7_2 }}" style="text-align:left;width:100%;min-height:56px;padding:14px 18px;border:2px solid #D5E0E6;border-radius:12px;background:#fff;font:500 18px/1.4 'Source Sans 3',sans-serif;cursor:pointer">It is fine as long as the work really gets done</button>
+      </div>
+      <div hidden="{{ hideOk_m7 }}" style="margin-top:14px;background:#EAF7F1;border-left:6px solid #1E8A5F;border-radius:12px;padding:16px;font-size:18px">Correct. Work submitted under your name that someone else performed is listed in our policy as falsification. Call your consumer so they can use their backup attendant.</div>
+      <div hidden="{{ hideNo_m7 }}" style="margin-top:14px;background:#FFF4EC;border-left:6px solid #C4551B;border-radius:12px;padding:16px;font-size:18px">{{ fb_m7 }}</div>
+    </div>
+    <div class="no-print" style="display:flex;gap:12px;flex-wrap:wrap">
+      <button type="button" onClick="{{ next7 }}" style="min-height:58px;padding:0 26px;border:none;border-radius:12px;background:#103860;color:#fff;font:700 19px/1 'Source Sans 3',sans-serif;cursor:pointer">Mark complete and continue</button>
+      <button type="button" onClick="{{ goDash }}" style="min-height:58px;padding:0 22px;border:2px solid #C3D0D9;border-radius:12px;background:#fff;color:#103860;font:600 18px/1 'Source Sans 3',sans-serif;cursor:pointer">Back to modules</button>
+    </div>
+  </article>
+
+  <article hidden="{{ hideM8 }}" style="max-width:760px;margin:0 auto;padding:34px 20px 90px">
+    <h2 style="margin:0 0 12px;font:700 26px/1.25 Nunito,sans-serif;color:#103860">You are a mandated reporter</h2>
+    <p style="margin:0 0 14px">Every attendant providing CDS is a mandated reporter. State law requires you to report suspicions or allegations of abuse, neglect or exploitation immediately to the DHSS Central Registry Unit.</p>
+    <div style="background:#103860;color:#fff;border-radius:16px;padding:22px;margin:0 0 20px">
+      <p style="margin:0 0 4px;font:700 13px/1 'Source Sans 3',sans-serif;letter-spacing:.14em;text-transform:uppercase;color:#7FE3DC">Report immediately</p>
+      <p style="margin:0 0 8px;font:800 30px/1.1 Nunito,sans-serif">800-392-0210</p>
+      <p style="margin:0;font-size:18px;color:#D8E6EE">DHSS Central Registry Unit. You do not have to witness it yourself. Information from someone else that suggests abuse, neglect or exploitation must also be reported.</p>
+    </div>
+
+    <h2 style="margin:28px 0 12px;font:700 26px/1.25 Nunito,sans-serif;color:#103860">What you are reporting</h2>
+    <div style="display:flex;flex-direction:column;gap:12px;margin:0 0 20px">
+      <div style="background:#fff;border:1px solid #DCE5EA;border-radius:14px;padding:18px">
+        <p style="margin:0 0 4px;font:700 19px/1.3 Nunito,sans-serif;color:#103860">Abuse</p>
+        <p style="margin:0;font-size:18px;color:#4C6070">Physical, sexual or emotional injury or harm. Physical includes beating, striking, choking or restraining. Emotional includes verbal abuse, or withholding affection to cause distress, including speaking to a person with profanity or in a demeaning way in their presence.</p>
+      </div>
+      <div style="background:#fff;border:1px solid #DCE5EA;border-radius:14px;padding:18px">
+        <p style="margin:0 0 4px;font:700 19px/1.3 Nunito,sans-serif;color:#103860">Neglect</p>
+        <p style="margin:0;font-size:18px;color:#4C6070">Failure to provide the care, goods or services a person needs and cannot obtain themselves. It can be passive, from carelessness or not knowing, or active, from an intentional failure to provide care.</p>
+      </div>
+      <div style="background:#fff;border:1px solid #DCE5EA;border-radius:14px;padding:18px">
+        <p style="margin:0 0 4px;font:700 19px/1.3 Nunito,sans-serif;color:#103860">Exploitation</p>
+        <p style="margin:0;font-size:18px;color:#4C6070">Taking control of someone's property or money by deception, intimidation or force. Includes misuse of a power of attorney, fraud, theft, stealing by deceit, or undue influence over wills and documents.</p>
+      </div>
+    </div>
+    <p style="margin:0 0 20px">Reporting is not disloyalty, and it is not optional. If you are unsure whether something rises to the level of a report, call the hotline anyway and let them decide.</p>
+
+    <h2 style="margin:28px 0 12px;font:700 26px/1.25 Nunito,sans-serif;color:#103860">Emergencies and changes in condition</h2>
+    <ul style="margin:0 0 20px;padding-left:24px;display:flex;flex-direction:column;gap:8px">
+      <li>In a medical emergency, call 911 first, then your consumer's emergency contact, then us</li>
+      <li>Tell us and your consumer about a fall, an injury, or a sudden change in their condition</li>
+      <li>Tell us if your consumer is hospitalized or admitted to a facility. No time may be recorded for those days</li>
+      <li>Tell us if the home becomes unsafe for you, or if you are threatened or abused</li>
+      <li>Tell us if you can no longer meet the physical demands of the tasks</li>
+    </ul>
+
+    <h2 style="margin:28px 0 12px;font:700 26px/1.25 Nunito,sans-serif;color:#103860">When to call Caring Companions</h2>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px;margin:0 0 22px">
+      <div style="background:#fff;border:1px solid #DCE5EA;border-radius:14px;padding:18px;font-size:18px">You are asked to do something not on the plan of care</div>
+      <div style="background:#fff;border:1px solid #DCE5EA;border-radius:14px;padding:18px;font-size:18px">You are asked to record time you did not work</div>
+      <div style="background:#fff;border:1px solid #DCE5EA;border-radius:14px;padding:18px;font-size:18px">The app or the phone line is failing repeatedly</div>
+      <div style="background:#fff;border:1px solid #DCE5EA;border-radius:14px;padding:18px;font-size:18px">Your pay looks wrong, or has not arrived</div>
+      <div style="background:#fff;border:1px solid #DCE5EA;border-radius:14px;padding:18px;font-size:18px">Your name, address or phone number changes</div>
+      <div style="background:#fff;border:1px solid #DCE5EA;border-radius:14px;padding:18px;font-size:18px">You are unsure about anything at all</div>
+    </div>
+    <div style="background:#EAF6F5;border:1px solid #B9E3DF;border-left:6px solid #14807A;border-radius:14px;padding:20px;margin:0 0 22px">
+      <p style="margin:0 0 6px;font:700 13px/1 'Source Sans 3',sans-serif;letter-spacing:.14em;text-transform:uppercase;color:#14807A">Call us</p>
+      <p style="margin:0;font-size:19px">{{ phone }}. If you have a concern about how you have been treated, tell us and we will work it through with you. Raising a concern in good faith is part of doing this job well.</p>
+    </div>
+
+    <div style="background:#fff;border:2px solid #E4EDF0;border-radius:18px;padding:24px;margin:34px 0 26px">
+      <p style="margin:0 0 4px;font:700 13px/1 'Source Sans 3',sans-serif;letter-spacing:.14em;text-transform:uppercase;color:#14807A">What would you do?</p>
+      <p style="margin:0 0 16px;font:700 22px/1.35 Nunito,sans-serif;color:#103860">Your consumer's nephew mentions that he has been taking money from her account without asking. You did not see it happen. What do you do?</p>
+      <div style="display:flex;flex-direction:column;gap:10px">
+        <button type="button" onClick="{{ p_m8_0 }}" style="text-align:left;width:100%;min-height:56px;padding:14px 18px;border:2px solid #D5E0E6;border-radius:12px;background:#fff;font:500 18px/1.4 'Source Sans 3',sans-serif;cursor:pointer">Report it to the hotline at 800-392-0210 right away, then tell Caring Companions</button>
+        <button type="button" onClick="{{ p_m8_1 }}" style="text-align:left;width:100%;min-height:56px;padding:14px 18px;border:2px solid #D5E0E6;border-radius:12px;background:#fff;font:500 18px/1.4 'Source Sans 3',sans-serif;cursor:pointer">Nothing. You did not witness it yourself</button>
+        <button type="button" onClick="{{ p_m8_2 }}" style="text-align:left;width:100%;min-height:56px;padding:14px 18px;border:2px solid #D5E0E6;border-radius:12px;background:#fff;font:500 18px/1.4 'Source Sans 3',sans-serif;cursor:pointer">Confront the nephew and handle it inside the family</button>
+      </div>
+      <div hidden="{{ hideOk_m8 }}" style="margin-top:14px;background:#EAF7F1;border-left:6px solid #1E8A5F;border-radius:12px;padding:16px;font-size:18px">Correct. Mandated reporters do not have to witness anything. Information from a secondary source that suggests exploitation must be reported immediately.</div>
+      <div hidden="{{ hideNo_m8 }}" style="margin-top:14px;background:#FFF4EC;border-left:6px solid #C4551B;border-radius:12px;padding:16px;font-size:18px">{{ fb_m8 }}</div>
+    </div>
+    <div class="no-print" style="display:flex;gap:12px;flex-wrap:wrap">
+      <button type="button" onClick="{{ next8 }}" style="min-height:58px;padding:0 26px;border:none;border-radius:12px;background:#103860;color:#fff;font:700 19px/1 'Source Sans 3',sans-serif;cursor:pointer">Mark complete and continue</button>
+      <button type="button" onClick="{{ goDash }}" style="min-height:58px;padding:0 22px;border:2px solid #C3D0D9;border-radius:12px;background:#fff;color:#103860;font:600 18px/1 'Source Sans 3',sans-serif;cursor:pointer">Back to modules</button>
+    </div>
+  </article>
+
+  <article hidden="{{ hideFinal }}" style="max-width:760px;margin:0 auto;padding:34px 20px 90px">
+    <p style="margin:0 0 10px;font:700 13px/1 'Source Sans 3',sans-serif;letter-spacing:.16em;text-transform:uppercase;color:#14807A">Final knowledge check</p>
+    <h1 style="margin:0 0 12px;font:800 clamp(30px,5.4vw,42px)/1.14 Nunito,sans-serif;color:#103860">Twelve questions</h1>
+    <p style="margin:0 0 8px;font-size:20px;color:#3D5164">Answer each one. If you miss it, you will see why, and you can pick again.</p>
+    <p style="margin:0 0 26px;font-size:19px"><strong style="color:#14807A">Answered correctly: {{ score }} of 12</strong></p>
+
+    <sc-for list="{{ finalQuestions }}" as="q" hint-placeholder-count="12">
+      <div style="background:#fff;border:2px solid #E4EDF0;border-radius:18px;padding:22px;margin:0 0 16px">
+        <p style="margin:0 0 4px;font:700 13px/1 'Source Sans 3',sans-serif;letter-spacing:.14em;text-transform:uppercase;color:#7A8C99">Question {{ q.num }}</p>
+        <p style="margin:0 0 14px;font:700 21px/1.35 Nunito,sans-serif;color:#103860">{{ q.q }}</p>
+        <div style="display:flex;flex-direction:column;gap:10px">
+          <sc-for list="{{ q.opts }}" as="o" hint-placeholder-count="3">
+            <button type="button" onClick="{{ o.pick }}" style="text-align:left;width:100%;min-height:54px;padding:13px 18px;border:2px solid #D5E0E6;border-radius:12px;background:#fff;font:500 18px/1.4 'Source Sans 3',sans-serif;cursor:pointer">{{ o.label }}</button>
+          </sc-for>
+        </div>
+        <div hidden="{{ q.hideOk }}" style="margin-top:14px;background:#EAF7F1;border-left:6px solid #1E8A5F;border-radius:12px;padding:16px;font-size:18px">{{ q.ok }}</div>
+        <div hidden="{{ q.hideNo }}" style="margin-top:14px;background:#FFF4EC;border-left:6px solid #C4551B;border-radius:12px;padding:16px;font-size:18px">{{ q.fb }}</div>
+      </div>
+    </sc-for>
+
+    <p hidden="{{ hideAckLock }}" style="margin:22px 0 0;font-size:18px;font-weight:600;color:#C4551B">{{ ackLockMsg }}</p>
+    <div class="no-print" style="display:flex;gap:12px;flex-wrap:wrap;margin-top:22px">
+      <button type="button" disabled="{{ ackLocked }}" onClick="{{ goAck }}" style="min-height:58px;padding:0 26px;border:none;border-radius:12px;background:{{ ackBtnBg }};color:#fff;font:700 19px/1 'Source Sans 3',sans-serif;cursor:pointer">Continue to acknowledgment</button>
+      <button type="button" onClick="{{ goDash }}" style="min-height:58px;padding:0 22px;border:2px solid #C3D0D9;border-radius:12px;background:#fff;color:#103860;font:600 18px/1 'Source Sans 3',sans-serif;cursor:pointer">Back to modules</button>
+    </div>
+  </article>
+
+  <article hidden="{{ hideAck }}" style="max-width:760px;margin:0 auto;padding:34px 20px 90px">
+    <p style="margin:0 0 10px;font:700 13px/1 'Source Sans 3',sans-serif;letter-spacing:.16em;text-transform:uppercase;color:#14807A">Almost done</p>
+    <h1 style="margin:0 0 12px;font:800 clamp(30px,5.4vw,42px)/1.14 Nunito,sans-serif;color:#103860">Orientation acknowledgment</h1>
+    <p style="margin:0 0 24px;font-size:20px;color:#3D5164">Please check each statement, then type your name and today's date.</p>
+
+    <div style="display:flex;flex-direction:column;gap:12px;margin:0 0 24px">
+      <label style="display:flex;gap:14px;align-items:flex-start;background:#fff;border:1px solid #DCE5EA;border-radius:14px;padding:18px;cursor:pointer">
+        <input type="checkbox" checked="{{ a1 }}" onChange="{{ t1 }}" style="width:26px;height:26px;flex:none;margin-top:2px;accent-color:#14807A" />
+        <span style="font-size:18px">I understand I am the employee of my consumer for the time paid by CDS funds, and never an employee of Caring Companions, DHSS or the state.</span>
+      </label>
+      <label style="display:flex;gap:14px;align-items:flex-start;background:#fff;border:1px solid #DCE5EA;border-radius:14px;padding:18px;cursor:pointer">
+        <input type="checkbox" checked="{{ a2 }}" onChange="{{ t2 }}" style="width:26px;height:26px;flex:none;margin-top:2px;accent-color:#14807A" />
+        <span style="font-size:18px">I understand my consumer directs my day to day work, and that being told to do something does not make it allowable if it breaks CDS rules, Medicaid requirements or the law.</span>
+      </label>
+      <label style="display:flex;gap:14px;align-items:flex-start;background:#fff;border:1px solid #DCE5EA;border-radius:14px;padding:18px;cursor:pointer">
+        <input type="checkbox" checked="{{ a3 }}" onChange="{{ t3 }}" style="width:26px;height:26px;flex:none;margin-top:2px;accent-color:#14807A" />
+        <span style="font-size:18px">I understand I may perform only the tasks authorized on my consumer's plan of care, only for my consumer, and that I must be actively working while clocked in.</span>
+      </label>
+      <label style="display:flex;gap:14px;align-items:flex-start;background:#fff;border:1px solid #DCE5EA;border-radius:14px;padding:18px;cursor:pointer">
+        <input type="checkbox" checked="{{ a4 }}" onChange="{{ t4 }}" style="width:26px;height:26px;flex:none;margin-top:2px;accent-color:#14807A" />
+        <span style="font-size:18px">I understand I must clock in and out for every shift using the WellSky Personal Care app or the consumer's home phone, and that no paper timesheets are used.</span>
+      </label>
+      <label style="display:flex;gap:14px;align-items:flex-start;background:#fff;border:1px solid #DCE5EA;border-radius:14px;padding:18px;cursor:pointer">
+        <input type="checkbox" checked="{{ a5 }}" onChange="{{ t5 }}" style="width:26px;height:26px;flex:none;margin-top:2px;accent-color:#14807A" />
+        <span style="font-size:18px">I understand that recording time or tasks that were not actually provided is Medicaid fraud, that payments will be recovered, and that I may be disqualified and referred to the proper authorities.</span>
+      </label>
+      <label style="display:flex;gap:14px;align-items:flex-start;background:#fff;border:1px solid #DCE5EA;border-radius:14px;padding:18px;cursor:pointer">
+        <input type="checkbox" checked="{{ a6 }}" onChange="{{ t6 }}" style="width:26px;height:26px;flex:none;margin-top:2px;accent-color:#14807A" />
+        <span style="font-size:18px">I understand I am a mandated reporter and must report suspected abuse, neglect or exploitation immediately to 800-392-0210, whether or not I witnessed it.</span>
+      </label>
+      <label style="display:flex;gap:14px;align-items:flex-start;background:#fff;border:1px solid #DCE5EA;border-radius:14px;padding:18px;cursor:pointer">
+        <input type="checkbox" checked="{{ a7 }}" onChange="{{ t7 }}" style="width:26px;height:26px;flex:none;margin-top:2px;accent-color:#14807A" />
+        <span style="font-size:18px">I understand I must keep my consumer's information confidential, keep my screening and paperwork current, and follow the Caring Companions policies that apply to me.</span>
+      </label>
+    </div>
+
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px;margin:0 0 22px">
+      <label style="display:flex;flex-direction:column;gap:8px;font:600 17px/1.3 'Source Sans 3',sans-serif;color:#103860">Your full name
+        <input type="text" value="{{ name }}" onChange="{{ setName }}" placeholder="Type your full name" style="min-height:56px;padding:0 16px;border:2px solid #C3D0D9;border-radius:12px;font:400 19px/1 'Source Sans 3',sans-serif;background:#fff" />
+      </label>
+      <label style="display:flex;flex-direction:column;gap:8px;font:600 17px/1.3 'Source Sans 3',sans-serif;color:#103860">Today's date
+        <input type="date" value="{{ date }}" onChange="{{ setDate }}" style="min-height:56px;padding:0 16px;border:2px solid #C3D0D9;border-radius:12px;font:400 19px/1 'Source Sans 3',sans-serif;background:#fff" />
+      </label>
+    </div>
+    <p style="margin:0 0 22px;font-size:17px;color:#5A6E7C">Typing your name here records your acknowledgment of this orientation. A Caring Companions staff witness signature is collected separately.</p>
+    <p hidden="{{ hideFinishLock }}" style="margin:0 0 16px;font-size:18px;font-weight:600;color:#C4551B">{{ finishLockMsg }}</p>
+    <div class="no-print" style="display:flex;gap:12px;flex-wrap:wrap">
+      <button type="button" disabled="{{ ackDisabled }}" onClick="{{ finish }}" style="min-height:58px;padding:0 26px;border:none;border-radius:12px;background:{{ ackBg }};color:#fff;font:700 19px/1 'Source Sans 3',sans-serif;cursor:pointer">Complete my orientation</button>
+      <button type="button" onClick="{{ goFinal }}" style="min-height:58px;padding:0 22px;border:2px solid #C3D0D9;border-radius:12px;background:#fff;color:#103860;font:600 18px/1 'Source Sans 3',sans-serif;cursor:pointer">Back to the check</button>
+    </div>
+  </article>
+
+  <article hidden="{{ hideDone }}" style="max-width:760px;margin:0 auto;padding:48px 20px 90px;text-align:center">
+    <div style="width:84px;height:84px;border-radius:50%;background:#EAF7F1;border:3px solid #38C0B8;margin:0 auto 22px;display:flex;align-items:center;justify-content:center;font:800 40px/1 Nunito,sans-serif;color:#14807A">&#10003;</div>
+    <h1 style="margin:0 0 10px;font:800 clamp(32px,6vw,48px)/1.1 Nunito,sans-serif;color:#103860">You are finished</h1>
+    <p style="margin:0 0 30px;font-size:22px;color:#3D5164">Attendant CDS Orientation complete</p>
+    <div style="background:#fff;border:1px solid #DCE5EA;border-radius:18px;padding:24px;text-align:left;max-width:520px;margin:0 auto 26px">
+      <div style="display:flex;justify-content:space-between;gap:14px;padding:10px 0;border-bottom:1px solid #EDF2F4"><span style="color:#5A6E7C">Name</span><strong style="color:#103860">{{ name }}</strong></div>
+      <div style="display:flex;justify-content:space-between;gap:14px;padding:10px 0;border-bottom:1px solid #EDF2F4"><span style="color:#5A6E7C">Date</span><strong style="color:#103860">{{ date }}</strong></div>
+      <div style="display:flex;justify-content:space-between;gap:14px;padding:10px 0;border-bottom:1px solid #EDF2F4"><span style="color:#5A6E7C">Modules completed</span><strong style="color:#103860">{{ doneCount }} of 8</strong></div>
+      <div style="display:flex;justify-content:space-between;gap:14px;padding:10px 0;border-bottom:1px solid #EDF2F4"><span style="color:#5A6E7C">Final check score</span><strong style="color:#103860">{{ score }} of 12</strong></div>
+      <div style="display:flex;justify-content:space-between;gap:14px;padding:10px 0"><span style="color:#5A6E7C">Time spent</span><strong style="color:#103860">{{ elapsed }}</strong></div>
+    </div>
+    <p style="margin:0 0 26px;font-size:19px;color:#3D5164">Print this for your records. Questions about anything you learned? Call us at {{ phone }}.</p>
+    <div class="no-print" style="display:flex;gap:12px;flex-wrap:wrap;justify-content:center">
+      <button type="button" onClick="{{ doPrint }}" style="min-height:58px;padding:0 26px;border:none;border-radius:12px;background:#103860;color:#fff;font:700 19px/1 'Source Sans 3',sans-serif;cursor:pointer">Print or save as PDF</button>
+      <button type="button" onClick="{{ goDash }}" style="min-height:58px;padding:0 22px;border:2px solid #C3D0D9;border-radius:12px;background:#fff;color:#103860;font:600 18px/1 'Source Sans 3',sans-serif;cursor:pointer">Review the modules</button>
+    </div>
+  </article>
+
+  <footer style="border-top:1px solid #DCE5EA;background:#fff">
+    <div style="max-width:840px;margin:0 auto;padding:26px 20px;display:flex;gap:16px;flex-wrap:wrap;align-items:center;justify-content:space-between">
+      <span style="font-size:17px;color:#5A6E7C">Caring Companions Consumer Directed Services</span>
+      <span style="font-size:17px;color:#5A6E7C">Office 417-218-2888 &nbsp;·&nbsp; Toll free 866-863-5151</span>
+    </div>
+  </footer>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+const KEY = 'ccCdsAttendantV1';
+const PHONE = '417-218-2888, or toll free at 866-863-5151';
+
+const MODS = [
+  { n: 1, t: 'Welcome and What CDS Is', d: 'The program, and whose employee you actually are.', min: '6 min' },
+  { n: 2, t: 'Who Directs Your Work', d: 'The consumer directs the care, and the one line nobody may cross.', min: '8 min' },
+  { n: 3, t: 'Qualifications and Staying Eligible', d: 'Requirements, ongoing screening, and paperwork before your first shift.', min: '7 min' },
+  { n: 4, t: 'What You May and May Not Do', d: 'The plan of care, who you serve, supplies, and the hard ceiling on hours.', min: '8 min' },
+  { n: 5, t: 'Professional Expectations', d: 'Attendance, call offs, dignity, boundaries and confidentiality.', min: '7 min' },
+  { n: 6, t: 'Clocking In and Out', d: 'The app, the home phone, and the EVV correction form.', min: '8 min' },
+  { n: 7, t: 'Medicaid Fraud and Consequences', d: 'What counts as falsification, what happens, and overpayments.', min: '9 min' },
+  { n: 8, t: 'Reporting, Safety and Support', d: 'Mandated reporting, emergencies, and when to call us.', min: '9 min' }
+];
+
+const CHECKS = {
+  m1: { c: 1, w: ['Not quite. Caring Companions is the vendor. We handle payroll, screening and billing, but you are not our employee.', '', 'Not quite. You are never an employee of the state or DHSS. Your employer is the consumer who hired you.'] },
+  m2: { c: 1, w: ['Not quite. Your consumer directs how approved work is done, but cannot authorize recording time you did not work. That is Medicaid fraud.', '', 'Not quite. There is no "just this once" with unworked time. Recording it is falsification the first time.'] },
+  m3: { c: 0, w: ['', 'Not quite. Time worked before screening and paperwork are complete cannot be paid.', 'Not quite. The consumer is your employer, but they cannot waive the screening and paperwork requirements.'] },
+  m4: { c: 0, w: ['', 'Not quite. Services go only to the consumer named on the plan of care, never to visitors, children, other adults or pets.', 'Not quite. Working off the clock for someone else in the household is still outside the program, and it puts you at risk.'] },
+  m5: { c: 2, w: ['Not quite. Never photograph or post anything from your consumer\u2019s home, including their pets. It identifies them and their household.', 'Not quite. Your consumer\u2019s health information is confidential. Family members are not an exception.', ''] },
+  m6: { c: 0, w: ['', 'Not quite. Time must match the day and hours actually worked. Moving hours to another day is falsification.', 'Not quite. You should be paid for the time you actually worked. That is exactly what the correction form is for.'] },
+  m7: { c: 0, w: ['', 'Not quite. Consumer agreement does not make it allowable. Work submitted under your name that someone else performed is falsification.', 'Not quite. Only the approved, screened attendant may provide and record the services. Who did the work matters.'] },
+  m8: { c: 0, w: ['', 'Not quite. Mandated reporters do not have to witness anything. Information from a secondary source must also be reported.', 'Not quite. This is not yours to investigate or settle. Report it to the hotline immediately.'] }
+};
+
+const FINAL = [
+  { q: 'You are the employee of:', o: ['Caring Companions', 'The consumer who hired you', 'The state of Missouri'], c: 1,
+    ok: 'Right. You are the consumer\u2019s employee for the time paid by CDS funds.',
+    w: ['Not quite. We are the vendor. We pay you on the consumer\u2019s behalf.', '', 'Not quite. You are never a state employee.'] },
+  { q: 'Who teaches you how your consumer likes their care done?', o: ['Caring Companions staff', 'Your consumer', 'You decide from experience'], c: 1,
+    ok: 'Right. The consumer directs and trains you on their own routine and preferences.',
+    w: ['Not quite. We train and support the consumer so they can direct you. Your consumer teaches you their routine.', '', 'Not quite. Your experience helps, but the consumer decides how their care happens.'] },
+  { q: 'Your consumer asks you to do a task that is not on the plan of care. What do you do?', o: ['Do it, they are the employer', 'Stop, ask, document if needed, and contact Caring Companions', 'Do it but do not record the time'], c: 1,
+    ok: 'Right. Stop, ask, document, contact us. Only approved tasks may be performed and recorded.',
+    w: ['Not quite. "The consumer told me to" is not a defense when something breaks program rules.', '', 'Not quite. Doing unapproved work off the clock still puts you and your consumer at risk. Ask us first.'] },
+  { q: 'Who may you provide services to?', o: ['Anyone in the household who needs help', 'Only the consumer named on the plan of care', 'The consumer and their children'], c: 1,
+    ok: 'Right. Only the named consumer. Not visitors, children, other adults or pets.',
+    w: ['Not quite. Services are for the named consumer only.', '', 'Not quite. Children in the household are not covered by your consumer\u2019s plan of care.'] },
+  { q: 'Who provides the cleaning supplies, gloves, gas and vehicle for authorized tasks?', o: ['You do', 'Caring Companions', 'The consumer'], c: 2,
+    ok: 'Right. Attendants are not responsible for supplies, protective gear, gas or a vehicle.',
+    w: ['Not quite. You are not required to supply these. Tell your consumer what you need.', 'Not quite. The vendor does not supply these. They are the consumer\u2019s responsibility.', ''] },
+  { q: 'How do you clock in and out?', o: ['The WellSky Personal Care app, or a call from the consumer\u2019s home phone', 'A call from your own cell phone', 'A paper timesheet each week'], c: 0,
+    ok: 'Right. Those are the only two methods, and no paper timesheets are used.',
+    w: ['', 'Not quite. Calling from a cell phone does not work and is not allowed.', 'Not quite. Caring Companions does not use paper timesheets at all.'] },
+  { q: 'A dead phone stopped you clocking out. What is the correct fix?', o: ['Add the time to tomorrow\u2019s shift', 'Submit the EVV Manual Correction Form, signed by both, by 11:59 PM Saturday of that pay period', 'Ask us to enter whatever hours sound right'], c: 1,
+    ok: 'Right. The correction form is the only path, it needs both signatures, and it has a Saturday deadline.',
+    w: ['Not quite. Moving time to another day is falsification.', '', 'Not quite. Corrections have to reflect the real times, documented on the form and signed by you both.'] },
+  { q: 'True or false: frequent manual EVV corrections are harmless as long as the hours are right.', o: ['True', 'False'], c: 1,
+    ok: 'Right. Missouri Medicaid treats a high rate of manual corrections as a possible fraud indicator, and frequent submissions may trigger a compliance review.',
+    w: ['Not quite. The goal is 95 percent or more clocked correctly the first time. Frequent corrections can affect your standing.', ''] },
+  { q: 'Which of these is Medicaid fraud?', o: ['Marking a task you did not complete', 'Clocking out as soon as you finish', 'Telling us you were overpaid'], c: 0,
+    ok: 'Right. Tasks marked that were not completed is listed in our policy as falsification.',
+    w: ['', 'Not quite. That is exactly what you should do.', 'Not quite. Reporting an overpayment is the honest, correct action.'] },
+  { q: 'If you are overpaid, what happens?', o: ['Nothing, it is the company\u2019s error', 'You repay by personal check or authorized wage reduction, with written notice and a right to dispute', 'Your pay stops until it is resolved'], c: 1,
+    ok: 'Right. Repayment is by check or authorized reduction, normally within the same tax year, and you may dispute it.',
+    w: ['Not quite. Overpayments are recovered either way.', '', 'Not quite. Your pay is not reduced without your written authorization or documented due process.'] },
+  { q: 'You suspect your consumer is being financially exploited by a relative, but you did not see it. What must you do?', o: ['Report it immediately to 800-392-0210', 'Wait until you have proof', 'Handle it with the family'], c: 0,
+    ok: 'Right. You are a mandated reporter, you do not need to witness it, and reports go to the DHSS Central Registry Unit immediately.',
+    w: ['', 'Not quite. Mandated reporters report suspicions, not proven cases.', 'Not quite. This is not yours to investigate or settle privately.'] },
+  { q: 'Your consumer goes into the hospital for three days. What is true about those days?', o: ['You may record your normal hours', 'No time may be recorded for days the consumer is in a facility', 'You may record half your hours'], c: 1,
+    ok: 'Right. Time submitted for days the consumer was hospitalized or in a facility is listed as falsification.',
+    w: ['Not quite. No care was provided, so no time may be recorded.', '', 'Not quite. There is no partial allowance. No time may be recorded.'] }
+];
+
+const STAGES = [
+  { bg: '#0B2740', a: '#123B5C', b: '#14545C' },
+  { bg: '#0E3352', a: '#17608A', b: '#0F4A52' },
+  { bg: '#10394A', a: '#14666B', b: '#1A4E6E' },
+  { bg: '#12303F', a: '#1B5E6B', b: '#123B5C' }
+];
+
+const VIDEO = {
+  1: { file: 'audio/attendant-01-what-is-cds.mp3', scenes: [
+    { k: 'Module 1', t: 'Welcome to the job', l: ['A Missouri Medicaid program', 'Your consumer stays home instead of entering a facility', 'You are the attendant they chose'],
+      say: ['Welcome, and thank you for taking this work on. Consumer Directed Services is a Missouri Medicaid program that lets a person with a disability stay in their own home and hire their own caregiver, instead of moving into a facility. That caregiver is you, and the job title is attendant.'] },
+    { k: 'Who is who', t: 'Consumer, attendant, vendor', l: ['The consumer: the person you care for', 'The attendant: you', 'The vendor: Caring Companions, handling payroll and screening'],
+      say: ['The person you care for is called the consumer. You are the attendant. Caring Companions is the vendor. We hold the agreement with the Department of Health and Senior Services, and we handle payroll, taxes, background screening, Medicaid billing and support.'] },
+    { k: 'Important', t: 'You work for your consumer', l: ['You are the consumer\u2019s employee for CDS paid time', 'Never an employee of Caring Companions', 'Never an employee of DHSS or the state'],
+      say: ['Here is something that surprises people, so listen closely. You are the employee of your consumer, for the time paid by CDS funds. You are never an employee of Caring Companions, of the Department of Health and Senior Services, or of the state of Missouri.', 'That is not a technicality. It shapes the whole job. Your consumer hired you, trains you, sets your schedule, and directs your work. We pay you on their behalf and keep the program running correctly.'] },
+    { k: 'The difference', t: 'This is not an agency job', l: ['No supervisor assigning you clients', 'No standard agency care plan to follow', 'Your consumer chose you and directs the work'],
+      say: ['If you have worked for a home care agency, this is different. There is no supervisor assigning you clients or setting your schedule, and no standardized agency care plan to follow. Your consumer chose you, and your consumer directs the work.', 'There is a real freedom in that. There is also a real limit, and it is the subject of the next module. The consumer directs the work, but nobody, including the consumer, can direct you outside the rules of the program.'] }
+  ] },
+  2: { file: 'audio/attendant-02-who-directs.mp3', scenes: [
+    { k: 'Module 2', t: 'The consumer directs their care', l: ['Which tasks, in what order, in what way', 'At the time of day they choose', 'Learn their way, not your own'],
+      say: ['Your consumer decides how their care happens. Which tasks, in what order, in what way, at what time of day. They know their body, their home and their routine better than anyone else does, and part of your job is to learn their way of doing things rather than importing your own.', 'We are not sending you into the home to carry out a standardized agency care plan. Ask them how they like things done. Then do it that way.'] },
+    { k: 'Our part', t: 'What Caring Companions does', l: ['Screening and keeping your eligibility current', 'Payroll, taxes and Medicaid billing', 'Program monitoring, questions and support'],
+      say: ['Our part is the machinery. We screen you and keep your eligibility to work current. We collect your time, run payroll, and pay the payroll taxes. We bill Medicaid. We monitor the program, and we answer questions from you or your consumer. And we train and support consumers so they can direct your work well.'] },
+    { k: 'The line', t: '"The consumer told me to" is not a defense', l: ['They direct how approved work is done', 'They cannot authorize unapproved tasks', 'They cannot authorize time you did not work', 'You carry the consequences too'],
+      say: ['Now the most important sentence in this orientation. The consumer told me to does not make something allowable if it breaks C D S rules, Medicaid requirements, employment rules, or the law.', 'Your consumer directs how the approved work is done. They cannot authorize unapproved tasks, they cannot authorize unworked time, and they cannot authorize anything illegal. If you do it anyway, you are the one holding the consequences, right alongside them.'] },
+    { k: 'When unsure', t: 'Stop. Ask. Document. Contact us.', l: ['Stop: do not do it, do not clock it', 'Ask: what do you need, and why', 'Document: date, time, what was said', 'Contact Caring Companions'],
+      say: ['So what do you do when you are not sure? Four steps. Stop. Do not do the thing you are unsure about, and do not clock time for it. Ask. Ask your consumer what they need and why, kindly and without accusation. Document when it matters. Write down the date, the time, and what was said or happened. And contact Caring Companions. Asking first is always cheaper than fixing afterward.'] }
+  ] },
+  3: { file: 'audio/attendant-03-qualifications.mp3', scenes: [
+    { k: 'Module 3', t: 'Who may work as an attendant', l: ['At least 18 years old', 'Able to meet the physical and mental demands', 'Confidential, mature, dependable, calm in emergencies', 'Not the consumer\u2019s spouse'],
+      say: ['Let us cover the requirements. You must be at least eighteen years old. You must be able to meet the physical and mental demands of the tasks your consumer needs. You must agree to keep their information confidential. You need to be emotionally mature and dependable, and able to handle emergency situations. And you cannot be the consumer\u2019s spouse.'] },
+    { k: 'Registries', t: 'Your record has to stay clear', l: ['Registered with the Family Care Safety Registry, clear screening', 'Or a Good Cause Waiver in good standing', 'Not on the Employee Disqualification List', 'Not on the federal exclusion list'],
+      say: ['You must be registered with the Family Care Safety Registry with a clear screening, or hold a good cause waiver from the state that is still in good standing. You cannot be listed on the Employee Disqualification List maintained by the Department of Health and Senior Services, and you cannot be on the federal List of Excluded Individuals and Entities.'] },
+    { k: 'Ongoing', t: 'Screening does not stop at hire', l: ['Registry and disqualification list checked quarterly', 'Federal exclusion list checked monthly', 'A new entry can end your eligibility mid assignment', 'Tell us if your name, address or situation changes'],
+      say: ['And this is ongoing, not a one time check. We screen the registry and the disqualification list every quarter, and the federal exclusion list every month, for as long as you work in the program. Something that lands on any of those lists can end your eligibility to work, even in the middle of an assignment. So if your name, address, phone number or legal situation changes, tell us. Paperwork that is out of date can hold up your pay or your eligibility.'] },
+    { k: 'Before day one', t: 'No work before paperwork', l: ['No attendant may work or be paid before screening clears', 'If asked to start early, the answer is no', 'Choose direct deposit or a Rapid Pay card'],
+      say: ['One firm rule before your first shift. No attendant may begin working or be paid until screening and employment paperwork are complete. If someone asks you to start early just to help out, the answer is no, because that time cannot be paid. You will also choose how you want to be paid: direct deposit into a checking or savings account, or a Rapid Pay card.'] }
+  ] },
+  4: { file: 'audio/attendant-04-tasks.mp3', scenes: [
+    { k: 'Module 4', t: 'The plan of care is the whole list', l: ['Approved tasks, how often, and the monthly maximum', 'One unit equals 15 minutes', 'Ask to see it, and ask how they want each task done'],
+      say: ['Your consumer has a plan of care from their state assessment. It lists the tasks they are approved for, how often, and the maximum units of care per month. One unit is fifteen minutes. Only the tasks on that plan may be performed and recorded. Ask to see it, and ask your consumer to walk you through how they want each task done.'] },
+    { k: 'May and may not', t: 'Stay inside the plan', l: ['Do the listed tasks, the way your consumer teaches you', 'Be actively working the whole time you are clocked in', 'No unapproved tasks, no unauthorized medication tasks', 'No idle time or personal errands on the clock'],
+      say: ['You may do the tasks listed on the plan of care, done the way your consumer teaches you, and you should be actively providing services the entire time you are clocked in. You may not do tasks that are not on the plan, you may not do medication tasks that are not authorized, and you may not sit idle or run personal errands while clocked in.'] },
+    { k: 'Only your consumer', t: 'Services go to one person', l: ['Not their spouse or adult children', 'Not their grandchildren or visitors', 'Not their pets', 'A common way good attendants get in trouble'],
+      say: ['Here is one of the most common ways good attendants get into trouble. You provide services only to the consumer named on the plan of care. Not their spouse. Not their adult children. Not their grandchildren, not visitors, and not their pets. It feels unkind to say no. Say it anyway, kindly.'] },
+    { k: 'Supplies', t: 'Supplies are not yours to buy', l: ['Cleaning supplies, gloves and protective gear', 'Gasoline and a vehicle', 'All the consumer\u2019s responsibility'],
+      say: ['You are not responsible for providing cleaning supplies, gloves or other protective gear, gasoline, or a vehicle. Those are the consumer\u2019s responsibility. If what you need is not there, tell your consumer, and tell us if it does not get resolved.'] },
+    { k: 'Hours', t: 'There is a hard ceiling', l: ['The state approves the monthly units and task time', 'We can only pay what was approved', 'Hours past the limit will not be paid', 'Know your schedule and speak up'],
+      say: ['Now something that protects your paycheck. The state approves a set number of units each month, and how much time each task gets. Caring Companions can only bill Medicaid, and therefore only pay you, for what was approved.', 'If more hours are worked than the state approved, the units run out before the end of the month, and hours worked past the limit will not be paid. Your consumer is responsible for tracking that. But protect yourself too. Know the schedule you agreed to, and speak up if you are being asked to work beyond it.'] }
+  ] },
+  5: { file: 'audio/attendant-05-professional.mp3', scenes: [
+    { k: 'Module 5', t: 'Showing up is most of the job', l: ['Your consumer planned their day around you', 'Missing a shift can mean no food, no bath, no getting up', 'Treat the schedule as a promise'],
+      say: ['Let us talk about the part of this job that has nothing to do with paperwork. Showing up is most of the job. Your consumer planned their day around you. When you do not come, they may not eat, bathe, or get out of bed. Be on time, every shift, and treat the schedule as a promise.'] },
+    { k: 'Call offs', t: 'Call early, and agree the rules up front', l: ['Call your consumer as early as you possibly can', 'Agree in advance how much notice they need', 'Give notice for vacations and appointments', 'Never assume someone else will cover'],
+      say: ['Things happen, and sometimes you cannot come. When that is true, call your consumer as early as you possibly can, not a few minutes before the shift. Agree in advance how much notice they need, and tell them ahead of time about vacations and appointments. And never assume someone else will cover for you.'] },
+    { k: 'Dignity', t: 'You are in someone\u2019s home', l: ['Knock. Ask before moving their things', 'Cover them during personal care', 'Talk to them, not about them, never demeaning', 'Demeaning language can be reported as emotional abuse'],
+      say: ['You are in someone\u2019s home, helping with the most private parts of their life. Knock. Ask before you move their things. Cover them during personal care. Talk to them, not about them, and never in a demeaning way, even as a joke. Referring to a person in their presence with profanity or in a degrading way can be reported as emotional abuse.'] },
+    { k: 'Boundaries', t: 'Keep it professional', l: ['Do not borrow or lend money', 'Do not accept gifts of value', 'Do not use their vehicle for personal errands', 'Do not bring your own tasks or family to work'],
+      say: ['Keep the relationship professional. Do not borrow money, and do not lend it. Do not accept gifts of value. Do not use their car for personal errands. Do not bring your own household tasks, or your family and friends, into their home. Warmth is wonderful. Blurred lines are not.'] },
+    { k: 'Confidentiality', t: 'What happens in the home stays there', l: ['No discussing their health, finances or household', 'Never post or photograph them or their home', 'Never share their address, phone or documents', 'Talk care only with them, their representative, and us'],
+      say: ['You agreed to keep your consumer\u2019s information confidential, and that is a condition of working in this program. Health information is protected by federal law. In practice: do not discuss your consumer\u2019s health, finances or household with your friends or family. Never post about them, or photograph them or their home, on social media. Do not share their address, phone number or documents with anyone. And speak about their care only with them, their chosen representative, and Caring Companions.', 'One related note. Because of privacy rules, we cannot discuss your payroll by email. Call us for anything about your pay.'] }
+  ] },
+  6: { file: 'audio/attendant-06-clocking.mp3', scenes: [
+    { k: 'Module 6', t: 'Two ways to clock in. Only two.', l: ['The WellSky Personal Care app on your smartphone', 'Or a call from the consumer\u2019s home phone', 'Calling from your own cell phone is not allowed', 'No paper timesheets, ever'],
+      say: ['This module is how you get paid, so let us be exact. There are two ways to clock in and out, and no others. Option one is the WellSky Personal Care app. You need a smartphone that can download it, and you clock in when you start and out when you finish, every shift. Option two is a call from the consumer\u2019s home telephone, the number registered to their residence.', 'Calling to clock in from your own cell phone does not work and is not allowed. It is the app, or the consumer\u2019s home phone. Nothing else. And Caring Companions does not use paper timesheets at all, so there is no paper slip to fall back on.'] },
+    { k: 'Habits', t: 'The habits that protect your pay', l: ['Clock in before you start work, not after', 'Clock out immediately when you finish', 'Report the tasks you actually completed', 'Check your times daily and keep your own record'],
+      say: ['Build these habits from your first shift. Clock in before you start any authorized work, not after. Clock out immediately when the work is finished, not later from the car. Report the tasks you actually completed. Check your recorded times daily, so a problem is caught the same day. Keep your own simple record of hours worked, in case an electronic record goes missing. And be actively providing care the entire time you are clocked in.'] },
+    { k: 'When it fails', t: 'The EVV Manual Correction Form', l: ['Dead phone, no signal, app crash, forgotten punch', 'Online at hub.caringcds.com/evv-form.html', 'Both you and your consumer sign', 'Submit by 11:59 PM Saturday of that pay period'],
+      say: ['Sometimes something genuinely goes wrong. A dead phone, no signal, an app crash, or a punch you truly forgot. There is one correct path: the E V V Manual Correction Form, online at hub dot caring c d s dot com. It asks for the visit date, the original and corrected times, the reason, and the tasks you actually performed, and it needs signatures from both you and your consumer. Submit it by eleven fifty nine P M Saturday of that pay period. Save it to your phone\u2019s home screen so it is one tap when you need it.'] },
+    { k: 'One caution', t: 'Corrections are watched closely', l: ['Goal: 95 percent or more correct the first time', 'Frequent corrections may trigger a compliance review', 'Missouri Medicaid sees them as a possible fraud indicator', 'Struggling most weeks? Call us instead'],
+      say: ['One serious caution. Our goal is that ninety five percent or more of visits are clocked correctly the first time, with no manual correction. Missouri Medicaid treats a high rate of manual corrections as a possible fraud indicator, and every correction is reviewed individually in an audit. Frequent submissions can affect your standing and may trigger a compliance review. So use the form when you truly need it, and if you are submitting them most weeks, call us instead and we will work out what is going wrong.'] }
+  ] },
+  7: { file: 'audio/attendant-07-fraud.mp3', scenes: [
+    { k: 'Module 7', t: 'Every hour is billed to Medicaid', l: ['Inaccurate time or tasks is Medicaid fraud', 'Bad intentions are not required for it to count'],
+      say: ['Every hour you work is billed to Medicaid. If time or tasks are submitted that are not accurate, that is Medicaid fraud, and it does not require bad intentions to count. So let us name the specific things.'] },
+    { k: 'Falsification', t: 'What counts, from our policy', l: ['Days not worked, or more hours than worked', 'Tasks marked that were not completed', 'Time recorded before the work happened', 'Unapproved work like yard work or pet care'],
+      say: ['Time submitted for days you did not work. More hours than you actually worked. Tasks marked that you did not complete. Time recorded before the work happened, or for a day that has not occurred yet. Time for tasks not approved on the plan of care, such as yard work, pet care or home repair.'] },
+    { k: 'Falsification', t: 'And these too', l: ['Days the consumer was hospitalized or in a facility', 'Days you were hospitalized, in rehab or in jail', 'Time while working for another consumer or employer', 'Signatures that are not genuinely yours'],
+      say: ['Time for days the consumer was in the hospital, at an appointment, in rehab or in a facility. Time for days you were in the hospital, in rehab, in jail, or otherwise unavailable. Time while you were working for another consumer, agency or employer. And signatures or initials that are not genuinely yours or your consumer\u2019s.'] },
+    { k: 'Never', t: 'Nobody works under your name', l: ['Never let another person provide services as you', 'Never clock in for someone else', 'Never let anyone clock in for you'],
+      say: ['And one more, which comes up more than you would think. Never let anyone else provide services under your name or your login. Never clock in for someone else, and never let another person clock in for you. If you cannot work, your consumer uses their backup attendant. That is what a backup is for.', 'Two allegations apply specifically to C D S attendants. Misappropriation, which is diverting a consumer\u2019s property or funds, including borrowing money with a promise to repay. And falsification of documentation, which is falsifying your time.'] },
+    { k: 'Consequences', t: 'What happens if it occurs', l: ['Reported to MMAC, DHSS and the Attorney General', 'Payments stopped, money recovered from both parties', 'Disqualification from all our consumers', 'Lifetime loss of eligibility, charges, penalties, prison'],
+      say: ['Here is what happens. Caring Companions is required to report suspected Medicaid fraud to the Missouri Medicaid Audit and Compliance Unit, to the Department of Health and Senior Services, and to the Missouri Attorney General. We can stop or suspend payments, disqualify you from working for any of our consumers, and withdraw as the consumer\u2019s vendor.', 'According to the Missouri Attorney General, falsifying timesheets or signatures in connection with personal care services is Medicaid fraud. People who violate these rules may lose Medicaid eligibility for life, and may face criminal charges, financial penalties, and prison time. Money paid on inaccurate time is recovered from the attendant and the consumer.'] },
+    { k: 'Overpayments', t: 'Mistakes get corrected fairly', l: ['Repay by personal check, or authorized wage reduction', 'No reduction without your written authorization or due process', 'Normally settled within the same tax year', 'You may dispute it in writing'],
+      say: ['Not everything is fraud. Sometimes there is simply an overpayment, and those get corrected. You may repay by personal check, or authorize a reduction in your pay. Your pay is never reduced without your written authorization, or proof that you were given due process first, and repayment normally has to happen inside the same tax year. If you dispute an overpayment, say so. You will receive written notice and an opportunity to show that no overpayment occurred.'] }
+  ] },
+  8: { file: 'audio/attendant-08-reporting.mp3', scenes: [
+    { k: 'Module 8', t: 'You are a mandated reporter', l: ['Required by law to report abuse, neglect and exploitation', 'Immediately, to the DHSS Central Registry Unit', 'You do not have to witness it yourself'],
+      say: ['This last module is the most serious one. Every attendant providing C D S is a mandated reporter. State law requires you to report suspicions or allegations of abuse, neglect or exploitation immediately to the Department of Health and Senior Services Central Registry Unit. And you do not have to witness anything yourself. Information from someone else that suggests abuse, neglect or exploitation must also be reported.'] },
+    { k: 'The number', t: '800-392-0210', l: ['DHSS Central Registry Unit', 'Report immediately, not after you gather proof', 'Unsure? Call anyway and let them decide'],
+      say: ['The number is eight hundred, three nine two, zero two one zero. Write it in your phone right now. Report immediately, not after you have gathered proof. And if you are unsure whether something rises to the level of a report, call anyway and let them decide. Reporting is not disloyalty, and it is not optional.'] },
+    { k: 'Definitions', t: 'What you are reporting', l: ['Abuse: physical, sexual or emotional harm', 'Neglect: failing to provide needed care, passive or active', 'Exploitation: taking property or money by deception or force'],
+      say: ['Abuse is any physical, sexual or emotional injury or harm. Physical includes beating, striking, choking or restraining. Emotional includes verbal abuse, or withholding affection to cause distress. Neglect is the failure to provide the care, goods or services a person needs and cannot obtain themselves, and it can be passive, from carelessness or not knowing, or active, from an intentional failure. Exploitation is taking control of someone\u2019s property or money by deception, intimidation or force, including misuse of a power of attorney, theft, or undue influence over wills and documents.'] },
+    { k: 'Emergencies', t: 'In the moment', l: ['Medical emergency: 911, then emergency contact, then us', 'Report falls, injuries and changes in condition', 'No time recorded for days in a hospital or facility', 'Tell us if the home becomes unsafe for you'],
+      say: ['In a medical emergency, call nine one one first, then your consumer\u2019s emergency contact, then us. Tell us and your consumer about a fall, an injury, or a sudden change in their condition. Tell us if your consumer is hospitalized or admitted to a facility, and remember that no time may be recorded for those days. Tell us if the home becomes unsafe for you, or if you are threatened or abused. And tell us if you can no longer meet the physical demands of the tasks.'] },
+    { k: 'Support', t: 'When to call Caring Companions', l: ['Asked to do something off the plan of care', 'Asked to record time you did not work', 'The app or phone line keeps failing', 'Your pay looks wrong, or you are simply unsure'],
+      say: ['Call us when you are asked to do something that is not on the plan of care. When you are asked to record time you did not work. When the app or the phone line is failing repeatedly. When your pay looks wrong or has not arrived. When your name, address or phone number changes. And any time you are unsure about anything at all.', 'If you have a concern about how you have been treated, tell us and we will work it through with you. Raising a concern in good faith is part of doing this job well. Thank you for the care you give. It matters more than you know.'] }
+  ] }
+};
+
+const ART = {
+  '1-0': { k: 'count', big: 'CDS', small: 'Consumer Directed Services', cap: 'Care at home, chosen by the person receiving it' },
+  '1-1': { k: 'orbit', center: 'The care', dots: ['Consumer', 'You', 'Caring Companions'] },
+  '1-2': { k: 'compare', rows: [['ok', 'Employee of your consumer'], ['x', 'Not our employee'], ['x', 'Not a DHSS employee'], ['x', 'Not a state employee']] },
+  '1-3': { k: 'compare', rows: [['x', 'Agency assigns your clients'], ['x', 'Supervisor sets the schedule'], ['ok', 'Your consumer chose you'], ['ok', 'Your consumer directs the work']] },
+  '2-0': { k: 'orbit', center: 'Consumer directs', dots: ['Which tasks', 'What way', 'What time'] },
+  '2-1': { k: 'grid', cap: 'Screening, payroll, taxes, billing, support' },
+  '2-2': { k: 'stop', big: 'NOT A DEFENSE', cap: '"The consumer told me to" does not make it allowable' },
+  '2-3': { k: 'count', big: '4', small: 'Stop. Ask. Document. Contact us.', cap: 'Asking first is always cheaper than fixing afterward' },
+  '3-0': { k: 'compare', rows: [['ok', '18 or older'], ['ok', 'Confidential and dependable'], ['ok', 'Calm in an emergency'], ['x', 'Never the consumer\u2019s spouse']] },
+  '3-1': { k: 'grid', cap: 'Registry clear, and off both exclusion lists' },
+  '3-2': { k: 'clock', big: '4x', small: 'per year', cap: 'Registry checks quarterly, federal exclusions monthly', turn: 0.75 },
+  '3-3': { k: 'stop', big: 'NOT YET', cap: 'No work and no pay before screening and paperwork clear' },
+  '4-0': { k: 'clock', big: '15', small: 'minutes', cap: 'One unit of service. The plan sets the monthly maximum', turn: 0.25 },
+  '4-1': { k: 'compare', rows: [['ok', 'Tasks on the plan of care'], ['ok', 'Done your consumer\u2019s way'], ['x', 'Unapproved tasks'], ['x', 'Idle time on the clock']] },
+  '4-2': { k: 'stop', big: 'ONE PERSON', cap: 'Services go only to the consumer named on the plan' },
+  '4-3': { k: 'compare', rows: [['x', 'You buy cleaning supplies'], ['x', 'You buy gloves'], ['x', 'You buy the gas'], ['ok', 'The consumer provides all of it']] },
+  '4-4': { k: 'meter', cap: 'Hours past the approved limit will not be paid' },
+  '5-0': { k: 'count', big: '1', small: 'Showing up', cap: 'The single most important thing you do' },
+  '5-1': { k: 'phone', big: 'Call early', cap: 'Not minutes before the shift' },
+  '5-2': { k: 'compare', rows: [['ok', 'Knock, and ask before moving things'], ['ok', 'Cover them during personal care'], ['ok', 'Talk to them, not about them'], ['x', 'Never demeaning, even as a joke']] },
+  '5-3': { k: 'compare', rows: [['x', 'Borrowing or lending money'], ['x', 'Gifts of value'], ['x', 'Using their vehicle personally'], ['x', 'Bringing family to work']] },
+  '5-4': { k: 'stop', big: 'NO POSTS', cap: 'Never photograph or post your consumer or their home' },
+  '6-0': { k: 'compare', rows: [['ok', 'WellSky Personal Care app'], ['ok', 'Call from the consumer home phone'], ['x', 'Your own cell phone'], ['x', 'Paper timesheets']] },
+  '6-1': { k: 'grid', cap: 'Clock in first, clock out immediately, verify daily' },
+  '6-2': { k: 'phone', big: 'EVV form', cap: 'hub.caringcds.com/evv-form.html, both sign, due Saturday 11:59 PM' },
+  '6-3': { k: 'meter', cap: 'Aim for 95 percent or more clocked correctly first time' },
+  '7-0': { k: 'stop', big: 'FRAUD', cap: 'Inaccurate time or tasks is Medicaid fraud' },
+  '7-1': { k: 'compare', rows: [['x', 'Days you did not work'], ['x', 'More hours than worked'], ['x', 'Tasks not completed'], ['x', 'Yard work, pet care, repairs']] },
+  '7-2': { k: 'compare', rows: [['x', 'Consumer in a hospital or facility'], ['x', 'You in hospital, rehab or jail'], ['x', 'Working for someone else'], ['x', 'Signatures that are not yours']] },
+  '7-3': { k: 'stop', big: 'NEVER', cap: 'Nobody works or clocks in under your name' },
+  '7-4': { k: 'count', big: '3', small: 'Agencies notified', cap: 'MMAC, DHSS and the Attorney General' },
+  '7-5': { k: 'grid', cap: 'Overpayments: written notice, and a right to dispute' },
+  '8-0': { k: 'orbit', center: 'Report', dots: ['Abuse', 'Neglect', 'Exploitation'] },
+  '8-1': { k: 'count', big: '800', small: '392-0210', cap: 'DHSS Central Registry Unit. Report immediately' },
+  '8-2': { k: 'grid', cap: 'Physical, sexual, emotional, passive, active, financial' },
+  '8-3': { k: 'phone', big: '911', cap: 'Then the emergency contact, then Caring Companions' },
+  '8-4': { k: 'compare', rows: [['ok', 'Asked to work off the plan'], ['ok', 'Asked to record unworked time'], ['ok', 'App or phone line failing'], ['ok', 'Pay looks wrong, or you are unsure']] }
+};
+
+const ART_FALLBACK = ['grid', 'compare', 'count', 'orbit'];
+const WPS = 2.45;
+
+function sceneTiming(mod) {
+  const scenes = VIDEO[mod].scenes;
+  let total = 0;
+  const spans = scenes.map((s) => {
+    const words = s.say.join(' ').split(/\s+/).length;
+    const dur = Math.max(4, words / WPS);
+    const start = total;
+    total += dur;
+    return { start: start, dur: dur };
+  });
+  return { spans: spans, total: total };
+}
+
+class Component extends DCLogic {
+  state = { view: 'welcome', done: [], picks: {}, name: '', date: '', started: 0, finishedAt: 0, playing: false, t: 0, dur: 0, audioOk: true, showTranscript: false };
+
+  componentDidMount() {
+    let s = null;
+    try { s = JSON.parse(localStorage.getItem(KEY) || 'null'); } catch (e) { s = null; }
+    const base = { started: Date.now() };
+    if (s && typeof s === 'object') Object.assign(base, s);
+    if (!base.started) base.started = Date.now();
+    if (!base.date) base.date = new Date().toISOString().slice(0, 10);
+    this.setState(base);
+  }
+
+  componentWillUnmount() { if (this.tick) clearInterval(this.tick); }
+
+  persist(patch) {
+    this.setState(patch, () => {
+      try { localStorage.setItem(KEY, JSON.stringify(this.state)); } catch (e) {}
+    });
+  }
+
+  go(view) {
+    if (this.audio) { try { this.audio.pause(); } catch (e) {} }
+    this.persist({ view: view, t: 0, dur: 0, playing: false, audioOk: true });
+    if (typeof window !== 'undefined') window.scrollTo(0, 0);
+  }
+
+  complete(n) {
+    if (this.audio) { try { this.audio.pause(); } catch (e) {} }
+    const done = this.state.done.indexOf(n) === -1 ? this.state.done.concat([n]) : this.state.done;
+    this.persist({ done: done, view: n < 8 ? n + 1 : 'final', t: 0, dur: 0, playing: false, audioOk: true });
+    if (typeof window !== 'undefined') window.scrollTo(0, 0);
+  }
+
+  pick(id, i) {
+    const picks = Object.assign({}, this.state.picks);
+    picks[id] = i;
+    this.persist({ picks: picks });
+  }
+
+  startClock() {
+    if (this.tick) clearInterval(this.tick);
+    this.tick = setInterval(() => {
+      const a = this.audio;
+      const st = this.state;
+      if (!st.playing) return;
+      if (a && st.audioOk && a.duration) {
+        this.setState({ t: a.currentTime, dur: a.duration, playing: !a.paused });
+      } else {
+        const total = this.state.dur || sceneTiming(this.state.view).total;
+        const nt = st.t + 0.1;
+        if (nt >= total) this.setState({ t: total, playing: false });
+        else this.setState({ t: nt });
+      }
+    }, 100);
+  }
+
+  setAudio(el) {
+    this.audio = el;
+    if (!el) return;
+    const mod = VIDEO[this.state.view];
+    if (mod && mod.file && el.getAttribute('src') !== mod.file) el.setAttribute('src', mod.file);
+    el.onerror = () => this.setState({ audioOk: false });
+    el.onloadedmetadata = () => this.setState({ audioOk: true, dur: el.duration });
+    el.onended = () => this.setState({ playing: false });
+  }
+
+  togglePlayback() {
+    const a = this.audio;
+    const next = !this.state.playing;
+    if (a && this.state.audioOk) {
+      if (next) { const p = a.play(); if (p && p.catch) p.catch(() => this.setState({ audioOk: false })); }
+      else a.pause();
+    }
+    this.setState({ playing: next }, () => this.startClock());
+  }
+
+  restartPlayback() {
+    const a = this.audio;
+    if (a && this.state.audioOk) { a.currentTime = 0; const p = a.play(); if (p && p.catch) p.catch(() => {}); }
+    this.setState({ t: 0, playing: true }, () => this.startClock());
+  }
+
+  renderVals() {
+    const st = this.state;
+    const doneCount = st.done.length;
+    if ((st.view === 'ack' || st.view === 'done') && doneCount < 8) {
+      setTimeout(() => { if (this.state.done.length < 8) this.persist({ view: 'dash' }); }, 0);
+    }
+
+    const v = {
+      phone: PHONE,
+      pct: Math.round((doneCount / 8) * 100) + '%',
+      doneCount: doneCount,
+      hideProgress: st.view === 'welcome',
+      progressDisplay: st.view === 'welcome' ? 'none' : 'flex',
+      hideWelcome: st.view !== 'welcome',
+      hideDash: st.view !== 'dash',
+      hideFinal: st.view !== 'final',
+      hideAck: st.view !== 'ack',
+      hideDone: st.view !== 'done',
+      goDash: () => this.go('dash'),
+      goFinal: () => { if (this.state.done.length >= 8) this.go('final'); },
+      doPrint: () => { if (typeof window !== 'undefined') window.print(); },
+      name: st.name,
+      date: st.date,
+      setName: (e) => this.persist({ name: e.target.value }),
+      setDate: (e) => this.persist({ date: e.target.value }),
+      modules: MODS.map((m) => {
+        const done = st.done.indexOf(m.n) > -1;
+        return {
+          n: m.n, t: m.t, d: m.d,
+          meta: 'Module ' + m.n + ' \u00b7 about ' + m.min,
+          status: done ? 'Complete' : 'Not started',
+          badgeBg: done ? '#1E8A5F' : '#EDF2F4',
+          badgeColor: done ? '#FFFFFF' : '#5A6E7C',
+          numBg: done ? '#1E8A5F' : '#EAF6F5',
+          numColor: done ? '#FFFFFF' : '#14807A',
+          numMark: done ? '\u2713' : m.n,
+          border: done ? '#1E8A5F' : '#DCE5EA',
+          bg: done ? '#F4FBF7' : '#FFFFFF',
+          open: () => this.go(m.n)
+        };
+      })
+    };
+
+    const watching = typeof st.view === 'number';
+    v.hidePlayer = !watching;
+    v.watching = watching;
+
+    if (watching) {
+      const mod = VIDEO[st.view];
+      const timing = sceneTiming(st.view);
+      const total = (st.audioOk && st.dur) ? st.dur : timing.total;
+      const scale = total / timing.total;
+      const t = Math.min(st.t, total);
+      let idx = 0;
+      for (let s = 0; s < timing.spans.length; s++) {
+        if (t >= timing.spans[s].start * scale) idx = s;
+      }
+      const span = timing.spans[idx];
+      const local = Math.max(0, Math.min(1, (t - span.start * scale) / (span.dur * scale)));
+      const scene = mod.scenes[idx];
+      const started = st.t > 0.05 || st.playing;
+
+      v.vidEyebrow = 'Module ' + st.view + ' of 8 \u00b7 narrated by Samantha';
+      v.vidTitle = MODS[st.view - 1].t;
+      v.sceneKicker = scene.k;
+      v.sceneTitle = scene.t;
+      v.sceneLines = scene.l.map((txt, li) => {
+        const at = 0.18 + li * (0.6 / Math.max(1, scene.l.length));
+        const on = !started ? true : local >= at;
+        return { t: txt, o: on ? 1 : 0.4, y: on ? '0px' : '12px' };
+      });
+      v.sceneCounter = 'Scene ' + (idx + 1) + ' of ' + mod.scenes.length;
+
+      const stage = STAGES[(st.view + idx) % STAGES.length];
+      v.stageBg = stage.bg;
+      v.blobA = stage.a;
+      v.blobB = stage.b;
+
+      const art = ART[st.view + '-' + idx] || { k: ART_FALLBACK[idx % ART_FALLBACK.length], cap: scene.t };
+      ['orbit', 'clock', 'meter', 'phone', 'stop', 'count', 'compare', 'grid'].forEach((k) => {
+        v['art' + k.charAt(0).toUpperCase() + k.slice(1)] = art.k === k;
+      });
+      v.artBig = art.big || '';
+      v.artSmall = art.small || '';
+      v.artCaption = art.cap || '';
+      v.artCenter = art.center || '';
+
+      const dots = art.dots || [];
+      v.artOrbitDots = dots.map((t2, di) => {
+        const ang = (-90 + (360 / Math.max(1, dots.length)) * di) * (Math.PI / 180);
+        return {
+          t: t2,
+          x: (50 + Math.cos(ang) * 44) + '%',
+          y: (50 + Math.sin(ang) * 44) + '%',
+          o: (!started || local > 0.15 + di * 0.16) ? 1 : 0.35
+        };
+      });
+      v.artTurn = ((art.turn || 0.25) * Math.min(1, local * 1.6)) + 'turn';
+
+      const heights = [62, 78, 54, 88, 70];
+      v.artBars = heights.map((h, bi) => ({
+        h: ((!started || local > 0.1 + bi * 0.12) ? h : 4) + '%',
+        c: bi === 3 ? '#F0B44B' : '#38C0B8'
+      }));
+
+      const rows = art.rows || [];
+      v.artRows = rows.map((r, ri) => {
+        const on = !started || local > 0.12 + ri * 0.17;
+        const good = r[0] === 'ok';
+        return {
+          t: r[1],
+          mark: good ? '\u2713' : '\u2715',
+          dot: good ? '#1E8A5F' : '#B3341F',
+          bg: good ? 'rgba(30,138,95,.18)' : 'rgba(179,52,31,.18)',
+          o: on ? 1 : 0.12,
+          x: on ? '0px' : '18px'
+        };
+      });
+
+      const cells = [];
+      for (let ci = 0; ci < 15; ci++) {
+        const on = !started || local > 0.08 + ci * 0.045;
+        cells.push({ bg: on ? (ci % 4 === 0 ? '#38C0B8' : '#1D5C7E') : '#123B5C', s: on ? 1 : 0.55 });
+      }
+      v.artCells = cells;
+
+      v.playPct = Math.round((t / total) * 100) + '%';
+      v.playLabel = st.playing ? 'Pause' : (st.t > 0.05 ? 'Resume' : 'Play video');
+      const fmt = (sec) => {
+        const m = Math.floor(sec / 60);
+        const s2 = Math.floor(sec % 60);
+        return m + ':' + (s2 < 10 ? '0' : '') + s2;
+      };
+      v.timeLabel = fmt(t) + ' / ' + fmt(total);
+      v.audioSrc = mod.file;
+      v.hideAudioNotice = st.audioOk;
+      v.audioRef = (el) => this.setAudio(el);
+      v.togglePlay = () => this.togglePlayback();
+      v.restart = () => this.restartPlayback();
+      v.nextFromVideo = () => { if (this.audio) { try { this.audio.pause(); } catch (e) {} } this.setState({ playing: false }); this.complete(st.view); };
+
+      const paras = [];
+      mod.scenes.forEach((s, si) => {
+        s.say.forEach((p) => paras.push({ t: p, color: si === idx ? '#0E2438' : '#5A6E7C' }));
+      });
+      v.transcript = st.showTranscript ? paras : [];
+      v.hideTranscript = !st.showTranscript;
+      v.transcriptDisplay = st.showTranscript ? 'flex' : 'none';
+      v.transcriptPad = st.showTranscript ? '0 20px 20px' : '0';
+      v.transcriptLabel = st.showTranscript ? 'Hide the transcript' : 'Read the transcript';
+      v.transcriptSign = st.showTranscript ? '\u2212' : '+';
+      v.toggleTranscript = () => this.persist({ showTranscript: !this.state.showTranscript });
+    } else {
+      v.sceneLines = [];
+      v.transcript = [];
+      v.hideTranscript = true;
+      v.transcriptDisplay = 'none';
+      v.transcriptPad = '0';
+      v.transcriptLabel = '';
+      v.transcriptSign = '+';
+      v.toggleTranscript = () => {};
+      v.audioSrc = '';
+      v.hideAudioNotice = true;
+      v.playPct = '0%';
+      v.vidEyebrow = '';
+      v.vidTitle = '';
+      v.sceneKicker = '';
+      v.sceneTitle = '';
+      v.playLabel = '';
+      v.timeLabel = '';
+      v.sceneCounter = '';
+      v.stageBg = '#0B2740';
+      v.blobA = '#123B5C';
+      v.blobB = '#14545C';
+      v.artBig = '';
+      v.artSmall = '';
+      v.artCaption = '';
+      v.artCenter = '';
+      v.artTurn = '0turn';
+      v.artOrbitDots = [];
+      v.artBars = [];
+      v.artRows = [];
+      v.artCells = [];
+      ['Orbit', 'Clock', 'Meter', 'Phone', 'Stop', 'Count', 'Compare', 'Grid'].forEach((k) => { v['art' + k] = false; });
+      v.togglePlay = () => {};
+      v.restart = () => {};
+      v.nextFromVideo = () => {};
+      v.audioRef = (el) => this.setAudio(el);
+    }
+
+    for (let i = 1; i <= 8; i++) {
+      v['hideM' + i] = st.view !== i;
+      v['goM' + i] = () => this.go(i);
+      v['next' + i] = () => this.complete(i);
+      const id = 'm' + i;
+      const ch = CHECKS[id];
+      const p = st.picks[id];
+      v['hideOk_' + id] = !(p != null && p === ch.c);
+      v['hideNo_' + id] = !(p != null && p !== ch.c);
+      v['fb_' + id] = p != null && p !== ch.c ? ch.w[p] : '';
+      for (let k = 0; k < ch.w.length; k++) {
+        v['p_' + id + '_' + k] = ((idx2) => () => this.pick(id, idx2))(k);
+      }
+    }
+
+    let score = 0;
+    v.finalQuestions = FINAL.map((q, qi) => {
+      const id = 'f' + qi;
+      const p = st.picks[id];
+      if (p === q.c) score++;
+      return {
+        num: qi + 1,
+        q: q.q,
+        ok: q.ok,
+        fb: p != null && p !== q.c ? q.w[p] : '',
+        hideOk: !(p != null && p === q.c),
+        hideNo: !(p != null && p !== q.c),
+        opts: q.o.map((label, oi) => ({ label: label, pick: () => this.pick(id, oi) }))
+      };
+    });
+    v.score = score;
+
+    const finalLocked = doneCount < 8;
+    v.finalLocked = finalLocked;
+    v.hideFinalLock = !finalLocked;
+    v.finalBtnBg = finalLocked ? '#9FB2BF' : '#103860';
+    v.finalLockMsg = 'Finish all 8 modules first. You have completed ' + doneCount + ' of 8.';
+
+    const answered = FINAL.filter((q, qi) => st.picks['f' + qi] != null).length;
+    const ackLocked = finalLocked || answered < FINAL.length || score < 10;
+    v.ackLocked = ackLocked;
+    v.hideAckLock = !ackLocked;
+    v.ackBtnBg = ackLocked ? '#9FB2BF' : '#103860';
+    v.ackLockMsg = answered < FINAL.length
+      ? 'Answer all 12 questions to continue. You have answered ' + answered + '.'
+      : (score < 10 ? 'You need at least 10 of 12 correct to continue. Read the explanations above and choose again on the ones you missed.' : '');
+    v.goAck = () => { if (!ackLocked) this.go('ack'); };
+
+    let allAck = true;
+    [1, 2, 3, 4, 5, 6, 7].forEach((n) => {
+      const on = !!st['ack' + n];
+      v['a' + n] = on;
+      if (!on) allAck = false;
+      v['t' + n] = () => {
+        const patch = {};
+        patch['ack' + n] = !this.state['ack' + n];
+        this.persist(patch);
+      };
+    });
+    const ready = !ackLocked && allAck && (st.name || '').trim().length > 1 && !!st.date;
+    v.ackDisabled = !ready;
+    v.ackBg = ready ? '#103860' : '#9FB2BF';
+    v.hideFinishLock = ready || !ackLocked;
+    v.finishLockMsg = 'Finish all 8 modules and pass the final check before completing your orientation.';
+    v.finish = () => {
+      if (!ready) return;
+      this.persist({ finishedAt: Date.now(), view: 'done' });
+      if (typeof window !== 'undefined') window.scrollTo(0, 0);
+    };
+
+    const end = st.finishedAt || Date.now();
+    const mins = Math.max(1, Math.round((end - (st.started || end)) / 60000));
+    v.elapsed = mins + (mins === 1 ? ' minute' : ' minutes');
+    return v;
+  }
+}
+</script>
+</body>
+</html>
