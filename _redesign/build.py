@@ -285,6 +285,7 @@ def build_generic(dc_name, vals=None, pre=None, extra_js=""):
     v = base_vals()
     if vals: v.update(vals)
     tmpl = page_body(dc_name)
+    tmpl = apply_hero_photo(tmpl, dc_name)
     if pre: tmpl = pre(tmpl)
     body = expand(tmpl, v)
     body, hover_css = post_process(body, path)
@@ -295,6 +296,33 @@ def build_generic(dc_name, vals=None, pre=None, extra_js=""):
 def lead_form_attrs(source, thanks="main"):
     return f"@data-lead-form='{source}' data-thanks-key='{thanks}'"
 
+
+
+# Hero photos: when a file exists in assets/photos/, the matching placeholder
+# is replaced with the real image. Until then the hatched placeholder ships.
+HERO_PHOTOS = {
+    "Caring Companions Home": ("home-hero.jpg", "4 / 5",
+        "A caregiver and her mother laughing together on the couch at home"),
+    "Receive Care": ("receive-care-hero.jpg", "5 / 4",
+        "An older gentleman relaxed and comfortable in his favorite chair at home"),
+    "Service Area": ("service-area-hero.jpg", "4 / 3",
+        "Map of the Southwest Missouri counties Caring Companions CDS serves"),
+}
+
+def apply_hero_photo(t, dc_name):
+    if dc_name not in HERO_PHOTOS:
+        return t
+    fname, ratio, alt = HERO_PHOTOS[dc_name]
+    if not os.path.exists(os.path.join(ROOT, "assets", "photos", fname)):
+        return t
+    pattern = re.compile(
+        r'<div style="border-radius: 6px; overflow: hidden; border: 1px solid #e0d8ca; '
+        r'background: repeating-linear-gradient[^>]*aspect-ratio: ' + ratio.replace("/", r"\/") +
+        r'[^>]*>.*?</div>', re.S)
+    img = (f'<img src="/assets/photos/{fname}" alt="{alt}" '
+           f'style="display: block; width: 100%; aspect-ratio: {ratio}; object-fit: cover; '
+           f'border-radius: 6px; border: 1px solid #e0d8ca;">')
+    return pattern.sub(img, t, count=1)
 
 # page-specific source fixes: wire the training pages into the real interactive
 # orientation players (which live at /attendant-orientation/ and
