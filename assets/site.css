@@ -60,9 +60,19 @@
   .brand{display:flex; align-items:center; flex:none}
   .brand img{height:46px; width:auto}
   nav{margin-left:auto; display:none}
-  nav ul{display:flex; align-items:center; gap:26px; list-style:none; margin:0; padding:0}
-  nav a{color:var(--navy); font-weight:600; font-size:.95rem; text-decoration:none}
+  nav ul{display:flex; flex-wrap:wrap; align-items:center; gap:8px 16px; list-style:none; margin:0; padding:0}
+  nav a{color:var(--navy); font-weight:600; font-size:.95rem; text-decoration:none; white-space:nowrap}
   nav a:hover{color:var(--teal-deep)}
+  .has-sub{position:relative}
+  .sub-label{color:var(--navy); font-weight:600; font-size:.95rem; cursor:pointer; user-select:none}
+  .sub-label::after{content:"\25BE"; margin-left:.35em; font-size:.85em; color:var(--teal-deep)}
+  .has-sub:hover .sub-label, .has-sub:focus-within .sub-label{color:var(--teal-deep)}
+  .has-sub .sub{display:none; position:absolute; top:100%; left:50%; transform:translateX(-50%); flex-direction:column;
+    background:var(--card); border:1px solid var(--line); border-radius:14px; box-shadow:0 14px 34px rgba(14,56,96,.16);
+    gap:2px; padding:8px; min-width:230px; margin:0; list-style:none; z-index:60}
+  .has-sub:hover .sub, .has-sub:focus-within .sub{display:flex}
+  .has-sub .sub a{display:block; padding:11px 14px; border-radius:9px; white-space:nowrap}
+  .has-sub .sub a:hover{background:var(--paper)}
   .navcta{display:none}
   @media (min-width:960px){ nav,.navcta{display:block} }
 
