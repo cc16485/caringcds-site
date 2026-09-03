@@ -820,18 +820,38 @@
 
     <div style="background:#fff;border:2px solid #38C0B8;border-radius:16px;padding:22px;margin:0 0 20px">
       <p style="margin:0 0 8px;font:700 20px/1.3 Nunito,sans-serif;color:#103860">The EVV Manual Correction Form</p>
-      <p style="margin:0 0 12px;font-size:18px;color:#4C6070">Fill it in online at <a href="https://hub.caringcds.com/evv-form.html">hub.caringcds.com/evv-form.html</a>. It asks for the visit date, the original and corrected times, the reason, the tasks performed, and signatures from both you and your attendant.</p>
-      <ul style="margin:0 0 12px;padding-left:22px;display:flex;flex-direction:column;gap:8px;font-size:18px">
-        <li>It must be submitted by 11:59 PM Saturday of that pay period</li>
-        <li>Use it only when a technical problem prevented a normal clock in or clock out</li>
-        <li>Both signatures are required. You are confirming the services really were provided</li>
-      </ul>
+      <p style="margin:0 0 12px;font-size:18px;color:#4C6070">Fill it in online at <a href="https://hub.caringcds.com/evv-form.html">hub.caringcds.com/evv-form.html</a>, together with your attendant, and submit it by 11:59 PM Saturday of that pay period.</p>
       <p style="margin:0;font-size:18px;color:#4C6070">Tell your attendant to save the form to their phone's home screen, so it is one tap when they need it.</p>
     </div>
+
+    <h2 style="margin:24px 0 12px;font:700 26px/1.25 Nunito,sans-serif;color:#103860">How to fill out the correction form, step by step</h2>
+
+    <p style="margin:0 0 8px;font:700 20px/1.3 Nunito,sans-serif;color:#103860">Step 1 — Names and dates</p>
+    <p style="margin:0 0 12px;font-size:18px">The two notice boxes at the top explain when the form may be used: only when a genuine technical problem prevented a normal clock in or clock out. Below them, enter your attendant's full name, your full name, and the date of the visit being corrected. Picking the visit date shows the pay period and the exact Saturday 11:59 PM deadline for that visit.</p>
+    <img src="../assets/evv/evv-step1-visit.png" alt="Top of the EVV correction form: the two notice boxes, attendant and consumer name fields, date of visit with the pay period deadline shown, and date submitted" loading="lazy" style="width:100%;border:1px solid #D5E0E6;border-radius:14px;margin:0 0 22px">
+
+    <p style="margin:0 0 8px;font:700 20px/1.3 Nunito,sans-serif;color:#103860">Step 2 — Times and reason</p>
+    <p style="margin:0 0 12px;font-size:18px">Original Times are what WellSky actually recorded; a box stays empty if a punch never happened. Corrected Times are the times your attendant really started and finished. In the example below, the clock in was missed, so the original clock in is blank and the corrected times show the true 8:00 AM to 4:00 PM shift. The reason must honestly match what happened. Before you sign, check that the corrected times match what you saw: when your attendant arrived and when they left.</p>
+    <img src="../assets/evv/evv-step2-times-reason.png" alt="Clock-in and clock-out section of the EVV correction form showing a blank original clock in, corrected times of 8:00 AM to 4:00 PM, and the reason dropdown set to Forgot to clock in" loading="lazy" style="width:100%;border:1px solid #D5E0E6;border-radius:14px;margin:0 0 22px">
+
+    <p style="margin:0 0 8px;font:700 20px/1.3 Nunito,sans-serif;color:#103860">Step 3 — Tasks performed</p>
+    <p style="margin:0 0 12px;font-size:18px">Only the tasks actually performed during this visit get checked, and only tasks on your plan of care. If a task is checked that was not done, do not sign until it is fixed.</p>
+    <img src="../assets/evv/evv-step3-tasks.png" alt="Missouri CDS tasks section of the EVV correction form with several tasks checked, such as bathing, dressing and grooming, meal prep and eating, and make bed" loading="lazy" style="width:100%;border:1px solid #D5E0E6;border-radius:14px;margin:0 0 22px">
+
+    <p style="margin:0 0 8px;font:700 20px/1.3 Nunito,sans-serif;color:#103860">Step 4 — Sign together and submit</p>
+    <p style="margin:0 0 12px;font-size:18px">You and your attendant each sign with a finger or mouse and date your own signature. Your signature is your word that the services really were provided at those times, so sign together during the visit, never in advance and never for time you did not see worked. After Submit, a confirmation screen appears and the office processes the correction in WellSky. Nothing more is needed from either of you.</p>
+    <img src="../assets/evv/evv-step4-signatures.png" alt="Notes and signatures section of the EVV correction form with both the attendant and consumer signature boxes signed and dated" loading="lazy" style="width:100%;border:1px solid #D5E0E6;border-radius:14px;margin:0 0 22px">
+
     <div style="background:#FFF7E6;border:1px solid #F0DCA8;border-left:6px solid #C98A16;border-radius:14px;padding:20px;margin:0 0 24px">
       <p style="margin:0 0 6px;font:700 13px/1 'Source Sans 3',sans-serif;letter-spacing:.14em;text-transform:uppercase;color:#8A6B18">Remember</p>
       <p style="margin:0 0 10px;font-size:19px">The goal is 95 percent or more of visits clocked correctly the first time, with no manual change from us. Missouri Medicaid treats a high rate of manual corrections as a possible fraud indicator, and every correction is reviewed individually in an audit.</p>
       <p style="margin:0;font-size:19px">So use the form when you truly need it, not as a normal way to record time. If corrections are happening most weeks, call us at {{ phone }} and we will find out what is going wrong with the app.</p>
+    </div>
+
+    <div style="background:#EAF6F5;border:1px solid #BFE0DD;border-left:6px solid #14807A;border-radius:14px;padding:20px;margin:0 0 24px">
+      <p style="margin:0 0 6px;font:700 13px/1 'Source Sans 3',sans-serif;letter-spacing:.14em;text-transform:uppercase;color:#14807A">Your attendant's questions come through you</p>
+      <p style="margin:0 0 10px;font-size:19px">You are the employer. If your attendant has a question about their pay, their hours, this form, or anything else, they bring it to you, and you contact Caring Companions at {{ phone }}. We work it out with you, and you pass the answer along.</p>
+      <p style="margin:0;font-size:19px">Attendants should not contact the office directly, so if yours ever does, remind them the chain runs through you. It keeps you in charge of your own care, which is the whole point of CDS.</p>
     </div>
 
     <div style="background:#fff;border:2px solid #E4EDF0;border-radius:18px;padding:24px;margin:34px 0 26px">
