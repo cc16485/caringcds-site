@@ -305,7 +305,7 @@ HERO_PHOTOS = {
         "A caregiver and her mother laughing together on the couch at home"),
     "Receive Care": ("receive-care-hero.jpg", "5 / 4",
         "An older gentleman relaxed and comfortable in his favorite chair at home"),
-    "Service Area": ("service-area-hero.jpg", "4 / 3",
+    "Service Area": ("service-area-hero.svg", "4 / 3",
         "Map of the Southwest Missouri counties Caring Companions CDS serves"),
 }
 
