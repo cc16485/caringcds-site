@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous" />
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,400;6..72,500;6..72,600&family=Public+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body { margin: 0; background: #f7f3ec; color: #2b2721; font-family: "Public Sans", Helvetica, Arial, sans-serif; -webkit-font-smoothing: antialiased; text-wrap: pretty; }
+  a { color: #0e3860; text-decoration-thickness: 1px; text-underline-offset: 3px; }
+  a:hover { color: #0f7a7c; }
+  h1, h2, h3 { margin: 0; font-family: Newsreader, Georgia, serif; font-weight: 500; letter-spacing: -0.015em; }
+  p { margin: 0; }
+  ul { margin: 0; padding: 0; list-style: none; }
+  summary { list-style: none; cursor: pointer; }
+  summary::-webkit-details-marker { display: none; }
+  details[open] .om-chev { transform: rotate(45deg); }
+  input, select, button { font-family: inherit; font-size: inherit; }
+  .om-callbar { display: none; }
+  .om-menu { display: none; }
+  .om-menu summary { cursor: pointer; }
+  .om-train summary { cursor: pointer; list-style: none; }
+  .om-train summary::-webkit-details-marker { display: none; }
+  .om-train[open] summary { color: #0e3860; }
+  @media (max-width: 1120px) {
+    .om-callbar { display: flex !important; }
+    .om-menu { display: block !important; }
+    .om-foot { padding-bottom: 96px !important; }
+    .om-split { grid-template-columns: 1fr !important; gap: 40px !important; }
+    .om-two { grid-template-columns: 1fr !important; }
+    .om-nav { display: none !important; }
+    .om-sticky { position: static !important; }
+  }
+</style>
+</helmet>
+
+<div style="background: #f7f3ec;">
+  <div style="background: #0a2844; color: #dfe8f1; font-size: 15px; padding: 10px 48px; display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; text-align: center;">
+    <span>Monday to Friday, 9am to 4pm</span>
+    <span style="opacity: 0.4;">·</span>
+    <a href="tel:+14172182888" style="color: #ffffff; font-weight: 600; text-decoration: none;">Call 417-218-2888</a>
+    <span style="opacity: 0.4;">·</span>
+    <span>toll free <a href="tel:+18668635151" style="color: #ffffff; text-decoration: none;">866-863-5151</a></span>
+  </div>
+
+  <header style="position: sticky; top: 0; z-index: 50; background: rgba(247,243,236,0.93); backdrop-filter: blur(10px); border-bottom: 1px solid #e4ddd1;">
+    <div style="max-width: 1440px; margin: 0 auto; padding: 14px 48px; display: flex; align-items: center; gap: 28px;">
+      <a href="Caring Companions Home.dc.html" style="display: block; flex: none;">
+        <img src="assets/logo.png" alt="Caring Companions Consumer Directed Services" style="height: 46px; width: auto; display: block;" />
+      </a>
+      <details class="om-menu" style="margin-left: auto; position: relative;">
+        <summary style="display: flex; align-items: center; gap: 10px; padding: 12px 18px; border: 1.5px solid #d3cabb; border-radius: 999px; font-size: 16px; font-weight: 600; color: #0e3860; background: #ffffff;">
+          <span style="display: grid; gap: 4px;">
+            <span style="display: block; width: 18px; height: 2px; background: #0e3860;"></span>
+            <span style="display: block; width: 18px; height: 2px; background: #0e3860;"></span>
+            <span style="display: block; width: 18px; height: 2px; background: #0e3860;"></span>
+          </span>
+          Menu
+        </summary>
+        <div style="position: absolute; right: 0; top: calc(100% + 12px); min-width: 290px; max-height: 78vh; overflow-y: auto; background: #ffffff; border: 1px solid #e4ddd1; border-radius: 6px; box-shadow: 0 18px 40px rgba(20,48,77,0.14); padding: 12px; display: grid; gap: 2px;">
+          <span style="margin-top: 10px; padding: 8px 14px 4px; font-size: 12px; letter-spacing: 0.16em; text-transform: uppercase; color: #0f7a7c; font-weight: 700;">Receive care</span>
+          <a href="Receive Care.dc.html" style="padding: 14px; border-radius: 4px; font-size: 17px; font-weight: 500; color: #2b2721; text-decoration: none;" style-hover="background: #f7f3ec; color: #0e3860;">Receive care</a>
+          <a href="How It Works.dc.html" style="padding: 14px; border-radius: 4px; font-size: 17px; font-weight: 500; color: #2b2721; text-decoration: none;" style-hover="background: #f7f3ec; color: #0e3860;">How CDS works, start to finish</a>
+          <a href="Who Can Be The Caregiver.dc.html" style="padding: 14px; border-radius: 4px; font-size: 17px; font-weight: 500; color: #2b2721; text-decoration: none;" style-hover="background: #f7f3ec; color: #0e3860;">Who can be the caregiver</a>
+          <span style="margin-top: 10px; padding: 8px 14px 4px; font-size: 12px; letter-spacing: 0.16em; text-transform: uppercase; color: #0f7a7c; font-weight: 700;">Become a caregiver</span>
+          <a href="Become a Caregiver.dc.html" style="padding: 14px; border-radius: 4px; font-size: 17px; font-weight: 500; color: #2b2721; text-decoration: none;" style-hover="background: #f7f3ec; color: #0e3860;">Become a caregiver</a>
+          <a href="Caregiver Pay.dc.html" style="padding: 14px; border-radius: 4px; font-size: 17px; font-weight: 500; color: #2b2721; text-decoration: none;" style-hover="background: #f7f3ec; color: #0e3860;">How caregivers get paid</a>
+          <a href="Pay Calculator.dc.html" style="padding: 14px; border-radius: 4px; font-size: 17px; font-weight: 500; color: #2b2721; text-decoration: none;" style-hover="background: #f7f3ec; color: #0e3860;">Caregiver pay calculator</a>
+          <a href="Caregiver List.dc.html" style="padding: 14px; border-radius: 4px; font-size: 17px; font-weight: 500; color: #2b2721; text-decoration: none;" style-hover="background: #f7f3ec; color: #0e3860;">Join the caregiver list</a>
+          <span style="margin-top: 10px; padding: 8px 14px 4px; font-size: 12px; letter-spacing: 0.16em; text-transform: uppercase; color: #0f7a7c; font-weight: 700;">Already with us</span>
+          <a href="https://hub.caringcds.com/evv-form" target="_blank" rel="noopener" style="padding: 14px; border-radius: 4px; font-size: 17px; font-weight: 600; color: #0e3860; text-decoration: none;" style-hover="background: #f7f3ec;">EVV correction form</a>
+          <span style="margin-top: 10px; padding: 8px 14px 4px; font-size: 12px; letter-spacing: 0.16em; text-transform: uppercase; color: #0f7a7c; font-weight: 700;">For caregivers</span>
+          <a href="Clocking In And Out.dc.html" style="padding: 14px; border-radius: 4px; font-size: 17px; font-weight: 500; color: #2b2721; text-decoration: none;" style-hover="background: #f7f3ec; color: #0e3860;">Clocking in and out (EVV)</a>
+          <a href="Caregiver Pay.dc.html" style="padding: 14px; border-radius: 4px; font-size: 17px; font-weight: 500; color: #2b2721; text-decoration: none;" style-hover="background: #f7f3ec; color: #0e3860;">How caregivers get paid</a>
+          <a href="Pay Calculator.dc.html" style="padding: 14px; border-radius: 4px; font-size: 17px; font-weight: 500; color: #2b2721; text-decoration: none;" style-hover="background: #f7f3ec; color: #0e3860;">Caregiver pay calculator</a>
+          <a href="Attendant Orientation.dc.html" style="padding: 14px; border-radius: 4px; font-size: 17px; font-weight: 500; color: #2b2721; text-decoration: none;" style-hover="background: #f7f3ec; color: #0e3860;">Attendant Orientation</a>
+          <span style="margin-top: 10px; padding: 8px 14px 4px; font-size: 12px; letter-spacing: 0.16em; text-transform: uppercase; color: #0f7a7c; font-weight: 700;">For consumers</span>
+          <a href="Employer Setup.dc.html" style="padding: 14px; border-radius: 4px; font-size: 17px; font-weight: 500; color: #2b2721; text-decoration: none;" style-hover="background: #f7f3ec; color: #0e3860;">Employer setup guide</a>
+          <a href="Orienting Your Attendant.dc.html" style="padding: 14px; border-radius: 4px; font-size: 17px; font-weight: 500; color: #2b2721; text-decoration: none;" style-hover="background: #f7f3ec; color: #0e3860;">Orienting your attendant</a>
+          <a href="Who Can Be The Caregiver.dc.html" style="padding: 14px; border-radius: 4px; font-size: 17px; font-weight: 500; color: #2b2721; text-decoration: none;" style-hover="background: #f7f3ec; color: #0e3860;">Who can be the caregiver</a>
+          <a href="Consumer Orientation.dc.html" style="padding: 14px; border-radius: 4px; font-size: 17px; font-weight: 500; color: #2b2721; text-decoration: none;" style-hover="background: #f7f3ec; color: #0e3860;">Consumer Orientation</a>
+          <span style="margin-top: 10px; padding: 8px 14px 4px; font-size: 12px; letter-spacing: 0.16em; text-transform: uppercase; color: #0f7a7c; font-weight: 700;">More</span>
+          <a href="Service Area.dc.html" style="padding: 14px; border-radius: 4px; font-size: 17px; font-weight: 500; color: #2b2721; text-decoration: none;" style-hover="background: #f7f3ec; color: #0e3860;">Service area</a>
+          <a href="Contact.dc.html" style="padding: 14px; border-radius: 4px; font-size: 17px; font-weight: 500; color: #2b2721; text-decoration: none;" style-hover="background: #f7f3ec; color: #0e3860;">Contact</a>
+          <a href="Check My Eligibility.dc.html" style="margin-top: 10px; text-align: center; background: #0e3860; color: #ffffff; padding: 16px 18px; border-radius: 999px; text-decoration: none; font-weight: 600; font-size: 17px;" style-hover="background: #0a2844;">Check my eligibility</a>
+        </div>
+      </details>
+      <nav class="om-nav" style="margin-left: auto; display: flex; align-items: center; gap: 26px; font-size: 16px; font-weight: 500;">
+        <details class="om-train" style="position: relative;">
+          <summary style="display: flex; align-items: center; gap: 7px; color: #453f36; font-size: 16px; font-weight: 500; white-space: nowrap;">Receive care<span style="font-size: 11px; color: #0f7a7c;">&#9660;</span></summary>
+          <div style="position: absolute; left: -14px; top: calc(100% + 14px); min-width: 290px; background: #ffffff; border: 1px solid #e4ddd1; border-radius: 6px; box-shadow: 0 18px 40px rgba(20,48,77,0.14); padding: 12px; display: grid; gap: 2px;">
+            <a href="Receive Care.dc.html" style="padding: 14px; border-radius: 4px; font-size: 17px; font-weight: 600; color: #0e3860; text-decoration: none; white-space: nowrap;" style-hover="background: #f7f3ec;">Receive care &rarr;</a>
+            <span style="margin: 6px 14px 4px; border-top: 1px solid #ece5d9;"></span>
+            <a href="How It Works.dc.html" style="padding: 13px 14px; border-radius: 4px; font-size: 16.5px; font-weight: 500; color: #2b2721; text-decoration: none; white-space: nowrap;" style-hover="background: #f7f3ec; color: #0e3860;">How CDS works, start to finish</a>
+            <a href="Who Can Be The Caregiver.dc.html" style="padding: 13px 14px; border-radius: 4px; font-size: 16.5px; font-weight: 500; color: #2b2721; text-decoration: none; white-space: nowrap;" style-hover="background: #f7f3ec; color: #0e3860;">Who can be the caregiver</a>
+          </div>
+        </details>
+        <details class="om-train" style="position: relative;">
+          <summary style="display: flex; align-items: center; gap: 7px; color: #453f36; font-size: 16px; font-weight: 500; white-space: nowrap;">Become a caregiver<span style="font-size: 11px; color: #0f7a7c;">&#9660;</span></summary>
+          <div style="position: absolute; left: -14px; top: calc(100% + 14px); min-width: 290px; background: #ffffff; border: 1px solid #e4ddd1; border-radius: 6px; box-shadow: 0 18px 40px rgba(20,48,77,0.14); padding: 12px; display: grid; gap: 2px;">
+            <a href="Become a Caregiver.dc.html" style="padding: 14px; border-radius: 4px; font-size: 17px; font-weight: 600; color: #0e3860; text-decoration: none; white-space: nowrap;" style-hover="background: #f7f3ec;">Become a caregiver &rarr;</a>
+            <span style="margin: 6px 14px 4px; border-top: 1px solid #ece5d9;"></span>
+            <a href="Caregiver Pay.dc.html" style="padding: 13px 14px; border-radius: 4px; font-size: 16.5px; font-weight: 500; color: #2b2721; text-decoration: none; white-space: nowrap;" style-hover="background: #f7f3ec; color: #0e3860;">How caregivers get paid</a>
+            <a href="Pay Calculator.dc.html" style="padding: 13px 14px; border-radius: 4px; font-size: 16.5px; font-weight: 500; color: #2b2721; text-decoration: none; white-space: nowrap;" style-hover="background: #f7f3ec; color: #0e3860;">Caregiver pay calculator</a>
+            <a href="Caregiver List.dc.html" style="padding: 13px 14px; border-radius: 4px; font-size: 16.5px; font-weight: 500; color: #2b2721; text-decoration: none; white-space: nowrap;" style-hover="background: #f7f3ec; color: #0e3860;">Join the caregiver list</a>
+          </div>
+        </details>
+        <details class="om-train" style="position: relative;">
+          <summary style="display: flex; align-items: center; gap: 7px; color: #453f36; font-size: 16px; font-weight: 500; white-space: nowrap;">Already with us<span style="font-size: 11px; color: #0f7a7c;">&#9660;</span></summary>
+          <div style="position: absolute; left: -14px; top: calc(100% + 14px); min-width: 300px; background: #ffffff; border: 1px solid #e4ddd1; border-radius: 6px; box-shadow: 0 18px 40px rgba(20,48,77,0.14); padding: 12px; display: grid; gap: 2px;">
+            <a href="https://hub.caringcds.com/evv-form" target="_blank" rel="noopener" style="padding: 14px; border-radius: 4px; font-size: 17px; font-weight: 600; color: #0e3860; text-decoration: none; white-space: nowrap;" style-hover="background: #f7f3ec;">EVV correction form &rarr;</a>
+            <span style="padding: 10px 14px 4px; font-size: 11.5px; letter-spacing: 0.16em; text-transform: uppercase; color: #0f7a7c; font-weight: 700;">For caregivers</span>
+            <a href="Clocking In And Out.dc.html" style="padding: 13px 14px; border-radius: 4px; font-size: 16.5px; font-weight: 500; color: #2b2721; text-decoration: none; white-space: nowrap;" style-hover="background: #f7f3ec; color: #0e3860;">Clocking in and out (EVV)</a>
+            <a href="Caregiver Pay.dc.html" style="padding: 13px 14px; border-radius: 4px; font-size: 16.5px; font-weight: 500; color: #2b2721; text-decoration: none; white-space: nowrap;" style-hover="background: #f7f3ec; color: #0e3860;">How caregivers get paid</a>
+            <a href="Pay Calculator.dc.html" style="padding: 13px 14px; border-radius: 4px; font-size: 16.5px; font-weight: 500; color: #2b2721; text-decoration: none; white-space: nowrap;" style-hover="background: #f7f3ec; color: #0e3860;">Caregiver pay calculator</a>
+            <a href="Attendant Orientation.dc.html" style="padding: 13px 14px; border-radius: 4px; font-size: 16.5px; font-weight: 500; color: #2b2721; text-decoration: none; white-space: nowrap;" style-hover="background: #f7f3ec; color: #0e3860;">Attendant Orientation</a>
+            <span style="padding: 10px 14px 4px; font-size: 11.5px; letter-spacing: 0.16em; text-transform: uppercase; color: #0f7a7c; font-weight: 700;">For consumers</span>
+            <a href="Employer Setup.dc.html" style="padding: 13px 14px; border-radius: 4px; font-size: 16.5px; font-weight: 500; color: #2b2721; text-decoration: none; white-space: nowrap;" style-hover="background: #f7f3ec; color: #0e3860;">Employer setup guide</a>
+            <a href="Orienting Your Attendant.dc.html" style="padding: 13px 14px; border-radius: 4px; font-size: 16.5px; font-weight: 500; color: #2b2721; text-decoration: none; white-space: nowrap;" style-hover="background: #f7f3ec; color: #0e3860;">Orienting your attendant</a>
+            <a href="Who Can Be The Caregiver.dc.html" style="padding: 13px 14px; border-radius: 4px; font-size: 16.5px; font-weight: 500; color: #2b2721; text-decoration: none; white-space: nowrap;" style-hover="background: #f7f3ec; color: #0e3860;">Who can be the caregiver</a>
+            <a href="Consumer Orientation.dc.html" style="padding: 13px 14px; border-radius: 4px; font-size: 16.5px; font-weight: 500; color: #2b2721; text-decoration: none; white-space: nowrap;" style-hover="background: #f7f3ec; color: #0e3860;">Consumer Orientation</a>
+          </div>
+        </details>
+        <a href="Service Area.dc.html" style="color: #453f36; text-decoration: none; white-space: nowrap; flex: none;" style-hover="color: #0e3860;">Service area</a>
+        <a href="Contact.dc.html" style="color: #453f36; text-decoration: none; white-space: nowrap; flex: none;" style-hover="color: #0e3860;">Contact</a>
+        <a href="Check My Eligibility.dc.html" style="background: #0e3860; color: #ffffff; padding: 13px 22px; border-radius: 999px; text-decoration: none; font-weight: 600; white-space: nowrap;" style-hover="background: #0a2844;">Check my eligibility</a>
+      </nav>
+    </div>
+  </header>
+
+  <section style="max-width: 1440px; margin: 0 auto; padding: 72px 48px 48px;">
+    <div class="om-split" style="display: grid; grid-template-columns: 1.05fr 0.95fr; gap: 64px; align-items: end;">
+      <div>
+        <p style="font-size: 13px; letter-spacing: 0.16em; text-transform: uppercase; color: #0f7a7c; font-weight: 700; margin-bottom: 22px;">Employer setup</p>
+        <h1 style="font-size: clamp(42px, 5vw, 68px); line-height: 1.04; color: #14304d; max-width: 17ch;">You are the employer. We do the paperwork.</h1>
+      </div>
+      <div>
+        <p style="font-size: 20.5px; line-height: 1.6; color: #4c463c; max-width: 48ch;">In CDS your caregiver legally works for you, which is what gives you control over your own care. On paper that means two tax registrations and a few signatures. We prepare every one of them, and this page explains what each is for.</p>
+        <div style="margin-top: 30px; display: flex; flex-wrap: wrap; gap: 14px;">
+          <a href="Check My Eligibility.dc.html" style="background: #0e3860; color: #ffffff; padding: 19px 32px; border-radius: 999px; text-decoration: none; font-weight: 600; font-size: 18px;" style-hover="background: #0a2844;">Start enrolling</a>
+          <a href="tel:+14172182888" style="background: #ffffff; color: #0e3860; padding: 19px 32px; border-radius: 999px; text-decoration: none; font-weight: 600; font-size: 18px; border: 1.5px solid #d3cabb;" style-hover="border-color: #0e3860;">Or call 417-218-2888</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section style="background: #ffffff; border-top: 1px solid #e4ddd1; border-bottom: 1px solid #e4ddd1;">
+    <div style="max-width: 1440px; margin: 0 auto; padding: 88px 48px;">
+      <p style="font-size: 13px; letter-spacing: 0.16em; text-transform: uppercase; color: #0f7a7c; font-weight: 700;">What setup involves</p>
+      <h2 style="margin-top: 20px; font-size: clamp(32px, 3.3vw, 46px); line-height: 1.1; color: #14304d;">Six things, none of them yours to figure out</h2>
+      <ol style="margin: 44px 0 0; padding: 0; list-style: none; display: grid;">
+        <li class="om-split" style="border-top: 1px solid #ece5d9; padding: 32px 0; display: grid; grid-template-columns: 84px 0.8fr 1.2fr; gap: 32px; align-items: start;">
+          <span style="font-family: Newsreader, Georgia, serif; font-size: 46px; line-height: 1; color: #8a7a63;">01</span>
+          <h3 style="font-size: 26px; line-height: 1.2; color: #14304d;">Why you are the employer</h3>
+          <p style="font-size: 18.5px; line-height: 1.68; color: #4c463c;">This is the whole point of self-direction. The state does not employ your caregiver and neither do we: <strong style="color: #14304d;">you</strong> do. That is what gives you the right to choose who comes into your home, set the schedule, and end the arrangement if it is not working. Everything below is the paperwork that makes that legal.</p>
+        </li>
+        <li class="om-split" style="border-top: 1px solid #ece5d9; padding: 32px 0; display: grid; grid-template-columns: 84px 0.8fr 1.2fr; gap: 32px; align-items: start;">
+          <span style="font-family: Newsreader, Georgia, serif; font-size: 46px; line-height: 1; color: #8a7a63;">02</span>
+          <h3 style="font-size: 26px; line-height: 1.2; color: #14304d;">Your federal EIN</h3>
+          <p style="font-size: 18.5px; line-height: 1.68; color: #4c463c;">An Employer Identification Number from the IRS, which is your employer identity for payroll. It is free, and we complete the application with you as part of enrolling. Your part is confirming your details and signing.</p>
+        </li>
+        <li class="om-split" style="border-top: 1px solid #ece5d9; padding: 32px 0; display: grid; grid-template-columns: 84px 0.8fr 1.2fr; gap: 32px; align-items: start;">
+          <span style="font-family: Newsreader, Georgia, serif; font-size: 46px; line-height: 1; color: #8a7a63;">03</span>
+          <h3 style="font-size: 26px; line-height: 1.2; color: #14304d;">Your Missouri employer number</h3>
+          <p style="font-size: 18.5px; line-height: 1.68; color: #4c463c;">The state equivalent, for Missouri withholding and unemployment. Same story: we prepare it, you sign it. Both numbers are issued to <strong style="color: #14304d;">you</strong>, not to us, so keep a copy somewhere you can find it.</p>
+        </li>
+        <li class="om-split" style="border-top: 1px solid #ece5d9; padding: 32px 0; display: grid; grid-template-columns: 84px 0.8fr 1.2fr; gap: 32px; align-items: start;">
+          <span style="font-family: Newsreader, Georgia, serif; font-size: 46px; line-height: 1; color: #8a7a63;">04</span>
+          <h3 style="font-size: 26px; line-height: 1.2; color: #14304d;">Appointing us as your agent</h3>
+          <p style="font-size: 18.5px; line-height: 1.68; color: #4c463c;">One form, IRS Form 2678, that authorizes us to file and deposit employment taxes on your behalf. Without it you would be filing payroll returns yourself every quarter. With it, we do all of it and you never touch a 941.</p>
+        </li>
+        <li class="om-split" style="border-top: 1px solid #ece5d9; padding: 32px 0; display: grid; grid-template-columns: 84px 0.8fr 1.2fr; gap: 32px; align-items: start;">
+          <span style="font-family: Newsreader, Georgia, serif; font-size: 46px; line-height: 1; color: #8a7a63;">05</span>
+          <h3 style="font-size: 26px; line-height: 1.2; color: #14304d;">Hiring paperwork for your attendant</h3>
+          <p style="font-size: 18.5px; line-height: 1.68; color: #4c463c;">The usual employee file: I-9 work eligibility, W-4 withholding, direct deposit details, and the background screening consent. We collect it and keep it, and we tell you what is still outstanding before the first shift.</p>
+        </li>
+        <li class="om-split" style="border-top: 1px solid #ece5d9; padding: 32px 0; display: grid; grid-template-columns: 84px 0.8fr 1.2fr; gap: 32px; align-items: start;">
+          <span style="font-family: Newsreader, Georgia, serif; font-size: 46px; line-height: 1; color: #8a7a63;">06</span>
+          <h3 style="font-size: 26px; line-height: 1.2; color: #14304d;">What you actually do each week</h3>
+          <p style="font-size: 18.5px; line-height: 1.68; color: #4c463c;">Set the schedule, and confirm the recorded hours early in the week so Thursday&rsquo;s payday is clean. That is it. No filing, no deposits, no year-end forms. We do those.</p>
+        </li>
+      </ol>
+    </div>
+  </section>
+
+  <section style="background: #ffffff; border-bottom: 1px solid #e4ddd1;">
+    <div class="om-split" style="max-width: 1440px; margin: 0 auto; padding: 88px 48px; display: grid; grid-template-columns: 0.9fr 1.1fr; gap: 64px; align-items: start;">
+      <div>
+        <p style="font-size: 13px; letter-spacing: 0.16em; text-transform: uppercase; color: #0f7a7c; font-weight: 700;">Worth writing down</p>
+        <h2 style="margin-top: 20px; font-size: clamp(32px, 3.3vw, 46px); line-height: 1.1; color: #14304d;">Your EIN numbers are yours to keep</h2>
+        <div style="margin-top: 32px; background: #faf7f1; border: 1px solid #ece5d9; border-radius: 4px; padding: 28px;">
+          <p style="font-size: 13px; letter-spacing: 0.16em; text-transform: uppercase; color: #0f7a7c; font-weight: 700;">Keep a note of both</p>
+          <ul style="margin-top: 18px; display: grid;">
+            <li style="border-top: 1px solid #e8dfd0; padding: 16px 0; font-size: 18px; line-height: 1.5; color: #4c463c;"><strong style="color: #14304d;">Federal EIN</strong> &mdash; from the IRS</li>
+            <li style="border-top: 1px solid #e8dfd0; padding: 16px 0; font-size: 18px; line-height: 1.5; color: #4c463c;"><strong style="color: #14304d;">Missouri employer number</strong> &mdash; from the state</li>
+          </ul>
+          <p style="margin-top: 18px; font-size: 16.5px; line-height: 1.6; color: #6b6358;">Store them with your other important papers, not in an email. Lost them? Call us and we will look them up.</p>
+        </div>
+      </div>
+      <div style="display: grid; gap: 20px; font-size: 18.5px; line-height: 1.68; color: #4c463c;">
+        <p style="font-size: 21px; line-height: 1.55; color: #2f2b25;">Both numbers belong to you as the employer, permanently. They are not ours, and they are not tied to Caring Companions.</p>
+        <p>That matters most on the day you decide to change something. <strong style="color: #14304d;">If you ever switch CDS provider, your EIN and your Missouri employer number go with you.</strong> You do not apply again, you do not wait on the IRS, and your new provider simply uses the numbers you already hold.</p>
+        <p>It is one of the quiet advantages of self-direction: you are the employer, so the employer identity stays with you no matter who does your payroll. Knowing both numbers puts you in the position of being able to move, and it makes any switch a matter of days rather than weeks.</p>
+        <p>Ask us for them at any time, and we will send them to you. We would rather you have them written down than need them in a hurry.</p>
+        <a href="tel:+14172182888" style="justify-self: start; background: #0e3860; color: #ffffff; padding: 19px 32px; border-radius: 999px; text-decoration: none; font-weight: 600; font-size: 18px;" style-hover="background: #0a2844;">Ask us for my EIN numbers</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="om-split" style="max-width: 1440px; margin: 0 auto; padding: 88px 48px; display: grid; grid-template-columns: 1fr 1fr; gap: 64px; align-items: start;">
+    <div>
+      <p style="font-size: 13px; letter-spacing: 0.16em; text-transform: uppercase; color: #0f7a7c; font-weight: 700;">Yours</p>
+      <h2 style="margin-top: 20px; font-size: 32px; line-height: 1.2; color: #14304d;">What only you can do</h2>
+      <ul style="margin-top: 26px; display: grid;">
+        <li style="border-top: 1px solid #ece5d9; padding: 17px 0; font-size: 18.5px; line-height: 1.5; color: #4c463c;">Choose who you hire, and let them go if it is not working</li>
+        <li style="border-top: 1px solid #ece5d9; padding: 17px 0; font-size: 18.5px; line-height: 1.5; color: #4c463c;">Set the schedule within your authorized hours</li>
+        <li style="border-top: 1px solid #ece5d9; padding: 17px 0; font-size: 18.5px; line-height: 1.5; color: #4c463c;">Orient your attendant on the eight required topics</li>
+        <li style="border-top: 1px solid #ece5d9; padding: 17px 0; font-size: 18.5px; line-height: 1.5; color: #4c463c;">Confirm the recorded hours each week</li>
+        <li style="border-top: 1px solid #ece5d9; padding: 17px 0; font-size: 18.5px; line-height: 1.5; color: #4c463c;">Tell us when something changes</li>
+      </ul>
+    </div>
+    <div>
+      <p style="font-size: 13px; letter-spacing: 0.16em; text-transform: uppercase; color: #0f7a7c; font-weight: 700;">Ours</p>
+      <h2 style="margin-top: 20px; font-size: 32px; line-height: 1.2; color: #14304d;">What we take off you</h2>
+      <ul style="margin-top: 26px; display: grid;">
+        <li style="border-top: 1px solid #ece5d9; padding: 17px 0; font-size: 18.5px; line-height: 1.5; color: #4c463c;">Both tax registrations, prepared and filed</li>
+        <li style="border-top: 1px solid #ece5d9; padding: 17px 0; font-size: 18.5px; line-height: 1.5; color: #4c463c;">Payroll, withholding, deposits and quarterly returns</li>
+        <li style="border-top: 1px solid #ece5d9; padding: 17px 0; font-size: 18.5px; line-height: 1.5; color: #4c463c;">W-2s at year end</li>
+        <li style="border-top: 1px solid #ece5d9; padding: 17px 0; font-size: 18.5px; line-height: 1.5; color: #4c463c;">Background screening on every attendant</li>
+        <li style="border-top: 1px solid #ece5d9; padding: 17px 0; font-size: 18.5px; line-height: 1.5; color: #4c463c;">EVV setup and a practice run before the first shift</li>
+        <li style="border-top: 1px solid #ece5d9; padding: 17px 0; font-size: 18.5px; line-height: 1.5; color: #4c463c;">Monthly check-in calls and the annual visit</li>
+      </ul>
+    </div>
+  </section>
+
+  <section style="background: #14807f;">
+    <div style="max-width: 1440px; margin: 0 auto; padding: 72px 48px; display: flex; flex-wrap: wrap; gap: 32px; align-items: center; justify-content: space-between;">
+      <h2 style="font-size: clamp(30px, 3.2vw, 42px); line-height: 1.12; color: #f2fbf9; max-width: 24ch;">We will walk you through the whole packet on one call.</h2>
+      <div style="display: flex; flex-wrap: wrap; gap: 14px;">
+        <a href="Check My Eligibility.dc.html" style="background: #ffffff; color: #0e6b6b; padding: 19px 32px; border-radius: 999px; text-decoration: none; font-weight: 600; font-size: 18px;" style-hover="background: #e4f4f2;">Start enrolling</a>
+        <a href="tel:+14172182888" style="color: #ffffff; padding: 19px 32px; border-radius: 999px; text-decoration: none; font-weight: 600; font-size: 18px; border: 1.5px solid rgba(255,255,255,0.55);" style-hover="border-color: #ffffff;">Call 417-218-2888</a>
+      </div>
+    </div>
+  </section>
+
+  <footer class="om-foot" style="background: #0a2844; color: #c6d3e0;">
+    <div class="om-split" style="max-width: 1440px; margin: 0 auto; padding: 72px 48px 32px; display: grid; grid-template-columns: 1fr 1fr 1.2fr; gap: 56px;">
+      <div>
+        <div style="background: #ffffff; border-radius: 4px; padding: 14px 18px; display: inline-block;">
+          <img src="assets/logo.png" alt="Caring Companions Consumer Directed Services" style="height: 42px; width: auto; display: block;" />
+        </div>
+        <p style="margin-top: 20px; font-size: 17px; line-height: 1.6; color: #a9bccd; max-width: 34ch;">Helping Missourians choose their own caregivers since 2017.</p>
+        <p style="margin-top: 22px; font-size: 17px; line-height: 1.8;">
+          <a href="tel:+14172182888" style="color: #ffffff; font-weight: 700; font-size: 21px; text-decoration: none;">417-218-2888</a><br />
+          Toll free <a href="tel:+18668635151" style="color: #ffffff; text-decoration: none;">866-863-5151</a><br />
+          Monday to Friday, 9am to 4pm<br />
+          1331 N Stewart Ave, Springfield, MO 65802
+        </p>
+      </div>
+      <div>
+        <h3 style="font-size: 13px; letter-spacing: 0.16em; text-transform: uppercase; color: #50c0c0; font-family: 'Public Sans', sans-serif; font-weight: 700;">Get started</h3>
+        <ul style="margin-top: 20px; display: grid; gap: 11px; font-size: 16.5px;">
+          <sc-for list="{{ links }}" as="link" hint-placeholder-count="8">
+            <li><a href="{{ link.href }}" style="color: #dbe6ef; text-decoration: none;" style-hover="color: #ffffff;">{{ link.label }}</a></li>
+          </sc-for>
+        </ul>
+      </div>
+      <div>
+        <h3 style="font-size: 13px; letter-spacing: 0.16em; text-transform: uppercase; color: #50c0c0; font-family: 'Public Sans', sans-serif; font-weight: 700;">Counties we serve</h3>
+        <p style="margin-top: 20px; font-size: 16.5px; line-height: 1.9; color: #dbe6ef;">{{ countyLine }}</p>
+        <a href="Service Area.dc.html" style="margin-top: 18px; display: inline-block; color: #ffffff; font-weight: 600;">See the full service area &rarr;</a>
+      </div>
+    </div>
+    <div style="max-width: 1440px; margin: 0 auto; padding: 24px 48px 40px; border-top: 1px solid rgba(255,255,255,0.13); font-size: 14.5px; color: #8fa6ba;">
+      &copy; 2026 Caring Companions Consumer Directed Services, LLC. All rights reserved.
+    </div>
+  </footer>
+
+  <div class="om-callbar" style="position: fixed; bottom: 0; left: 0; right: 0; z-index: 60; gap: 10px; padding: 12px 16px; background: rgba(247,243,236,0.96); backdrop-filter: blur(10px); border-top: 1px solid #ddd4c5;">
+    <a href="tel:+14172182888" style="flex: 1; text-align: center; background: #0e3860; color: #ffffff; padding: 17px 18px; border-radius: 999px; text-decoration: none; font-weight: 600; font-size: 17px;">Call 417-218-2888</a>
+    <a href="#eligibility" style="flex: 1; text-align: center; background: #ffffff; color: #0e3860; padding: 17px 18px; border-radius: 999px; text-decoration: none; font-weight: 600; font-size: 17px; border: 1.5px solid #d3cabb;">Am I eligible?</a>
+  </div>
+</div>
+</x-dc>
+<script data-dc-script type="text/plain" data-props='{"faqFirstOpen":{"editor":"boolean","default":true,"tsType":"boolean"}}'>
+class Component extends DCLogic {
+  state = { submitted: false, switchSent: false, hours: 25 };
+  renderVals() {
+    const counties = ["Barry","Barton","Benton","Camden","Cedar","Christian","Dade","Dallas","Douglas","Greene","Hickory","Jasper","Laclede","Lawrence","McDonald","Newton","Ozark","Phelps","Polk","Pulaski","St. Clair","Stone","Taney","Texas","Vernon","Webster","Wright"];
+    const links = [
+      { href: "Check My Eligibility.dc.html", label: "Check if you qualify" },
+      { href: "How It Works.dc.html", label: "How CDS works, start to finish" },
+      { href: "Who Can Be The Caregiver.dc.html", label: "Who can be the caregiver" },
+      { href: "Employer Setup.dc.html", label: "Employer setup guide" },
+      { href: "Orienting Your Attendant.dc.html", label: "Orienting your attendant" },
+      { href: "Clocking In And Out.dc.html", label: "Clocking in and out (EVV)" },
+      { href: "https://hub.caringcds.com/evv-form", label: "EVV correction form" },
+      { href: "Caregiver Pay.dc.html", label: "How caregivers get paid" },
+      { href: "Pay Calculator.dc.html", label: "Caregiver pay calculator" },
+      { href: "Receive Care.dc.html", label: "Receive care" },
+      { href: "Become a Caregiver.dc.html", label: "Become a caregiver" },
+      { href: "Caregiver List.dc.html", label: "Join the caregiver list" },
+      { href: "Service Area.dc.html", label: "Service area" },
+      { href: "Contact.dc.html", label: "Contact us" }
+    ];
+    const hours = Number(this.state.hours) || 0;
+    const weekly = hours * 15;
+    const money = (n) => "$" + n.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    return {
+      counties, links,
+      countyLine: counties.join(" \u00b7 "),
+      countyLinks: counties.map((c) => ({ name: c + " County", href: c + " County.dc.html" })),
+      faqFirstOpen: this.props.faqFirstOpen ?? true,
+      showHeroPhoto: this.props.showHeroPhoto ?? true,
+      submitted: this.state.submitted,
+      notSubmitted: !this.state.submitted,
+      switchSent: this.state.switchSent,
+      switchNotSent: !this.state.switchSent,
+      hours: this.state.hours,
+      hoursLabel: hours === 1 ? "1 hour a week" : hours + " hours a week",
+      weekly: money(weekly),
+      monthly: money(weekly * 52 / 12),
+      yearly: money(weekly * 52),
+      onHours: (e) => this.setState({ hours: e.target.value }),
+      onSubmit: (e) => { e.preventDefault(); this.setState({ submitted: true }); },
+      onSwitch: (e) => { e.preventDefault(); this.setState({ switchSent: true }); }
+    };
+  }
+}
+</script>
+</body>
+</html>

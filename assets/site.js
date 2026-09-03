@@ -1,30 +1,17 @@
-/* Caring Companions CDS — shared behaviour.
+/* Caring Companions CDS — shared behaviour for the redesigned site.
    Every page loads this. Each piece checks whether its element exists first, so
    one file can serve pages that have a form and pages that do not. */
 
-/* ---------- the 27 counties we serve, common picks first ---------- */
-var CDS_COUNTIES = ['Greene','Christian','Jasper','Taney','Polk','Webster','Lawrence','Newton',
-  'Barry','Stone','Dade','Douglas','Dallas','Cedar','Hickory','Laclede','McDonald','Ozark',
-  'Wright','Texas','Phelps','Pulaski','Camden','Benton','St. Clair','Vernon','Barton'];
-
-/* ---------- mobile menu ---------- */
+/* ---------- nav dropdowns: one open at a time, close on outside click / Escape ---------- */
 (function () {
-  var btn = document.getElementById('menuBtn'), drawer = document.getElementById('drawer');
-  if (!btn || !drawer) return;
-  btn.addEventListener('click', function () {
-    var open = drawer.classList.toggle('open');
-    btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+  var all = function () { return document.querySelectorAll('details.om-train, details.om-menu'); };
+  document.addEventListener('click', function (e) {
+    var inside = e.target.closest('details.om-train, details.om-menu');
+    all().forEach(function (d) { if (d !== inside) d.removeAttribute('open'); });
   });
-})();
-
-/* ---------- county dropdowns ---------- */
-(function () {
-  var sels = document.querySelectorAll('select[data-counties]');
-  if (!sels.length) return;
-  var alpha = CDS_COUNTIES.slice().sort(function (a, b) { return a.localeCompare(b); });
-  var html = alpha.map(function (c) { return '<option>' + c + '</option>'; }).join('')
-           + '<option value="Outside these counties">Somewhere else in Missouri</option>';
-  Array.prototype.forEach.call(sels, function (s) { s.insertAdjacentHTML('beforeend', html); });
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape') all().forEach(function (d) { d.removeAttribute('open'); });
+  });
 })();
 
 /* ---------- phone formatting ---------- */
@@ -40,97 +27,94 @@ var CDS_COUNTIES = ['Greene','Christian','Jasper','Taney','Polk','Webster','Lawr
 })();
 
 /* ---------- lead forms ----------
-   Any <form data-lead-form="<source>"> is wired up automatically. Fields are read
-   by their name attribute, and anything marked required is validated first.
+   Any <form data-lead-form="<source>"> posts to Supabase (system of record) and
+   optionally to the GoHighLevel inbound webhook. On success the form hides and
+   its sibling thank-you panel ([data-thanks]) shows.
 
-   Submissions go to Supabase, which is the system of record so an enquiry is never
-   lost. Before go-live this also needs to POST to Samantha's GoHighLevel inbound
-   webhook so her existing follow-up automations still fire — see GHL_WEBHOOK below.
-*/
+   site_leads has a fixed column set. Named fields map onto those columns; any
+   other field is folded into the message column as "label: value" lines, so
+   nothing a visitor typed is ever dropped. */
 var SUPABASE_URL  = 'https://siivpekcaryeyttszwav.supabase.co';
 var SUPABASE_ANON = 'sb_publishable_iDJ00Ve4hw5iw2YtVmiulg__FmjShmO';
 var AGENCY_ID     = 'caring-companions-cds';
-var GHL_WEBHOOK   = null;   // set this to the GHL inbound webhook URL to enable automations
+var GHL_WEBHOOK   = null;   // set to the GHL inbound webhook URL to enable automations
 
 (function () {
   var forms = document.querySelectorAll('form[data-lead-form]');
   if (!forms.length) return;
 
-  Array.prototype.forEach.call(forms, function (form) {
-    var errBox = form.querySelector('.alert.err');
-    var okBox  = form.querySelector('.alert.ok');
-    var btn    = form.querySelector('button[type="submit"]');
-    var btnLabel = btn ? btn.textContent : 'Send';
+  var COLUMNS = ['first_name','last_name','full_name','phone','email','county',
+                 'who_needs_care','has_medicaid','message'];
+  var RENAME = { first: 'first_name', last: 'last_name', name: 'full_name',
+                 who: 'who_needs_care', medicaid: 'has_medicaid' };
 
+  Array.prototype.forEach.call(forms, function (form) {
+    form.setAttribute('novalidate', '');
     form.addEventListener('submit', async function (e) {
       e.preventDefault();
 
-      /* validate */
+      /* validate required fields */
       var problems = [];
-      Array.prototype.forEach.call(form.querySelectorAll('.field'), function (f) { f.classList.remove('bad'); });
-
       Array.prototype.forEach.call(form.querySelectorAll('[required]'), function (el) {
-        var field = el.closest('.field');
-        var label = (field && field.querySelector('label')) ? field.querySelector('label').textContent : 'a field';
-        label = label.replace('*','').trim().toLowerCase();
+        el.style.borderColor = '';
         var bad = !el.value.trim();
-        if (!bad && el.type === 'tel') bad = el.value.replace(/\D/g,'').length !== 10;
-        if (bad) {
-          problems.push(el.type === 'tel' ? 'a 10-digit phone number' : label);
-          if (field) field.classList.add('bad');
-        }
+        if (!bad && el.type === 'tel') bad = el.value.replace(/\D/g, '').length !== 10;
+        if (bad) { problems.push(el); el.style.borderColor = '#9a5a48'; }
       });
-
+      var errBox = form.querySelector('[data-form-error]');
+      if (!errBox) {
+        errBox = document.createElement('p');
+        errBox.setAttribute('data-form-error', '');
+        errBox.style.cssText = 'display:none;background:#f6e8e4;border:1px solid #d8b3a7;border-radius:4px;padding:12px 14px;font-size:16px;line-height:1.5;color:#7c4030;';
+        form.insertBefore(errBox, form.firstChild);
+      }
       if (problems.length) {
-        if (errBox) {
-          errBox.textContent = 'Please add ' + problems.join(', ').replace(/, ([^,]*)$/, ' and $1') + '.';
-          errBox.classList.add('show');
-          errBox.scrollIntoView({ behavior:'smooth', block:'center' });
-        }
-        if (okBox) okBox.classList.remove('show');
+        errBox.textContent = 'Please fill in the highlighted fields' +
+          (problems.some(function (p) { return p.type === 'tel'; }) ? ' — the phone number needs all 10 digits.' : '.');
+        errBox.style.display = 'block';
+        problems[0].focus();
         return;
       }
-      if (errBox) errBox.classList.remove('show');
+      errBox.style.display = 'none';
+
+      var btn = form.querySelector('button[type="submit"]');
+      var btnLabel = btn ? btn.textContent : '';
       if (btn) { btn.disabled = true; btn.textContent = 'Sending…'; }
 
-      /* collect every named field */
+      /* collect fields: known columns directly, everything else into message */
       var row = { agency_id: AGENCY_ID, source: form.getAttribute('data-lead-form') };
+      var extras = [];
       Array.prototype.forEach.call(form.querySelectorAll('[name]'), function (el) {
         var v = (el.value || '').trim();
-        row[el.name] = v || null;
+        if (!v) return;
+        var key = RENAME[el.name] || el.name;
+        if (COLUMNS.indexOf(key) !== -1 && key !== 'message') row[key] = v;
+        else if (key === 'message') extras.push(v);
+        else extras.push(key.replace(/_/g, ' ') + ': ' + v);
       });
-      var firstName = row.first_name || (row.full_name || '').split(' ')[0] || 'there';
+      if (extras.length) row.message = extras.join('\n');
 
       try {
         var db = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON);
         var res = await db.from('site_leads').insert(row);
         if (res.error) throw res.error;
-
-        /* Fire the GHL automation too, if configured. Deliberately after the
-           database write and deliberately non-fatal: a webhook outage must never
-           make a real enquiry look like it failed. */
         if (GHL_WEBHOOK) {
-          try { await fetch(GHL_WEBHOOK, {
-            method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(row)
-          }); } catch (ignore) {}
+          try { await fetch(GHL_WEBHOOK, { method: 'POST',
+            headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(row) }); } catch (ignore) {}
         }
-
-        Array.prototype.forEach.call(form.querySelectorAll('input,select,textarea,button'), function (el) { el.disabled = true; });
-        if (okBox) {
-          okBox.innerHTML = '<strong>Thank you, ' + firstName + '.</strong> We have your details and someone will call you'
-            + (row.phone ? ' on ' + row.phone : '') + '. If you would rather not wait, call us on '
-            + '<a href="tel:+14172182888">417-218-2888</a>.';
-          okBox.classList.add('show');
-          okBox.scrollIntoView({ behavior:'smooth', block:'center' });
-        }
+        /* swap form for its thank-you panel */
+        var key = form.getAttribute('data-thanks-key') || 'main';
+        var scope = form.parentElement;
+        var thanks = null;
+        while (scope && !(thanks = scope.querySelector('[data-thanks="' + key + '"]'))) scope = scope.parentElement;
+        form.hidden = true;
+        if (thanks) { thanks.hidden = false; thanks.scrollIntoView({ behavior: 'smooth', block: 'center' }); }
       } catch (err) {
         if (btn) { btn.disabled = false; btn.textContent = btnLabel; }
-        if (errBox) {
-          errBox.innerHTML = 'Something went wrong sending that, so nothing was submitted. Please call us on '
-            + '<a href="tel:+14172182888" style="color:#8b2e24;font-weight:700">417-218-2888</a>, or toll free 866-863-5151, and we will help straight away.'
-            + '<br><span style="font-size:.85em;opacity:.75">' + (err.message || 'unknown error') + '</span>';
-          errBox.classList.add('show');
-        }
+        errBox.innerHTML = 'Something went wrong sending that, so nothing was submitted. Please call us on '
+          + '<a href="tel:+14172182888" style="color:#7c4030;font-weight:700">417-218-2888</a>, toll free 866-863-5151, and we will help straight away.';
+        errBox.style.display = 'block';
+        errBox.scrollIntoView({ behavior: 'smooth', block: 'center' });
       }
     });
   });

@@ -1,578 +1,450 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Join Our Caregiver List — Caring Companions CDS</title>
-<meta name="description" content="Add your name to the Caring Companions caregiver list. Consumers across 27 Southwest Missouri counties hire full-time, part-time and fill-in caregivers from this list.">
-<meta name="theme-color" content="#0e3860">
-<link rel="apple-touch-icon" href="../assets/apple-touch-icon.png">
-<link rel="icon" href="../assets/icon-192.png">
-<!-- Open Graph, so the logo shows when this link is shared on Facebook -->
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Join Our Caregiver List | Caring Companions CDS</title>
+<meta name="description" content="Want paid caregiving work but don&#x27;t have a consumer yet? Join the list and we introduce you to Medicaid consumers looking for a caregiver in your county.">
 <link rel="canonical" href="https://caringcds.com/caregiver-list/">
 <meta property="og:type" content="website">
-<meta property="og:title" content="Join our caregiver list — Caring Companions CDS">
-<meta property="og:description" content="$15.00 per hour, paid weekly. Full-time, part-time and fill-in caregiver positions across 27 Southwest Missouri counties.">
 <meta property="og:url" content="https://caringcds.com/caregiver-list/">
+<meta property="og:title" content="Join Our Caregiver List | Caring Companions CDS">
+<meta property="og:description" content="Want paid caregiving work but don&#x27;t have a consumer yet? Join the list and we introduce you to Medicaid consumers looking for a caregiver in your county.">
 <meta property="og:image" content="https://caringcds.com/assets/logo.png">
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+<meta name="theme-color" content="#0e3860">
+<link rel="icon" href="/assets/icon-192.png">
+<link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,400;6..72,500;6..72,600&family=Public+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
-  :root {
-    --primary: #0e3860;
-    --teal: #54bdb8;
-    --teal-dark: #3d9d98;
-    --honey: #f0a830;
-    --danger: #e74c3c;
-    --success: #27ae60;
-    --success-pale: #eafaf1;
-    --gray-100: #f8f9fa;
-    --gray-200: #e9ecef;
-    --gray-300: #dee2e6;
-    --gray-600: #6c757d;
-    --gray-800: #343a40;
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body { margin: 0; background: #f7f3ec; color: #2b2721; font-family: "Public Sans", Helvetica, Arial, sans-serif; -webkit-font-smoothing: antialiased; text-wrap: pretty; }
+  a { color: #0e3860; text-decoration-thickness: 1px; text-underline-offset: 3px; }
+  a:hover { color: #0f7a7c; }
+  h1, h2, h3 { margin: 0; font-family: Newsreader, Georgia, serif; font-weight: 500; letter-spacing: -0.015em; }
+  p { margin: 0; }
+  ul { margin: 0; padding: 0; list-style: none; }
+  summary { list-style: none; cursor: pointer; }
+  summary::-webkit-details-marker { display: none; }
+  details[open] .om-chev { transform: rotate(45deg); }
+  input, select, button { font-family: inherit; font-size: inherit; }
+  .om-callbar { display: none; }
+  .om-menu { display: none; }
+  .om-menu summary { cursor: pointer; }
+  .om-train summary { cursor: pointer; list-style: none; }
+  .om-train summary::-webkit-details-marker { display: none; }
+  .om-train[open] summary { color: #0e3860; }
+  @media (max-width: 1120px) {
+    .om-callbar { display: flex !important; }
+    .om-menu { display: block !important; }
+    .om-foot { padding-bottom: 96px !important; }
+    .om-split { grid-template-columns: 1fr !important; gap: 40px !important; }
+    .om-two { grid-template-columns: 1fr !important; }
+    .om-nav { display: none !important; }
+    .om-sticky { position: static !important; }
   }
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  body { font-family: 'Poppins', sans-serif; background: var(--gray-100); color: var(--gray-800); min-height: 100vh; }
 
-  .header { background: white; border-bottom: 3px solid var(--teal); padding: 13px 18px; display: flex; align-items: center; }
-  /* The real brand lockup. Height-constrained so the aspect ratio is never touched. */
-  .header-logo { height: 44px; width: auto; max-width: 100%; }
-  @media (max-width: 400px) { .header-logo { height: 38px; } }
-
-  .container { max-width: 720px; margin: 0 auto; padding: 20px 16px 90px; }
-
-  .hero { background: white; border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.07); padding: 24px 22px; margin-bottom: 16px; border-top: 4px solid var(--teal); }
-  .hero h1 { font-size: 22px; font-weight: 700; color: var(--primary); line-height: 1.25; margin-bottom: 10px; }
-  .hero p { font-size: 14px; line-height: 1.6; color: var(--gray-800); margin-bottom: 10px; }
-  .hero p:last-child { margin-bottom: 0; }
-  .hero .muted { font-size: 12.5px; color: var(--gray-600); }
-
-  /* pay rate — the single thing most people scan for */
-  .pay { display: flex; align-items: baseline; gap: 9px; flex-wrap: wrap;
-    background: #eaf6f6; border: 2px solid var(--teal); border-radius: 9px;
-    padding: 13px 16px; margin: 16px 0 4px; }
-  .pay .amount { font-size: 27px; font-weight: 700; color: var(--primary); line-height: 1;
-    font-variant-numeric: tabular-nums; }
-  .pay .per { font-size: 14px; font-weight: 600; color: var(--primary); }
-  .pay .note { font-size: 12px; color: var(--teal-dark); font-weight: 600; width: 100%; margin-top: 3px; }
-
-  .callout { background: #eaf6f6; border-left: 4px solid var(--teal); border-radius: 6px; padding: 13px 15px; font-size: 13px; line-height: 1.55; margin-bottom: 16px; }
-  .callout strong { color: var(--primary); }
-
-  .card { background: white; border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.07); padding: 20px; margin-bottom: 16px; }
-  .card-title { font-size: 12px; font-weight: 600; color: var(--primary); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 16px; padding-bottom: 10px; border-bottom: 2px solid var(--teal); }
-  .card-hint { font-size: 12.5px; color: var(--gray-600); margin: -6px 0 14px; line-height: 1.5; }
-
-  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px; }
-  .form-row.single { grid-template-columns: 1fr; }
-  .form-row.thirds { grid-template-columns: 1fr 1fr 1fr; }
-  @media (max-width: 560px) { .form-row, .form-row.thirds { grid-template-columns: 1fr; } }
-  .form-group { display: flex; flex-direction: column; }
-  .form-group label { font-size: 11px; font-weight: 600; color: var(--gray-600); margin-bottom: 5px; text-transform: uppercase; letter-spacing: 0.04em; }
-  .form-group label .req { color: var(--danger); }
-  .form-group input, .form-group select, .form-group textarea {
-    border: 1.5px solid var(--gray-300); border-radius: 6px; padding: 10px 11px;
-    font-size: 15px; font-family: inherit; background: white; color: var(--gray-800); transition: border-color 0.15s;
-    /* A select sizes itself to its widest option unless told otherwise, which
-       pushed the longer dropdowns straight out through the side of the card. */
-    width: 100%; min-width: 0; max-width: 100%;
-  }
-  .form-group input:focus, .form-group select:focus, .form-group textarea:focus { outline: none; border-color: var(--teal); }
-  .form-group textarea { resize: vertical; min-height: 74px; }
-  .form-group.invalid input, .form-group.invalid select { border-color: var(--danger); background: #fdf5f4; }
-
-  /* county + availability pickers */
-  .chips { display: flex; flex-wrap: wrap; gap: 7px; }
-  .chip { position: relative; }
-  .chip input { position: absolute; opacity: 0; width: 0; height: 0; }
-  .chip span { display: inline-block; border: 1.5px solid var(--gray-300); background: white; border-radius: 20px;
-    padding: 7px 13px; font-size: 13px; cursor: pointer; user-select: none; transition: all 0.13s; }
-  .chip input:checked + span { background: var(--teal); border-color: var(--teal); color: white; font-weight: 600; }
-  .chip input:focus-visible + span { outline: 2px solid var(--primary); outline-offset: 2px; }
-  .chip span:hover { border-color: var(--teal); }
-
-  .picker-tools { display: flex; gap: 8px; align-items: center; margin-bottom: 11px; flex-wrap: wrap; }
-  .mini-btn { background: none; border: 1.5px solid var(--gray-300); border-radius: 5px; padding: 5px 10px;
-    font-size: 11.5px; font-family: inherit; font-weight: 600; color: var(--gray-600); cursor: pointer; }
-  .mini-btn:hover { border-color: var(--teal); color: var(--teal-dark); }
-  .county-count { font-size: 12px; color: var(--gray-600); }
-  .county-count.none { color: var(--danger); font-weight: 600; }
-
-  .yesno { display: flex; gap: 8px; }
-  .yesno .chip span { min-width: 62px; text-align: center; }
-
-  .checkline { display: flex; gap: 10px; align-items: flex-start; font-size: 13.5px; line-height: 1.5; cursor: pointer; }
-  .checkline input { margin-top: 3px; width: 17px; height: 17px; accent-color: var(--teal); flex-shrink: 0; }
-
-  .submit-btn { width: 100%; background: var(--teal); color: white; border: none; border-radius: 8px;
-    padding: 16px; font-size: 16px; font-weight: 700; font-family: inherit; cursor: pointer; transition: background 0.15s; }
-  .submit-btn:hover { background: var(--teal-dark); }
-  .submit-btn:disabled { background: var(--gray-300); cursor: not-allowed; }
-
-  .form-error { background: #fdedec; border-left: 4px solid var(--danger); border-radius: 6px;
-    padding: 12px 14px; font-size: 13px; color: #8b2e24; margin-bottom: 14px; line-height: 1.5; display: none; }
-  .form-error.show { display: block; }
-
-  /* thank-you state */
-  .done { display: none; background: white; border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.07);
-    padding: 34px 26px; text-align: center; border-top: 4px solid var(--success); }
-  .done.show { display: block; }
-  .done .tick { width: 62px; height: 62px; margin: 0 auto 18px; border-radius: 50%; background: var(--success-pale);
-    display: flex; align-items: center; justify-content: center; font-size: 32px; color: var(--success); }
-  .done h2 { font-size: 21px; color: var(--primary); margin-bottom: 12px; }
-  .done p { font-size: 14px; line-height: 1.65; color: var(--gray-800); max-width: 480px; margin: 0 auto 12px; }
-  .done .next { text-align: left; background: var(--gray-100); border-radius: 8px; padding: 16px 18px; margin: 20px auto 0; max-width: 480px; }
-  .done .next h3 { font-size: 12px; text-transform: uppercase; letter-spacing: 0.06em; color: var(--primary); margin-bottom: 10px; }
-  .done .next ol { margin: 0; padding-left: 20px; font-size: 13.5px; line-height: 1.75; }
-
-  .footer-note { text-align: center; font-size: 12px; color: var(--gray-600); margin-top: 22px; line-height: 1.6; }
-  .footer-note a { color: var(--teal-dark); font-weight: 600; }
-</style>
+.hv1:hover{background: #f7f3ec !important;color: #0e3860 !important;}
+.hv2:hover{background: #f7f3ec !important;}
+.hv3:hover{background: #0a2844 !important;}
+.hv4:hover{color: #0e3860 !important;}
+.hv5:hover{border-color: #0e3860 !important;}
+.hv6:hover{color: #ffffff !important;}
+.fc1:focus{border-color: #0e3860 !important;outline: none !important;}</style>
 </head>
 <body>
 
-<div class="header">
-  <a href="../" aria-label="Caring Companions, home"><img src="../assets/logo.png" class="header-logo"
-       alt="Caring Companions Consumer Directed Services"></a>
-</div>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous" />
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,400;6..72,500;6..72,600&family=Public+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body { margin: 0; background: #f7f3ec; color: #2b2721; font-family: "Public Sans", Helvetica, Arial, sans-serif; -webkit-font-smoothing: antialiased; text-wrap: pretty; }
+  a { color: #0e3860; text-decoration-thickness: 1px; text-underline-offset: 3px; }
+  a:hover { color: #0f7a7c; }
+  h1, h2, h3 { margin: 0; font-family: Newsreader, Georgia, serif; font-weight: 500; letter-spacing: -0.015em; }
+  p { margin: 0; }
+  ul { margin: 0; padding: 0; list-style: none; }
+  summary { list-style: none; cursor: pointer; }
+  summary::-webkit-details-marker { display: none; }
+  details[open] .om-chev { transform: rotate(45deg); }
+  input, select, button { font-family: inherit; font-size: inherit; }
+  .om-callbar { display: none; }
+  .om-menu { display: none; }
+  .om-menu summary { cursor: pointer; }
+  .om-train summary { cursor: pointer; list-style: none; }
+  .om-train summary::-webkit-details-marker { display: none; }
+  .om-train[open] summary { color: #0e3860; }
+  @media (max-width: 1120px) {
+    .om-callbar { display: flex !important; }
+    .om-menu { display: block !important; }
+    .om-foot { padding-bottom: 96px !important; }
+    .om-split { grid-template-columns: 1fr !important; gap: 40px !important; }
+    .om-two { grid-template-columns: 1fr !important; }
+    .om-nav { display: none !important; }
+    .om-sticky { position: static !important; }
+  }
+</style>
+</helmet>
 
-<div class="container">
-
-  <!-- ══ INTRO ══ -->
-  <div class="hero" id="heroBlock">
-    <h1>Join our caregiver list</h1>
-    <p>Consumers across Southwest Missouri hire their caregivers from this list. Some are looking for someone full time, some part time, and some need a person who can fill in when their regular caregiver cannot make it.</p>
-    <p>Adding your name takes about two minutes. It does not commit you to anything, and you can say no to any position we call you about.</p>
-    <div class="pay">
-      <span class="amount">$15.00</span>
-      <span class="per">per hour</span>
-      <span class="note">Paid weekly, every Thursday, by direct deposit or pay card.</span>
-    </div>
-    <p class="muted" style="margin-top:14px">We work in 27 counties across Southwest Missouri. Tell us where you can work and when, and we will get in touch when something near you comes up.</p>
+<div style="background: #f7f3ec;">
+  <div style="background: #0a2844; color: #dfe8f1; font-size: 15px; padding: 10px 48px; display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; text-align: center;">
+    <span>Monday to Friday, 9am to 4pm</span>
+    <span style="opacity: 0.4;">·</span>
+    <a href="tel:+14172182888" style="color: #ffffff; font-weight: 600; text-decoration: none;">Call 417-218-2888</a>
+    <span style="opacity: 0.4;">·</span>
+    <span>toll free <a href="tel:+18668635151" style="color: #ffffff; text-decoration: none;">866-863-5151</a></span>
   </div>
 
-  <div class="callout">
-    <strong>One thing worth knowing up front:</strong> in the CDS program you are hired by the consumer, not by Caring Companions. The consumer is your employer and chooses who works for them. We handle payroll, taxes and paperwork, and we help make the introduction.
-  </div>
-
-  <!-- ══ FORM ══ -->
-  <form id="poolForm" novalidate>
-
-    <div class="form-error" id="formError"></div>
-
-    <div class="card">
-      <div class="card-title">Your contact information</div>
-      <div class="form-row">
-        <div class="form-group" id="g_first">
-          <label for="first_name">First name <span class="req">*</span></label>
-          <input type="text" id="first_name" autocomplete="given-name">
+  <header style="position: sticky; top: 0; z-index: 50; background: rgba(247,243,236,0.93); backdrop-filter: blur(10px); border-bottom: 1px solid #e4ddd1;">
+    <div style="max-width: 1440px; margin: 0 auto; padding: 14px 48px; display: flex; align-items: center; gap: 28px;">
+      <a href="/" style="display: block; flex: none;">
+        <img src="/assets/logo.png" alt="Caring Companions Consumer Directed Services" style="height: 46px; width: auto; display: block;" />
+      </a>
+      <details class="om-menu" style="margin-left: auto; position: relative;">
+        <summary style="display: flex; align-items: center; gap: 10px; padding: 12px 18px; border: 1.5px solid #d3cabb; border-radius: 999px; font-size: 16px; font-weight: 600; color: #0e3860; background: #ffffff;">
+          <span style="display: grid; gap: 4px;">
+            <span style="display: block; width: 18px; height: 2px; background: #0e3860;"></span>
+            <span style="display: block; width: 18px; height: 2px; background: #0e3860;"></span>
+            <span style="display: block; width: 18px; height: 2px; background: #0e3860;"></span>
+          </span>
+          Menu
+        </summary>
+        <div style="position: absolute; right: 0; top: calc(100% + 12px); min-width: 290px; max-height: 78vh; overflow-y: auto; background: #ffffff; border: 1px solid #e4ddd1; border-radius: 6px; box-shadow: 0 18px 40px rgba(20,48,77,0.14); padding: 12px; display: grid; gap: 2px;">
+          <span style="margin-top: 10px; padding: 8px 14px 4px; font-size: 12px; letter-spacing: 0.16em; text-transform: uppercase; color: #0f7a7c; font-weight: 700;">Receive care</span>
+          <a class="hv1" href="/consumers/" style="padding: 14px; border-radius: 4px; font-size: 17px; font-weight: 500; color: #2b2721; text-decoration: none;">Receive care</a>
+          <a class="hv1" href="/how-it-works/" style="padding: 14px; border-radius: 4px; font-size: 17px; font-weight: 500; color: #2b2721; text-decoration: none;">How CDS works, start to finish</a>
+          <a class="hv1" href="/caregiver-rules/" style="padding: 14px; border-radius: 4px; font-size: 17px; font-weight: 500; color: #2b2721; text-decoration: none;">Who can be the caregiver</a>
+          <span style="margin-top: 10px; padding: 8px 14px 4px; font-size: 12px; letter-spacing: 0.16em; text-transform: uppercase; color: #0f7a7c; font-weight: 700;">Become a caregiver</span>
+          <a class="hv1" href="/attendants/" style="padding: 14px; border-radius: 4px; font-size: 17px; font-weight: 500; color: #2b2721; text-decoration: none;">Become a caregiver</a>
+          <a class="hv1" href="/caregiver-pay/" style="padding: 14px; border-radius: 4px; font-size: 17px; font-weight: 500; color: #2b2721; text-decoration: none;">How caregivers get paid</a>
+          <a class="hv1" href="/pay-calculator/" style="padding: 14px; border-radius: 4px; font-size: 17px; font-weight: 500; color: #2b2721; text-decoration: none;">Caregiver pay calculator</a>
+          <a class="hv1" href="/caregiver-list/" style="padding: 14px; border-radius: 4px; font-size: 17px; font-weight: 500; color: #2b2721; text-decoration: none;">Join the caregiver list</a>
+          <span style="margin-top: 10px; padding: 8px 14px 4px; font-size: 12px; letter-spacing: 0.16em; text-transform: uppercase; color: #0f7a7c; font-weight: 700;">Already with us</span>
+          <a class="hv2" href="https://hub.caringcds.com/evv-form" target="_blank" rel="noopener" style="padding: 14px; border-radius: 4px; font-size: 17px; font-weight: 600; color: #0e3860; text-decoration: none;">EVV correction form</a>
+          <span style="margin-top: 10px; padding: 8px 14px 4px; font-size: 12px; letter-spacing: 0.16em; text-transform: uppercase; color: #0f7a7c; font-weight: 700;">For caregivers</span>
+          <a class="hv1" href="/evv/" style="padding: 14px; border-radius: 4px; font-size: 17px; font-weight: 500; color: #2b2721; text-decoration: none;">Clocking in and out (EVV)</a>
+          <a class="hv1" href="/caregiver-pay/" style="padding: 14px; border-radius: 4px; font-size: 17px; font-weight: 500; color: #2b2721; text-decoration: none;">How caregivers get paid</a>
+          <a class="hv1" href="/pay-calculator/" style="padding: 14px; border-radius: 4px; font-size: 17px; font-weight: 500; color: #2b2721; text-decoration: none;">Caregiver pay calculator</a>
+          <a class="hv1" href="/training/attendant-orientation/" style="padding: 14px; border-radius: 4px; font-size: 17px; font-weight: 500; color: #2b2721; text-decoration: none;">Attendant Orientation</a>
+          <span style="margin-top: 10px; padding: 8px 14px 4px; font-size: 12px; letter-spacing: 0.16em; text-transform: uppercase; color: #0f7a7c; font-weight: 700;">For consumers</span>
+          <a class="hv1" href="/employer-setup/" style="padding: 14px; border-radius: 4px; font-size: 17px; font-weight: 500; color: #2b2721; text-decoration: none;">Employer setup guide</a>
+          <a class="hv1" href="/orientation/" style="padding: 14px; border-radius: 4px; font-size: 17px; font-weight: 500; color: #2b2721; text-decoration: none;">Orienting your attendant</a>
+          <a class="hv1" href="/caregiver-rules/" style="padding: 14px; border-radius: 4px; font-size: 17px; font-weight: 500; color: #2b2721; text-decoration: none;">Who can be the caregiver</a>
+          <a class="hv1" href="/training/" style="padding: 14px; border-radius: 4px; font-size: 17px; font-weight: 500; color: #2b2721; text-decoration: none;">Consumer Orientation</a>
+          <span style="margin-top: 10px; padding: 8px 14px 4px; font-size: 12px; letter-spacing: 0.16em; text-transform: uppercase; color: #0f7a7c; font-weight: 700;">More</span>
+          <a class="hv1" href="/service-area/" style="padding: 14px; border-radius: 4px; font-size: 17px; font-weight: 500; color: #2b2721; text-decoration: none;">Service area</a>
+          <a class="hv1" href="/contact/" style="padding: 14px; border-radius: 4px; font-size: 17px; font-weight: 500; color: #2b2721; text-decoration: none;">Contact</a>
+          <a class="hv3" href="/check/" style="margin-top: 10px; text-align: center; background: #0e3860; color: #ffffff; padding: 16px 18px; border-radius: 999px; text-decoration: none; font-weight: 600; font-size: 17px;">Check my eligibility</a>
         </div>
-        <div class="form-group" id="g_last">
-          <label for="last_name">Last name <span class="req">*</span></label>
-          <input type="text" id="last_name" autocomplete="family-name">
-        </div>
-      </div>
-      <div class="form-row">
-        <div class="form-group" id="g_phone">
-          <label for="phone">Phone <span class="req">*</span></label>
-          <input type="tel" id="phone" autocomplete="tel" placeholder="(417) 555-0123">
-        </div>
-        <div class="form-group">
-          <label for="email">Email</label>
-          <input type="email" id="email" autocomplete="email" placeholder="Optional">
-        </div>
-      </div>
-      <div class="form-row">
-        <div class="form-group">
-          <label for="city">City or town you live in</label>
-          <input type="text" id="city" autocomplete="address-level2">
-        </div>
-        <div class="form-group">
-          <label for="zip">ZIP code</label>
-          <input type="text" id="zip" inputmode="numeric" maxlength="5" autocomplete="postal-code">
-        </div>
-      </div>
-    </div>
-
-    <div class="card" style="border:2px solid var(--teal)">
-      <div class="card-title"><span style="color:var(--teal-deep)">Most important question</span></div>
-      <p class="card-hint">Many people come to us because there is already someone they look after, or want to.
-        If that is you, say so here. It changes what happens next and it usually means we can move much faster.</p>
-
-      <div class="form-group" style="margin-bottom:4px">
-        <label>Do you already have someone you would be caring for? <span class="req">*</span></label>
-        <div class="chips" style="margin-top:6px">
-          <label class="chip"><input type="radio" name="hasconsumer" value="Yes" id="hc_yes"><span>Yes, I have someone</span></label>
-          <label class="chip"><input type="radio" name="hasconsumer" value="No" id="hc_no"><span>No, I am looking for work</span></label>
-          <label class="chip"><input type="radio" name="hasconsumer" value="Not sure" id="hc_maybe"><span>Not sure yet</span></label>
-        </div>
-      </div>
-
-      <div id="consumerDetail" style="display:none; margin-top:20px; padding-top:18px; border-top:1px solid var(--gray-200)">
-        <div class="form-row">
-          <div class="form-group">
-            <label for="consumer_name">Their name</label>
-            <input type="text" id="consumer_name" placeholder="Who would you be caring for?">
+      </details>
+      <nav class="om-nav" style="margin-left: auto; display: flex; align-items: center; gap: 26px; font-size: 16px; font-weight: 500;">
+        <details class="om-train" style="position: relative;">
+          <summary style="display: flex; align-items: center; gap: 7px; color: #453f36; font-size: 16px; font-weight: 500; white-space: nowrap;">Receive care<span style="font-size: 11px; color: #0f7a7c;">&#9660;</span></summary>
+          <div style="position: absolute; left: -14px; top: calc(100% + 14px); min-width: 290px; background: #ffffff; border: 1px solid #e4ddd1; border-radius: 6px; box-shadow: 0 18px 40px rgba(20,48,77,0.14); padding: 12px; display: grid; gap: 2px;">
+            <a class="hv2" href="/consumers/" style="padding: 14px; border-radius: 4px; font-size: 17px; font-weight: 600; color: #0e3860; text-decoration: none; white-space: nowrap;">Receive care &rarr;</a>
+            <span style="margin: 6px 14px 4px; border-top: 1px solid #ece5d9;"></span>
+            <a class="hv1" href="/how-it-works/" style="padding: 13px 14px; border-radius: 4px; font-size: 16.5px; font-weight: 500; color: #2b2721; text-decoration: none; white-space: nowrap;">How CDS works, start to finish</a>
+            <a class="hv1" href="/caregiver-rules/" style="padding: 13px 14px; border-radius: 4px; font-size: 16.5px; font-weight: 500; color: #2b2721; text-decoration: none; white-space: nowrap;">Who can be the caregiver</a>
           </div>
-          <div class="form-group">
-            <label for="consumer_rel">They are your…</label>
-            <select id="consumer_rel">
-              <option value="">Choose one</option>
-              <option>Parent</option>
-              <option>Grandparent</option>
-              <option>Adult child</option>
-              <option>Brother or sister</option>
-              <option>Other relative</option>
-              <option>Friend</option>
-              <option>Neighbor</option>
-              <option>No relation</option>
-            </select>
+        </details>
+        <details class="om-train" style="position: relative;">
+          <summary style="display: flex; align-items: center; gap: 7px; color: #453f36; font-size: 16px; font-weight: 500; white-space: nowrap;">Become a caregiver<span style="font-size: 11px; color: #0f7a7c;">&#9660;</span></summary>
+          <div style="position: absolute; left: -14px; top: calc(100% + 14px); min-width: 290px; background: #ffffff; border: 1px solid #e4ddd1; border-radius: 6px; box-shadow: 0 18px 40px rgba(20,48,77,0.14); padding: 12px; display: grid; gap: 2px;">
+            <a class="hv2" href="/attendants/" style="padding: 14px; border-radius: 4px; font-size: 17px; font-weight: 600; color: #0e3860; text-decoration: none; white-space: nowrap;">Become a caregiver &rarr;</a>
+            <span style="margin: 6px 14px 4px; border-top: 1px solid #ece5d9;"></span>
+            <a class="hv1" href="/caregiver-pay/" style="padding: 13px 14px; border-radius: 4px; font-size: 16.5px; font-weight: 500; color: #2b2721; text-decoration: none; white-space: nowrap;">How caregivers get paid</a>
+            <a class="hv1" href="/pay-calculator/" style="padding: 13px 14px; border-radius: 4px; font-size: 16.5px; font-weight: 500; color: #2b2721; text-decoration: none; white-space: nowrap;">Caregiver pay calculator</a>
+            <a class="hv1" href="/caregiver-list/" style="padding: 13px 14px; border-radius: 4px; font-size: 16.5px; font-weight: 500; color: #2b2721; text-decoration: none; white-space: nowrap;">Join the caregiver list</a>
           </div>
-        </div>
-        <div class="form-group">
-          <label for="consumer_mcaid">Do they have Missouri Medicaid?</label>
-          <select id="consumer_mcaid">
-            <option value="">Choose one</option>
-            <option>Yes, active Medicaid</option>
-            <option>Not sure</option>
-            <option>No</option>
-          </select>
-        </div>
-        <p style="font-size:12px;color:var(--gray-600);line-height:1.55;margin:10px 0 0">
-          You cannot be paid to care for your husband or wife, or for someone whose legal guardian you are.
-          That is a state rule. Everyone else is fine.
-        </p>
-      </div>
-    </div>
-
-    <div class="card">
-      <div class="card-title">Where you can work</div>
-      <p class="card-hint">Tap every county you would be willing to work in. Most people pick the one they live in plus any they already drive to.</p>
-      <div class="picker-tools">
-        <button type="button" class="mini-btn" id="btnClearCounties">Clear all</button>
-        <span class="county-count" id="countyCount">No counties selected yet</span>
-      </div>
-      <div class="chips" id="countyChips"></div>
-
-      <div class="form-row" style="margin-top:18px">
-        <div class="form-group">
-          <label for="max_miles">How far are you willing to drive?</label>
-          <select id="max_miles">
-            <option value="">Choose one</option>
-            <option value="10">Up to 10 miles</option>
-            <option value="20">Up to 20 miles</option>
-            <option value="30">Up to 30 miles</option>
-            <option value="45">Up to 45 miles</option>
-            <option value="100">Distance is not a problem</option>
-          </select>
-        </div>
-        <div class="form-group">
-          <label for="hours_wanted">Do you have reliable transportation?</label>
-          <div class="yesno" style="margin-top:2px">
-            <label class="chip"><input type="radio" name="transport" value="yes"><span>Yes</span></label>
-            <label class="chip"><input type="radio" name="transport" value="no"><span>No</span></label>
+        </details>
+        <details class="om-train" style="position: relative;">
+          <summary style="display: flex; align-items: center; gap: 7px; color: #453f36; font-size: 16px; font-weight: 500; white-space: nowrap;">Already with us<span style="font-size: 11px; color: #0f7a7c;">&#9660;</span></summary>
+          <div style="position: absolute; left: -14px; top: calc(100% + 14px); min-width: 300px; background: #ffffff; border: 1px solid #e4ddd1; border-radius: 6px; box-shadow: 0 18px 40px rgba(20,48,77,0.14); padding: 12px; display: grid; gap: 2px;">
+            <a class="hv2" href="https://hub.caringcds.com/evv-form" target="_blank" rel="noopener" style="padding: 14px; border-radius: 4px; font-size: 17px; font-weight: 600; color: #0e3860; text-decoration: none; white-space: nowrap;">EVV correction form &rarr;</a>
+            <span style="padding: 10px 14px 4px; font-size: 11.5px; letter-spacing: 0.16em; text-transform: uppercase; color: #0f7a7c; font-weight: 700;">For caregivers</span>
+            <a class="hv1" href="/evv/" style="padding: 13px 14px; border-radius: 4px; font-size: 16.5px; font-weight: 500; color: #2b2721; text-decoration: none; white-space: nowrap;">Clocking in and out (EVV)</a>
+            <a class="hv1" href="/caregiver-pay/" style="padding: 13px 14px; border-radius: 4px; font-size: 16.5px; font-weight: 500; color: #2b2721; text-decoration: none; white-space: nowrap;">How caregivers get paid</a>
+            <a class="hv1" href="/pay-calculator/" style="padding: 13px 14px; border-radius: 4px; font-size: 16.5px; font-weight: 500; color: #2b2721; text-decoration: none; white-space: nowrap;">Caregiver pay calculator</a>
+            <a class="hv1" href="/training/attendant-orientation/" style="padding: 13px 14px; border-radius: 4px; font-size: 16.5px; font-weight: 500; color: #2b2721; text-decoration: none; white-space: nowrap;">Attendant Orientation</a>
+            <span style="padding: 10px 14px 4px; font-size: 11.5px; letter-spacing: 0.16em; text-transform: uppercase; color: #0f7a7c; font-weight: 700;">For consumers</span>
+            <a class="hv1" href="/employer-setup/" style="padding: 13px 14px; border-radius: 4px; font-size: 16.5px; font-weight: 500; color: #2b2721; text-decoration: none; white-space: nowrap;">Employer setup guide</a>
+            <a class="hv1" href="/orientation/" style="padding: 13px 14px; border-radius: 4px; font-size: 16.5px; font-weight: 500; color: #2b2721; text-decoration: none; white-space: nowrap;">Orienting your attendant</a>
+            <a class="hv1" href="/caregiver-rules/" style="padding: 13px 14px; border-radius: 4px; font-size: 16.5px; font-weight: 500; color: #2b2721; text-decoration: none; white-space: nowrap;">Who can be the caregiver</a>
+            <a class="hv1" href="/training/" style="padding: 13px 14px; border-radius: 4px; font-size: 16.5px; font-weight: 500; color: #2b2721; text-decoration: none; white-space: nowrap;">Consumer Orientation</a>
           </div>
+        </details>
+        <a class="hv4" href="/service-area/" style="color: #453f36; text-decoration: none; white-space: nowrap; flex: none;">Service area</a>
+        <a class="hv4" href="/contact/" style="color: #453f36; text-decoration: none; white-space: nowrap; flex: none;">Contact</a>
+        <a class="hv3" href="/check/" style="background: #0e3860; color: #ffffff; padding: 13px 22px; border-radius: 999px; text-decoration: none; font-weight: 600; white-space: nowrap;">Check my eligibility</a>
+      </nav>
+    </div>
+  </header>
+
+  <section style="max-width: 1440px; margin: 0 auto; padding: 72px 48px 48px;">
+    <div class="om-split" style="display: grid; grid-template-columns: 1.05fr 0.95fr; gap: 64px; align-items: end;">
+      <div>
+        <p style="font-size: 13px; letter-spacing: 0.16em; text-transform: uppercase; color: #0f7a7c; font-weight: 700; margin-bottom: 22px;">For caregivers without a consumer yet</p>
+        <h1 style="font-size: clamp(42px, 5vw, 68px); line-height: 1.04; color: #14304d; max-width: 15ch;">Looking for someone to care for?</h1>
+      </div>
+      <div>
+        <p style="font-size: 20.5px; line-height: 1.6; color: #4c463c; max-width: 48ch;">This list is for people who want to be paid as a caregiver but do not have anyone to care for yet. Join it and we introduce you to consumers near you who need help at home. About two minutes, no commitment, and no fee, ever.</p>
+        <div style="margin-top: 30px; display: flex; flex-wrap: wrap; gap: 14px;">
+          <a class="hv3" href="#join" style="background: #0e3860; color: #ffffff; padding: 19px 32px; border-radius: 999px; text-decoration: none; font-weight: 600; font-size: 18px;">Join the list</a>
+          <a class="hv5" href="/pay-calculator/" style="background: #ffffff; color: #0e3860; padding: 19px 32px; border-radius: 999px; text-decoration: none; font-weight: 600; font-size: 18px; border: 1.5px solid #d3cabb;">See what I could earn</a>
         </div>
       </div>
     </div>
+  </section>
 
-    <div class="card">
-      <div class="card-title">When you are available</div>
-      <p class="card-hint">Tap anything that could work. This is not a schedule, just a rough idea so we do not call you at the wrong times.</p>
-      <div class="chips" id="availChips"></div>
-
-      <div class="form-row single" style="margin-top:18px">
-        <div class="form-group">
-          <label>What kind of position are you looking for?</label>
-          <select id="hours_wanted">
-            <option value="">Choose one</option>
-            <option>Full time, 30+ hours a week</option>
-            <option>Part time, around 10–25 hours a week</option>
-            <option>A few hours a week</option>
-            <option>Fill-in shifts only, when someone needs cover</option>
-            <option>Whatever is available</option>
-          </select>
-        </div>
-      </div>
-    </div>
-
-    <div class="card">
-      <div class="card-title">Your experience</div>
-      <p class="card-hint">No experience is genuinely fine. Many of our best attendants started by caring for their own family.</p>
-      <div class="form-row single">
-        <div class="form-group">
-          <label for="experience">Caregiving experience</label>
-          <select id="experience">
-            <option value="">Choose one</option>
-            <option>No experience, willing to learn</option>
-            <option>I have cared for a family member</option>
-            <option>Some paid caregiving experience</option>
-            <option>Several years of paid caregiving</option>
-            <option>Professional or certified caregiver</option>
-          </select>
-        </div>
-      </div>
-
-      <div style="display:flex;flex-direction:column;gap:11px;margin:16px 0 4px">
-        <label class="checkline"><input type="checkbox" id="cert_cpr"><span>I have current CPR or First Aid certification</span></label>
-        <label class="checkline"><input type="checkbox" id="cert_cna"><span>I am a CNA, CMT, LPN, RN or similar</span></label>
-        <label class="checkline"><input type="checkbox" id="worked_before"><span>I have worked for Caring Companions before</span></label>
-      </div>
-
-      <div class="form-row single" style="margin-top:14px">
-        <div class="form-group">
-          <label for="cert_other">Any other certifications or training</label>
-          <input type="text" id="cert_other" placeholder="Optional">
-        </div>
-      </div>
-      <div class="form-row single">
-        <div class="form-group">
-          <label for="experience_notes">Anything else about your experience</label>
-          <textarea id="experience_notes" placeholder="Optional. For example: I cared for my grandmother for three years, comfortable with transfers and dementia."></textarea>
-        </div>
-      </div>
-    </div>
-
-    <div class="card">
-      <div class="card-title">A few last questions</div>
-      <div class="form-row single">
-        <div class="form-group">
-          <label for="how_heard">How did you hear about us?</label>
-          <select id="how_heard">
-            <option value="">Choose one</option>
-            <option>A current attendant told me</option>
-            <option>A consumer or family member told me</option>
-            <option>Facebook or social media</option>
-            <option>Found your website</option>
-            <option>Job posting</option>
-            <option>Someone at Caring Companions contacted me</option>
-            <option>Other</option>
-          </select>
-        </div>
-      </div>
-      <div class="form-row single">
-        <div class="form-group">
-          <label for="applicant_notes">Anything you would like us to know</label>
-          <textarea id="applicant_notes" placeholder="Optional"></textarea>
-        </div>
-      </div>
-
-      <div style="border-top:1px solid var(--gray-200);margin-top:6px;padding-top:16px">
-        <label class="checkline" id="g_bg">
-          <input type="checkbox" id="background_ok">
-          <span>I understand that working as an attendant requires a background screening, including the Missouri Family Care Safety Registry, and I am willing to complete it. <span class="req" style="color:var(--danger)">*</span></span>
-        </label>
-        <p style="font-size:12px;color:var(--gray-600);margin-top:11px;line-height:1.55">
-          We do not ask for your Social Security number on this form and you should never send it by email or text. It is collected later, on paper, only if a consumer wants to hire you.
-        </p>
-      </div>
-    </div>
-
-    <button type="submit" class="submit-btn" id="submitBtn">Add me to the caregiver list</button>
-
-    <p class="footer-note">
-      Questions? Call <a href="tel:+14172182888">417-218-2888</a>, or toll free <a href="tel:+18668635151">866-863-5151</a>, Monday to Friday 9am–4pm.
-    </p>
-  </form>
-
-  <!-- ══ THANK YOU ══ -->
-  <div class="done" id="doneBlock">
-    <div class="tick">✓</div>
-    <h2>You are on the list</h2>
-    <p id="doneName">Thank you. We have your information and you are now on our caregiver list.</p>
-    <p class="muted" style="font-size:13px;color:var(--gray-600)">There is nothing else you need to do right now. You are not committed to anything, and you can say no to any position we call you about.</p>
-    <div class="next">
-      <h3>What happens next</h3>
-      <ol>
-        <li>Someone from our office reviews your information.</li>
-        <li>We call or text you to say hello and answer questions.</li>
-        <li>When a consumer near you is looking for a caregiver, we contact you.</li>
-        <li>If you and the consumer both want to move ahead, we walk you through the hiring paperwork and the background screening.</li>
+  <section style="background: #ffffff; border-top: 1px solid #e4ddd1; border-bottom: 1px solid #e4ddd1;">
+    <div style="max-width: 1440px; margin: 0 auto; padding: 88px 48px;">
+      <p style="font-size: 13px; letter-spacing: 0.16em; text-transform: uppercase; color: #0f7a7c; font-weight: 700;">How the list works</p>
+      <h2 style="margin-top: 20px; font-size: clamp(32px, 3.3vw, 46px); line-height: 1.1; color: #14304d;">We make the introduction</h2>
+      <ol style="margin: 44px 0 0; padding: 0; list-style: none; display: grid;">
+        <li class="om-split" style="border-top: 1px solid #ece5d9; padding: 32px 0; display: grid; grid-template-columns: 84px 0.8fr 1.2fr; gap: 32px; align-items: start;">
+          <span style="font-family: Newsreader, Georgia, serif; font-size: 46px; line-height: 1; color: #8a7a63;">01</span>
+          <h3 style="font-size: 26px; line-height: 1.2; color: #14304d;">You join the list</h3>
+          <p style="font-size: 18.5px; line-height: 1.68; color: #4c463c;">Tell us your county, the hours you can work and the kind of help you are comfortable giving. Nothing is published anywhere: the list is ours, not a public directory.</p>
+        </li>
+        <li class="om-split" style="border-top: 1px solid #ece5d9; padding: 32px 0; display: grid; grid-template-columns: 84px 0.8fr 1.2fr; gap: 32px; align-items: start;">
+          <span style="font-family: Newsreader, Georgia, serif; font-size: 46px; line-height: 1; color: #8a7a63;">02</span>
+          <h3 style="font-size: 26px; line-height: 1.2; color: #14304d;">We match on county and hours</h3>
+          <p style="font-size: 18.5px; line-height: 1.68; color: #4c463c;">When a consumer near you needs a caregiver, we look at who on the list fits their county, their schedule and the help in their plan of care.</p>
+        </li>
+        <li class="om-split" style="border-top: 1px solid #ece5d9; padding: 32px 0; display: grid; grid-template-columns: 84px 0.8fr 1.2fr; gap: 32px; align-items: start;">
+          <span style="font-family: Newsreader, Georgia, serif; font-size: 46px; line-height: 1; color: #8a7a63;">03</span>
+          <h3 style="font-size: 26px; line-height: 1.2; color: #14304d;">We introduce you</h3>
+          <p style="font-size: 18.5px; line-height: 1.68; color: #4c463c;">We call you first to check you are still interested and still available. Nobody gets your number without that call.</p>
+        </li>
+        <li class="om-split" style="border-top: 1px solid #ece5d9; padding: 32px 0; display: grid; grid-template-columns: 84px 0.8fr 1.2fr; gap: 32px; align-items: start;">
+          <span style="font-family: Newsreader, Georgia, serif; font-size: 46px; line-height: 1; color: #8a7a63;">04</span>
+          <h3 style="font-size: 26px; line-height: 1.2; color: #14304d;">The consumer decides, and so do you</h3>
+          <p style="font-size: 18.5px; line-height: 1.68; color: #4c463c;">In CDS the consumer is the employer and chooses who they hire. You can say no to any introduction, for any reason, and stay on the list.</p>
+        </li>
       </ol>
     </div>
-    <p class="footer-note" style="margin-top:22px">
-      Need to reach us in the meantime? Call <a href="tel:+14172182888">417-218-2888</a>, or toll free <a href="tel:+18668635151">866-863-5151</a>.
-    </p>
-  </div>
+  </section>
 
+  <section id="join" class="om-split" style="max-width: 1440px; margin: 0 auto; padding: 88px 48px; display: grid; grid-template-columns: 0.85fr 1.15fr; gap: 56px; align-items: start;">
+    <div>
+      <p style="font-size: 13px; letter-spacing: 0.16em; text-transform: uppercase; color: #0f7a7c; font-weight: 700;">Two minutes</p>
+      <h2 style="margin-top: 20px; font-size: clamp(32px, 3.3vw, 46px); line-height: 1.1; color: #14304d;">Join the caregiver list</h2>
+      <p style="margin-top: 18px; font-size: 19px; line-height: 1.6; color: #4c463c;">For caregivers looking for work. If you already know the person you would care for, <a href="/attendants/" style="font-weight: 600;">start here instead</a> &mdash; they hire you directly and you do not need the list.</p>
+      <ul style="margin-top: 26px; display: grid; gap: 14px;">
+        <li style="display: flex; gap: 12px; font-size: 18px; line-height: 1.5; color: #4c463c;"><span style="color: #0f7a7c; font-weight: 700;">&#10003;</span><span>No experience or certificate needed</span></li>
+        <li style="display: flex; gap: 12px; font-size: 18px; line-height: 1.5; color: #4c463c;"><span style="color: #0f7a7c; font-weight: 700;">&#10003;</span><span>Full-time, part-time and fill-in work</span></li>
+        <li style="display: flex; gap: 12px; font-size: 18px; line-height: 1.5; color: #4c463c;"><span style="color: #0f7a7c; font-weight: 700;">&#10003;</span><span>$15.00 an hour, paid every Thursday</span></li>
+        <li style="display: flex; gap: 12px; font-size: 18px; line-height: 1.5; color: #4c463c;"><span style="color: #0f7a7c; font-weight: 700;">&#10003;</span><span>Joining does not commit you to anything</span></li>
+      </ul>
+      <p style="margin-top: 26px; font-size: 17.5px; line-height: 1.62; color: #4c463c;"><strong style="color: #14304d;">Already have someone in mind?</strong> Then you do not need this list. Call us instead &mdash; but know that the person receiving care is the one who enrolls in CDS, or switches provider to us, and we will need to speak with them directly. <a href="/attendants/" style="font-weight: 600;">How that works &rarr;</a></p>
+      <p style="margin-top: 22px; font-size: 17px; line-height: 1.6; color: #6b6358;">Would rather do this by phone? Call <a href="tel:+14172182888" style="font-weight: 600;">417-218-2888</a>, Monday to Friday, 9am to 4pm.</p>
+    </div>
+    <div style="background: #ffffff; border: 1px solid #e4ddd1; border-radius: 4px; padding: 36px;">
+      <div hidden data-thanks="main">
+        <div style="padding: 20px 0;">
+          <h3 style="font-size: 28px; color: #14304d;">You are on the list.</h3>
+          <p style="margin-top: 12px; font-size: 18px; line-height: 1.6; color: #4c463c;">We call you before making any introduction. If your county or availability changes, call <a href="tel:+14172182888" style="font-weight: 600;">417-218-2888</a> and we will update it.</p>
+        </div>
+      </div>
+      
+      <form data-lead-form='caringcds caregiver-list' data-thanks-key='main' style="display: grid; gap: 20px;">
+        <div class="om-two" style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+          <label style="display: grid; gap: 8px; font-size: 15.5px; font-weight: 600; color: #453f36;">First name *
+            <input class="fc1" required name="first" style="padding: 15px 14px; border: 1.5px solid #ded5c6; border-radius: 3px; background: #fdfbf7; font-weight: 400; font-size: 17px; color: #2b2721;" />
+          </label>
+          <label style="display: grid; gap: 8px; font-size: 15.5px; font-weight: 600; color: #453f36;">Last name *
+            <input class="fc1" required name="last" style="padding: 15px 14px; border: 1.5px solid #ded5c6; border-radius: 3px; background: #fdfbf7; font-weight: 400; font-size: 17px; color: #2b2721;" />
+          </label>
+          <label style="display: grid; gap: 8px; font-size: 15.5px; font-weight: 600; color: #453f36;">Phone *
+            <input class="fc1" required type="tel" name="phone" style="padding: 15px 14px; border: 1.5px solid #ded5c6; border-radius: 3px; background: #fdfbf7; font-weight: 400; font-size: 17px; color: #2b2721;" />
+          </label>
+          <label style="display: grid; gap: 8px; font-size: 15.5px; font-weight: 600; color: #453f36;">Email
+            <input class="fc1" type="email" name="email" style="padding: 15px 14px; border: 1.5px solid #ded5c6; border-radius: 3px; background: #fdfbf7; font-weight: 400; font-size: 17px; color: #2b2721;" />
+          </label>
+        </div>
+        <div class="om-two" style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+          <label style="display: grid; gap: 8px; font-size: 15.5px; font-weight: 600; color: #453f36;">County you can work in *
+            <select required name="county" style="padding: 15px 14px; border: 1.5px solid #ded5c6; border-radius: 3px; background: #fdfbf7; font-weight: 400; font-size: 17px; color: #2b2721;">
+              <option value="">Choose one</option>
+              
+                <option>Barry</option>
+              
+                <option>Barton</option>
+              
+                <option>Benton</option>
+              
+                <option>Camden</option>
+              
+                <option>Cedar</option>
+              
+                <option>Christian</option>
+              
+                <option>Dade</option>
+              
+                <option>Dallas</option>
+              
+                <option>Douglas</option>
+              
+                <option>Greene</option>
+              
+                <option>Hickory</option>
+              
+                <option>Jasper</option>
+              
+                <option>Laclede</option>
+              
+                <option>Lawrence</option>
+              
+                <option>McDonald</option>
+              
+                <option>Newton</option>
+              
+                <option>Ozark</option>
+              
+                <option>Phelps</option>
+              
+                <option>Polk</option>
+              
+                <option>Pulaski</option>
+              
+                <option>St. Clair</option>
+              
+                <option>Stone</option>
+              
+                <option>Taney</option>
+              
+                <option>Texas</option>
+              
+                <option>Vernon</option>
+              
+                <option>Webster</option>
+              
+                <option>Wright</option>
+              
+            </select>
+          </label>
+          <label style="display: grid; gap: 8px; font-size: 15.5px; font-weight: 600; color: #453f36;">Hours a week you want *
+            <select required name="hours" style="padding: 15px 14px; border: 1.5px solid #ded5c6; border-radius: 3px; background: #fdfbf7; font-weight: 400; font-size: 17px; color: #2b2721;">
+              <option value="">Choose one</option>
+              <option>Up to 10 hours</option>
+              <option>10 to 20 hours</option>
+              <option>20 to 30 hours</option>
+              <option>30 to 40 hours</option>
+              <option>40 hours or more</option>
+              <option>Fill-in cover only</option>
+            </select>
+          </label>
+        </div>
+        <label style="display: grid; gap: 8px; font-size: 15.5px; font-weight: 600; color: #453f36;">Do you have caregiving experience?
+          <select name="experience" style="padding: 15px 14px; border: 1.5px solid #ded5c6; border-radius: 3px; background: #fdfbf7; font-weight: 400; font-size: 17px; color: #2b2721;">
+            <option value="">Choose one</option>
+            <option>No, this would be my first</option>
+            <option>Yes, for family or a friend, unpaid</option>
+            <option>Yes, paid, through CDS or an agency</option>
+            <option>Yes, I am a CNA or have a certificate</option>
+          </select>
+        </label>
+        <label style="display: grid; gap: 8px; font-size: 15.5px; font-weight: 600; color: #453f36;">Do you have a car and a valid license?
+          <select name="transport" style="padding: 15px 14px; border: 1.5px solid #ded5c6; border-radius: 3px; background: #fdfbf7; font-weight: 400; font-size: 17px; color: #2b2721;">
+            <option value="">Choose one</option>
+            <option>Yes, both</option>
+            <option>Valid license, no car</option>
+            <option>Neither</option>
+          </select>
+        </label>
+        <label style="display: grid; gap: 8px; font-size: 15.5px; font-weight: 600; color: #453f36;">Anything else we should know?
+          <textarea class="fc1" name="notes" rows="4" style="padding: 15px 14px; border: 1.5px solid #ded5c6; border-radius: 3px; background: #fdfbf7; font-weight: 400; font-size: 17px; color: #2b2721; resize: vertical;"></textarea>
+        </label>
+        <button class="hv3" type="submit" style="background: #0e3860; color: #ffffff; border: none; padding: 19px 28px; border-radius: 999px; font-weight: 600; font-size: 18px; cursor: pointer;">Join the caregiver list</button>
+        <p style="font-size: 14.5px; line-height: 1.55; color: #8a8073;">We never ask for your Social Security number on this form, and you should never send one by email or text. Background screening happens later, once a consumer hires you, and we run it.</p>
+      </form>
+      
+    </div>
+  </section>
+
+  <section style="background: #ffffff; border-top: 1px solid #e4ddd1;">
+    <div class="om-split" style="max-width: 1440px; margin: 0 auto; padding: 88px 48px; display: grid; grid-template-columns: 1fr 1fr; gap: 64px;">
+      <h2 style="font-size: clamp(32px, 3.3vw, 46px); line-height: 1.1; color: #14304d;">Already know who you would care for?</h2>
+      <div style="display: grid; gap: 20px; font-size: 18.5px; line-height: 1.68; color: #4c463c;">
+        <p>Then you do not need the list. If your parent, grandparent, friend or neighbor has Missouri Medicaid, they can hire you directly and we set the whole thing up.</p>
+        <p>Do call us to get it moving. The one thing to expect: CDS is the consumer&rsquo;s program, so they are the one who enrolls with us, or asks to switch to us from their current provider. We will need to speak with them, and we are glad to do that call with you both on the line.</p>
+        <p>Spouses and legal guardians cannot be paid caregivers. <a href="/caregiver-rules/">Who can and cannot be the caregiver</a> has the full rules.</p>
+        <a class="hv3" href="/attendants/" style="justify-self: start; background: #0e3860; color: #ffffff; padding: 19px 32px; border-radius: 999px; text-decoration: none; font-weight: 600; font-size: 18px;">Start as a caregiver</a>
+      </div>
+    </div>
+  </section>
+
+  <footer class="om-foot" style="background: #0a2844; color: #c6d3e0;">
+    <div class="om-split" style="max-width: 1440px; margin: 0 auto; padding: 72px 48px 32px; display: grid; grid-template-columns: 1fr 1fr 1.2fr; gap: 56px;">
+      <div>
+        <div style="background: #ffffff; border-radius: 4px; padding: 14px 18px; display: inline-block;">
+          <img src="/assets/logo.png" alt="Caring Companions Consumer Directed Services" style="height: 42px; width: auto; display: block;" />
+        </div>
+        <p style="margin-top: 20px; font-size: 17px; line-height: 1.6; color: #a9bccd; max-width: 34ch;">Helping Missourians choose their own caregivers since 2017.</p>
+        <p style="margin-top: 22px; font-size: 17px; line-height: 1.8;">
+          <a href="tel:+14172182888" style="color: #ffffff; font-weight: 700; font-size: 21px; text-decoration: none;">417-218-2888</a><br />
+          Toll free <a href="tel:+18668635151" style="color: #ffffff; text-decoration: none;">866-863-5151</a><br />
+          Monday to Friday, 9am to 4pm<br />
+          1331 N Stewart Ave, Springfield, MO 65802
+        </p>
+      </div>
+      <div>
+        <h3 style="font-size: 13px; letter-spacing: 0.16em; text-transform: uppercase; color: #50c0c0; font-family: 'Public Sans', sans-serif; font-weight: 700;">Get started</h3>
+        <ul style="margin-top: 20px; display: grid; gap: 11px; font-size: 16.5px;">
+          
+            <li><a class="hv6" href="/check/" style="color: #dbe6ef; text-decoration: none;">Check if you qualify</a></li>
+          
+            <li><a class="hv6" href="/how-it-works/" style="color: #dbe6ef; text-decoration: none;">How CDS works, start to finish</a></li>
+          
+            <li><a class="hv6" href="/caregiver-rules/" style="color: #dbe6ef; text-decoration: none;">Who can be the caregiver</a></li>
+          
+            <li><a class="hv6" href="/employer-setup/" style="color: #dbe6ef; text-decoration: none;">Employer setup guide</a></li>
+          
+            <li><a class="hv6" href="/orientation/" style="color: #dbe6ef; text-decoration: none;">Orienting your attendant</a></li>
+          
+            <li><a class="hv6" href="/evv/" style="color: #dbe6ef; text-decoration: none;">Clocking in and out (EVV)</a></li>
+          
+            <li><a class="hv6" href="https://hub.caringcds.com/evv-form" style="color: #dbe6ef; text-decoration: none;">EVV correction form</a></li>
+          
+            <li><a class="hv6" href="/caregiver-pay/" style="color: #dbe6ef; text-decoration: none;">How caregivers get paid</a></li>
+          
+            <li><a class="hv6" href="/pay-calculator/" style="color: #dbe6ef; text-decoration: none;">Caregiver pay calculator</a></li>
+          
+            <li><a class="hv6" href="/consumers/" style="color: #dbe6ef; text-decoration: none;">Receive care</a></li>
+          
+            <li><a class="hv6" href="/attendants/" style="color: #dbe6ef; text-decoration: none;">Become a caregiver</a></li>
+          
+            <li><a class="hv6" href="/caregiver-list/" style="color: #dbe6ef; text-decoration: none;">Join the caregiver list</a></li>
+          
+            <li><a class="hv6" href="/service-area/" style="color: #dbe6ef; text-decoration: none;">Service area</a></li>
+          
+            <li><a class="hv6" href="/contact/" style="color: #dbe6ef; text-decoration: none;">Contact us</a></li>
+          
+        </ul>
+      </div>
+      <div>
+        <h3 style="font-size: 13px; letter-spacing: 0.16em; text-transform: uppercase; color: #50c0c0; font-family: 'Public Sans', sans-serif; font-weight: 700;">Counties we serve</h3>
+        <p style="margin-top: 20px; font-size: 16.5px; line-height: 1.9; color: #dbe6ef;">Barry · Barton · Benton · Camden · Cedar · Christian · Dade · Dallas · Douglas · Greene · Hickory · Jasper · Laclede · Lawrence · McDonald · Newton · Ozark · Phelps · Polk · Pulaski · St. Clair · Stone · Taney · Texas · Vernon · Webster · Wright</p>
+        <a href="/service-area/" style="margin-top: 18px; display: inline-block; color: #ffffff; font-weight: 600;">See the full service area &rarr;</a>
+      </div>
+    </div>
+    <div style="max-width: 1440px; margin: 0 auto; padding: 24px 48px 40px; border-top: 1px solid rgba(255,255,255,0.13); font-size: 14.5px; color: #8fa6ba;">
+      &copy; 2026 Caring Companions Consumer Directed Services, LLC. All rights reserved.
+    </div>
+  </footer>
+
+  <div class="om-callbar" style="position: fixed; bottom: 0; left: 0; right: 0; z-index: 60; gap: 10px; padding: 12px 16px; background: rgba(247,243,236,0.96); backdrop-filter: blur(10px); border-top: 1px solid #ddd4c5;">
+    <a href="tel:+14172182888" style="flex: 1; text-align: center; background: #0e3860; color: #ffffff; padding: 17px 18px; border-radius: 999px; text-decoration: none; font-weight: 600; font-size: 17px;">Call 417-218-2888</a>
+    <a href="/check/" style="flex: 1; text-align: center; background: #ffffff; color: #0e3860; padding: 17px 18px; border-radius: 999px; text-decoration: none; font-weight: 600; font-size: 17px; border: 1.5px solid #d3cabb;">Am I eligible?</a>
+  </div>
 </div>
 
-<script>
-// ── Supabase ────────────────────────────────────────────────────────────────
-const SUPABASE_URL      = 'https://siivpekcaryeyttszwav.supabase.co';
-const SUPABASE_ANON_KEY = 'sb_publishable_iDJ00Ve4hw5iw2YtVmiulg__FmjShmO';
-const AGENCY_ID         = 'caring-companions-cds';
-const _db = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-
-// ── The 27 counties Caring Companions CDS serves ────────────────────────────
-// Source: caringcds.com/service-area. Greene, Christian, Jasper and Taney are
-// first because that is where the current caseload actually is.
-const COUNTIES = [
-  'Greene','Christian','Jasper','Taney','Polk','Webster','Lawrence','Newton',
-  'Barry','Stone','Dade','Douglas','Dallas','Cedar','Hickory','Laclede',
-  'McDonald','Ozark','Wright','Texas','Phelps','Pulaski','Camden','Benton',
-  'St. Clair','Vernon','Barton'
-];
-
-const AVAILABILITY = [
-  'Weekday mornings','Weekday afternoons','Weekday evenings',
-  'Saturdays','Sundays','Overnights','Live-in','Short notice / emergencies','Flexible'
-];
-
-// ── Build the pickers ───────────────────────────────────────────────────────
-function buildChips(el, items, name) {
-  el.innerHTML = items.map((v, i) => `
-    <label class="chip">
-      <input type="checkbox" name="${name}" value="${v.replace(/"/g,'&quot;')}" id="${name}_${i}">
-      <span>${v}</span>
-    </label>`).join('');
-}
-buildChips(document.getElementById('countyChips'), COUNTIES, 'county');
-buildChips(document.getElementById('availChips'),  AVAILABILITY, 'avail');
-
-const countyCountEl = document.getElementById('countyCount');
-function checkedValues(name) {
-  return [...document.querySelectorAll(`input[name="${name}"]:checked`)].map(i => i.value);
-}
-function updateCountyCount() {
-  const n = checkedValues('county').length;
-  countyCountEl.textContent = n === 0
-    ? 'No counties selected yet'
-    : n + (n === 1 ? ' county selected' : ' counties selected');
-  countyCountEl.classList.toggle('none', n === 0);
-}
-document.getElementById('countyChips').addEventListener('change', updateCountyCount);
-document.getElementById('btnClearCounties').addEventListener('click', () => {
-  document.querySelectorAll('input[name="county"]').forEach(i => i.checked = false);
-  updateCountyCount();
-});
-updateCountyCount();
-
-// ── Phone formatting, light touch ───────────────────────────────────────────
-const phoneEl = document.getElementById('phone');
-phoneEl.addEventListener('input', () => {
-  const d = phoneEl.value.replace(/\D/g,'').slice(0,10);
-  phoneEl.value = d.length > 6 ? `(${d.slice(0,3)}) ${d.slice(3,6)}-${d.slice(6)}`
-                : d.length > 3 ? `(${d.slice(0,3)}) ${d.slice(3)}`
-                : d.length > 0 ? `(${d}` : '';
-});
-
-// Show the follow-up questions only when there is actually someone to ask about.
-document.querySelectorAll('input[name="hasconsumer"]').forEach(r => {
-  r.addEventListener('change', () => {
-    document.getElementById('consumerDetail').style.display =
-      (r.value === 'Yes' && r.checked) ? 'block' : 'none';
-  });
-});
-
-// ── Submit ──────────────────────────────────────────────────────────────────
-const form      = document.getElementById('poolForm');
-const errBox    = document.getElementById('formError');
-const submitBtn = document.getElementById('submitBtn');
-
-function radioValue(name) {
-  const el = document.querySelector(`input[name="${name}"]:checked`);
-  return el ? el.value : null;
-}
-function val(id) { return (document.getElementById(id).value || '').trim() || null; }
-
-form.addEventListener('submit', async (e) => {
-  e.preventDefault();
-
-  // validate
-  const problems = [];
-  ['g_first','g_last','g_phone','g_bg'].forEach(id => document.getElementById(id).classList.remove('invalid'));
-
-  if (!val('first_name')) { problems.push('your first name');  document.getElementById('g_first').classList.add('invalid'); }
-  if (!val('last_name'))  { problems.push('your last name');   document.getElementById('g_last').classList.add('invalid'); }
-  const digits = (document.getElementById('phone').value || '').replace(/\D/g,'');
-  if (digits.length !== 10) { problems.push('a 10-digit phone number'); document.getElementById('g_phone').classList.add('invalid'); }
-  const counties = checkedValues('county');
-  if (counties.length === 0) problems.push('at least one county');
-  if (!radioValue('hasconsumer')) problems.push('whether you already have someone to care for');
-  if (!document.getElementById('background_ok').checked) {
-    problems.push('the background screening checkbox');
-    document.getElementById('g_bg').classList.add('invalid');
-  }
-
-  if (problems.length) {
-    errBox.innerHTML = 'Please add ' + problems.join(', ').replace(/, ([^,]*)$/, ' and $1') + '.';
-    errBox.classList.add('show');
-    errBox.scrollIntoView({ behavior:'smooth', block:'center' });
-    return;
-  }
-  errBox.classList.remove('show');
-
-  submitBtn.disabled = true;
-  submitBtn.textContent = 'Adding you to the list…';
-
-  const row = {
-    agency_id:          AGENCY_ID,
-    first_name:         val('first_name'),
-    last_name:          val('last_name'),
-    phone:              document.getElementById('phone').value.trim(),
-    email:              val('email'),
-    city:               val('city'),
-    zip:                val('zip'),
-    counties:           counties,
-    availability:       checkedValues('avail'),
-    hours_wanted:       val('hours_wanted'),
-    max_miles:          val('max_miles') ? parseInt(val('max_miles'), 10) : null,
-    has_transport:      radioValue('transport') === null ? null : radioValue('transport') === 'yes',
-    experience:         val('experience'),
-    experience_notes:   val('experience_notes'),
-    cert_cpr:           document.getElementById('cert_cpr').checked,
-    cert_cna:           document.getElementById('cert_cna').checked,
-    cert_other:         val('cert_other'),
-    worked_here_before: document.getElementById('worked_before').checked,
-    has_potential_consumer: radioValue('hasconsumer'),
-    knows_consumer:         val('consumer_name'),
-    consumer_relationship:  val('consumer_rel'),
-    consumer_has_medicaid:  val('consumer_mcaid'),
-    background_ok:      true,
-    how_heard:          val('how_heard'),
-    applicant_notes:    val('applicant_notes'),
-    source:             'public',
-    status:             'new'
-  };
-
-  let payload = { ...row };
-  let error;
-  // Drop any column the database does not have yet, then retry. Losing a real
-  // caregiver because a migration has not been run would be far worse than
-  // losing one answer. Bounded so it can never loop forever.
-  for (let attempt = 0; attempt < 6; attempt++) {
-    ({ error } = await _db.from('attendant_pool').insert(payload));
-    if (!error || error.code !== 'PGRST204') break;
-    const missing = (error.message.match(/'([^']+)' column/) || [])[1];
-    if (!missing || !(missing in payload)) break;
-    console.warn('attendant_pool.' + missing + ' missing; saving without it');
-    delete payload[missing];
-  }
-
-  if (error) {
-    submitBtn.disabled = false;
-    submitBtn.textContent = 'Add me to the caregiver list';
-    errBox.innerHTML = 'Something went wrong saving your information, so nothing was submitted. '
-      + 'Please call us on <a href="tel:+14172182888" style="color:#8b2e24;font-weight:700">417-218-2888</a>, or toll free 866-863-5151, '
-      + 'and we will add you by hand.<br><span style="font-size:11.5px;opacity:0.8">Technical detail: '
-      + (error.message || 'unknown error') + '</span>';
-    errBox.classList.add('show');
-    errBox.scrollIntoView({ behavior:'smooth', block:'center' });
-    return;
-  }
-
-  // success
-  document.getElementById('doneName').textContent =
-    'Thank you, ' + row.first_name + '. We have your information and you are now on our caregiver list for '
-    + (counties.length === 1 ? counties[0] + ' County.' : counties.length + ' counties.');
-  document.getElementById('heroBlock').style.display = 'none';
-  document.querySelector('.callout').style.display = 'none';
-  form.style.display = 'none';
-  document.getElementById('doneBlock').classList.add('show');
-  window.scrollTo({ top: 0, behavior: 'smooth' });
-});
-</script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="/assets/site.js" defer></script>
 </body>
 </html>
