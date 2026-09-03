@@ -273,7 +273,7 @@ def write_page(path, title, desc, body, extra_css="", scripts=""):
 
 def scripts_for(body, extra=""):
     s = ""
-    if "data-lead-form" in body:
+    if "data-lead-form" in body or "data-pool-form" in body:
         s += '<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>\n'
     s += '<script src="/assets/site.js" defer></script>'
     if extra:
@@ -399,6 +399,8 @@ def build_all():
             "onSubmit": lead_form_attrs(f"caringcds {slug}"),
             "onSwitch": lead_form_attrs(f"caringcds {slug} switch", "switch"),
         }
+        if name == "Caregiver List":
+            v["onSubmit"] = f"@data-pool-form='caringcds {slug}' data-thanks-key='main'"
         build_generic(name, v, PAGE_PRE.get(name))
         print("built", name, "->", URLMAP[name] or "/")
 

@@ -26,6 +26,29 @@
   });
 })();
 
+/* ---------- caregiver pool form ----------
+   The caregiver-list signup goes to the hub's Caregiver Pool tab
+   (attendant_pool), not the consumer lead pipeline. If that insert fails for
+   any reason, the same submission falls back to site_leads so no applicant is
+   ever lost — they just show up in Leads instead of the Pool. */
+function cdsPoolRow(form) {
+  var g = function (n) { var el = form.querySelector('[name="' + n + '"]'); return el ? (el.value || '').trim() : ''; };
+  var transport = g('transport');
+  var notes = [g('notes'), transport ? 'Transport: ' + transport : ''].filter(Boolean).join('\n');
+  return {
+    agency_id: AGENCY_ID,
+    first_name: g('first'), last_name: g('last'),
+    phone: g('phone'), email: g('email') || null,
+    counties: g('county') ? [g('county')] : null,
+    hours_wanted: g('hours') || null,
+    experience: g('experience') || null,
+    has_transport: transport ? /^yes/i.test(transport) : null,
+    applicant_notes: notes || null,
+    how_heard: 'caringcds.com caregiver list',
+    source: 'public'
+  };
+}
+
 /* ---------- lead forms ----------
    Any <form data-lead-form="<source>"> posts to Supabase (system of record) and
    optionally to the GoHighLevel inbound webhook. On success the form hides and
@@ -40,7 +63,7 @@ var AGENCY_ID     = 'caring-companions-cds';
 var GHL_WEBHOOK   = null;   // set to the GHL inbound webhook URL to enable automations
 
 (function () {
-  var forms = document.querySelectorAll('form[data-lead-form]');
+  var forms = document.querySelectorAll('form[data-lead-form], form[data-pool-form]');
   if (!forms.length) return;
 
   var COLUMNS = ['first_name','last_name','full_name','phone','email','county',
@@ -82,7 +105,7 @@ var GHL_WEBHOOK   = null;   // set to the GHL inbound webhook URL to enable auto
       if (btn) { btn.disabled = true; btn.textContent = 'Sending…'; }
 
       /* collect fields: known columns directly, everything else into message */
-      var row = { agency_id: AGENCY_ID, source: form.getAttribute('data-lead-form') };
+      var row = { agency_id: AGENCY_ID, source: form.getAttribute('data-lead-form') || form.getAttribute('data-pool-form') };
       var extras = [];
       Array.prototype.forEach.call(form.querySelectorAll('[name]'), function (el) {
         var v = (el.value || '').trim();
@@ -96,7 +119,13 @@ var GHL_WEBHOOK   = null;   // set to the GHL inbound webhook URL to enable auto
 
       try {
         var db = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON);
-        var res = await db.from('site_leads').insert(row);
+        var res;
+        if (form.hasAttribute('data-pool-form')) {
+          res = await db.from('attendant_pool').insert(cdsPoolRow(form));
+          if (res.error) res = await db.from('site_leads').insert(row);
+        } else {
+          res = await db.from('site_leads').insert(row);
+        }
         if (res.error) throw res.error;
         if (GHL_WEBHOOK) {
           try { await fetch(GHL_WEBHOOK, { method: 'POST',
