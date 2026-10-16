@@ -4,12 +4,12 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>CDS Caregiver Pay Calculator | Caring Companions</title>
-<meta name="description" content="See what a CDS caregiver earns weekly, monthly and yearly at $15.00 an hour based on hours per week.">
+<meta name="description" content="See what a CDS caregiver earns weekly, monthly and yearly at $15 to $16 an hour based on hours per week.">
 <link rel="canonical" href="https://caringcds.com/pay-calculator/">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://caringcds.com/pay-calculator/">
 <meta property="og:title" content="CDS Caregiver Pay Calculator | Caring Companions">
-<meta property="og:description" content="See what a CDS caregiver earns weekly, monthly and yearly at $15.00 an hour based on hours per week.">
+<meta property="og:description" content="See what a CDS caregiver earns weekly, monthly and yearly at $15 to $16 an hour based on hours per week.">
 <meta property="og:image" content="https://caringcds.com/assets/logo.png">
 <meta name="theme-color" content="#0e3860">
 <link rel="icon" href="/assets/icon-192.png">
@@ -190,7 +190,7 @@
         <h1 style="font-size: clamp(42px, 5vw, 68px); line-height: 1.04; color: #14304d; max-width: 14ch;">What would I earn?</h1>
       </div>
       <div>
-        <p style="font-size: 20.5px; line-height: 1.6; color: #4c463c; max-width: 48ch;">Set the hours you would work each week and see the figures. At $15.00 an hour, paid every Thursday. These are gross figures, before tax withholding.</p>
+        <p style="font-size: 20.5px; line-height: 1.6; color: #4c463c; max-width: 48ch;">Set the hours you would work each week and see the figures. At $15 to $16 an hour, paid every Thursday. These are gross figures, before tax withholding.</p>
       </div>
     </div>
   </section>
@@ -210,17 +210,17 @@
       <div style="background: #14304d; border-radius: 4px; padding: 40px; display: grid; gap: 4px;">
         <div style="padding: 22px 0; border-bottom: 1px solid rgba(255,255,255,0.16);">
           <p style="font-size: 13px; letter-spacing: 0.16em; text-transform: uppercase; color: #50c0c0; font-weight: 700;">Every Thursday</p>
-          <p style="margin-top: 8px; font-family: Newsreader, Georgia, serif; font-size: 56px; line-height: 1; color: #ffffff;"><span data-calc="weekly">$375.00</span></p>
+          <p style="margin-top: 8px; font-family: Newsreader, Georgia, serif; font-size: 56px; line-height: 1; color: #ffffff;"><span data-calc="weekly">$375 to $400</span></p>
         </div>
         <div style="padding: 22px 0; border-bottom: 1px solid rgba(255,255,255,0.16);">
           <p style="font-size: 13px; letter-spacing: 0.16em; text-transform: uppercase; color: #50c0c0; font-weight: 700;">A month, on average</p>
-          <p style="margin-top: 8px; font-family: Newsreader, Georgia, serif; font-size: 40px; line-height: 1; color: #ffffff;"><span data-calc="monthly">$1,625.00</span></p>
+          <p style="margin-top: 8px; font-family: Newsreader, Georgia, serif; font-size: 40px; line-height: 1; color: #ffffff;"><span data-calc="monthly">$1,625 to $1,733</span></p>
         </div>
         <div style="padding: 22px 0;">
           <p style="font-size: 13px; letter-spacing: 0.16em; text-transform: uppercase; color: #50c0c0; font-weight: 700;">A year</p>
-          <p style="margin-top: 8px; font-family: Newsreader, Georgia, serif; font-size: 40px; line-height: 1; color: #ffffff;"><span data-calc="yearly">$19,500.00</span></p>
+          <p style="margin-top: 8px; font-family: Newsreader, Georgia, serif; font-size: 40px; line-height: 1; color: #ffffff;"><span data-calc="yearly">$19,500 to $20,800</span></p>
         </div>
-        <p style="font-size: 15px; line-height: 1.55; color: #a9bccd;">Gross pay at $15.00 an hour, before income tax and FICA withholding. Your take-home depends on your filing status.</p>
+        <p style="font-size: 15px; line-height: 1.55; color: #a9bccd;">Gross pay at $15 to $16 an hour, before income tax and FICA withholding. Your take-home depends on your filing status.</p>
       </div>
     </div>
   </section>
@@ -232,7 +232,7 @@
     </div>
     <div style="display: grid; gap: 20px; font-size: 18.5px; line-height: 1.68; color: #4c463c;">
       <p style="font-size: 21px; line-height: 1.55; color: #2f2b25;">Your hours are not something you or we decide. They come from the state&rsquo;s assessment of the person you care for, written into their plan of care.</p>
-      <p>That means the honest answer to &ldquo;how much can I earn?&rdquo; is: the authorized hours, at $15.00 an hour. Working beyond the authorized hours cannot be paid, so never do it on a promise, and call us if you are ever asked to.</p>
+      <p>That means the honest answer to &ldquo;how much can I earn?&rdquo; is: the authorized hours, at $15 to $16 an hour. Working beyond the authorized hours cannot be paid, so never do it on a promise, and call us if you are ever asked to.</p>
       <p>Pay is withheld and filed properly, so you get a W-2 at year end and no surprise tax bill. <a href="/caregiver-pay/">How caregivers get paid</a> covers the mechanics.</p>
       <a class="hv3" href="/attendants/" style="justify-self: start; background: #0e3860; color: #ffffff; padding: 19px 32px; border-radius: 999px; text-decoration: none; font-weight: 600; font-size: 18px;">Become a caregiver</a>
     </div>
@@ -307,12 +307,13 @@
 <script>
 (function(){
 var r=document.querySelector('[data-calc-range]');if(!r)return;
-var money=function(n){return '$'+n.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2})};
-function upd(){var h=Number(r.value)||0,w=h*15;
+var money=function(n){return '$'+Math.round(n).toLocaleString('en-US')};
+var span=function(a,b){return money(a)+' to '+money(b)};
+function upd(){var h=Number(r.value)||0,lo=h*15,hi=h*16;
 document.querySelector('[data-calc="label"]').textContent=h===1?'1 hour a week':h+' hours a week';
-document.querySelector('[data-calc="weekly"]').textContent=money(w);
-document.querySelector('[data-calc="monthly"]').textContent=money(w*52/12);
-document.querySelector('[data-calc="yearly"]').textContent=money(w*52);}
+document.querySelector('[data-calc="weekly"]').textContent=span(lo,hi);
+document.querySelector('[data-calc="monthly"]').textContent=span(lo*52/12,hi*52/12);
+document.querySelector('[data-calc="yearly"]').textContent=span(lo*52,hi*52);}
 r.addEventListener('input',upd);r.addEventListener('change',upd);upd();})();
 </script>
 </body>

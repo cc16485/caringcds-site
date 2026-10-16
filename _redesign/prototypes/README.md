@@ -260,13 +260,13 @@ The whole site is composed from eight reusable patterns. Build these as componen
 ### Journeys (lead-facing)
 
 **`Caring Companions Home.dc.html` — Homepage**
-Hero ("Get paid to care for a loved one") with a vertical 4:5 photo slot, three stats (400+ families since 2017 · 27 counties · 4.9 on Google Reviews) on a hairline rule, then the two-card audience choice (pattern D, navy inversion). Then: the `$15.00` pay spread (86px numeral + fact list), a "Your trusted CDS provider" copy spread, the dark stress-list band, a two-card "Two ways in" eligibility/tasks pair, the FAQ accordion (8 questions), the eligibility form panel, four testimonials in a 2×2 grid of `#FAF7F1` cards, and the turquoise closing band.
+Hero ("Get paid to care for a loved one") with a vertical 4:5 photo slot, three stats (400+ families since 2017 · 27 counties · 4.9 on Google Reviews) on a hairline rule, then the two-card audience choice (pattern D, navy inversion). Then: the `$15 to $16` pay spread (86px numeral + fact list), a "Your trusted CDS provider" copy spread, the dark stress-list band, a two-card "Two ways in" eligibility/tasks pair, the FAQ accordion (8 questions), the eligibility form panel, four testimonials in a 2×2 grid of `#FAF7F1` cards, and the turquoise closing band.
 
 **`Receive Care.dc.html`**
 Hero with a 5:4 photo slot, the four-step consumer journey (pattern B), eligibility form, a "What if I don't have anyone to be my caregiver?" spread, FAQ, and the switching-provider band.
 
 **`Become a Caregiver.dc.html`**
-Hero with a `$15.00` facts card in the right column, a two-card application split — "If you already know who you would care for" vs "If you do not have anyone to care for yet" — then **the caregiver-initiated-contact band** (see *Domain rules*), FAQ with an orientation callout, and the switching band.
+Hero with a `$15 to $16` facts card in the right column, a two-card application split — "If you already know who you would care for" vs "If you do not have anyone to care for yet" — then **the caregiver-initiated-contact band** (see *Domain rules*), FAQ with an orientation callout, and the switching band.
 
 **`How It Works.dc.html`**
 The full eight-step journey from first call to first shift as one numbered sequence on white, then an "honest timing" spread about what the state controls versus what we control.
@@ -280,7 +280,7 @@ The Medicaid answer branches the result into one of three outcomes — **yes** (
 
 **`Caregiver Pay.dc.html`** — The four-stage pay cycle (pay week Sun–Sat → clock in/out → weekly approval → **Thursday payday**) as a numbered list, then a six-question FAQ covering rate, direct deposit vs pay card, tax withholding and W-2, overtime, missed clock-ins, and mileage.
 
-**`Pay Calculator.dc.html`** — A live calculator. Left: an `<input type="range" min="1" max="60" step="1">` (`accent-color: #14807F`, `height: 34px`) with the current value echoed as "N hours a week" in Newsreader at 62px. Right: a navy card showing **weekly**, **monthly** (`weekly × 52 ÷ 12`), and **yearly** (`weekly × 52`) gross at $15.00/hr, formatted `$0,000.00` via `toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })`. Default 25 hours. Below: a spread explaining that authorized hours come from the state assessment, not from preference.
+**`Pay Calculator.dc.html`** — A live calculator. Left: an `<input type="range" min="1" max="60" step="1">` (`accent-color: #14807F`, `height: 34px`) with the current value echoed as "N hours a week" in Newsreader at 62px. Right: a navy card showing **weekly**, **monthly** (`weekly × 52 ÷ 12`), and **yearly** (`weekly × 52`) gross at $15 to $16/hr, formatted `$0,000.00` via `toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })`. Default 25 hours. Below: a spread explaining that authorized hours come from the state assessment, not from preference.
 
 **`Caregiver List.dc.html`** — For caregivers who want paid work but have **no consumer yet**. Four-step explanation of how matching works, then the signup form (name, phone, email, county, hours wanted, experience level, transport, notes). Two places explicitly redirect anyone who already knows their consumer to Become a Caregiver, and note that the consumer is the one who enrolls.
 
@@ -384,7 +384,7 @@ Six distinct forms, all currently non-functional. Each needs a real endpoint, se
 
 These are business rules the client corrected during design. They are load-bearing — do not paraphrase them away.
 
-1. **Pay is `$15.00/hour`**, set by what the Missouri Department of Health and Senior Services funds — not by Caring Companions. If it changes, the client must be told before it takes effect.
+1. **Pay is `$15.00 to $16.00/hour`**, set by what the Missouri Department of Health and Senior Services funds — not by Caring Companions. If it changes, the client must be told before it takes effect.
 2. **Pay week runs Sunday–Saturday; payday is the following Thursday**, by direct deposit or pay card.
 3. **Spouses and legal guardians cannot be paid caregivers.** No exception, no application. Other family can.
 4. **The consumer is the employer**, not Caring Companions and not the state. This is the basis for the whole self-direction pitch.

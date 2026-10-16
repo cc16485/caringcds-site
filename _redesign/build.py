@@ -56,15 +56,15 @@ TITLES = {
     "consumers": ("Receive Care at Home Through Missouri CDS | Caring Companions",
          "Choose your own caregiver and Missouri Medicaid pays them. How Consumer Directed Services works for the person receiving care, and how to get started."),
     "attendants": ("Become a Paid Caregiver in Missouri CDS | Caring Companions",
-         "Get paid $15.00 an hour to care for a family member or friend on Missouri Medicaid. How to become a CDS caregiver with Caring Companions."),
+         "Get paid $15 to $16 an hour to care for a family member or friend on Missouri Medicaid. How to become a CDS caregiver with Caring Companions."),
     "how-it-works": ("How Missouri CDS Works, Start to Finish | Caring Companions",
          "The full journey from first call to first shift: Medicaid, the state assessment, employer setup, hiring your caregiver, and clocking in."),
     "check": ("Check If You Qualify for Missouri CDS | Caring Companions",
          "Four quick questions to see whether Consumer Directed Services fits your situation. No cost, no obligation."),
     "caregiver-pay": ("How CDS Caregivers Get Paid | Caring Companions",
-         "The $15.00 hourly rate, the Sunday-to-Saturday pay week, Thursday payday, direct deposit or pay card, and the answers to the usual pay questions."),
+         "The $15 to $16 hourly rate, the Sunday-to-Saturday pay week, Thursday payday, direct deposit or pay card, and the answers to the usual pay questions."),
     "pay-calculator": ("CDS Caregiver Pay Calculator | Caring Companions",
-         "See what a CDS caregiver earns weekly, monthly and yearly at $15.00 an hour based on hours per week."),
+         "See what a CDS caregiver earns weekly, monthly and yearly at $15 to $16 an hour based on hours per week."),
     "caregiver-list": ("Join Our Caregiver List | Caring Companions CDS",
          "Want paid caregiving work but don't have a consumer yet? Join the list and we introduce you to Medicaid consumers looking for a caregiver in your county."),
     "caregiver-rules": ("Who Can Be Your Paid Caregiver in Missouri CDS | Caring Companions",
@@ -413,14 +413,15 @@ def build_all():
 # ---------------------------------------------------------------- calculator
 def build_calculator():
     hours = 25
-    weekly = hours * 15
-    money = lambda n: "${:,.2f}".format(n)
+    lo, hi = hours * 15, hours * 16
+    money = lambda n: "${:,.0f}".format(n)
+    span = lambda f: money(f(lo)) + " to " + money(f(hi))
     v = {
         "hours": hours,
         "hoursLabel": f"{hours} hours a week",
-        "weekly": money(weekly),
-        "monthly": money(weekly * 52 / 12),
-        "yearly": money(weekly * 52),
+        "weekly": span(lambda w: w),
+        "monthly": span(lambda w: w * 52 / 12),
+        "yearly": span(lambda w: w * 52),
         "onHours": "@data-calc-range",
         "onSubmit": lead_form_attrs("caringcds pay-calculator"),
         "onSwitch": lead_form_attrs("caringcds pay-calculator switch", "switch"),
@@ -433,12 +434,13 @@ def build_calculator():
         return tmpl
     js = """(function(){
 var r=document.querySelector('[data-calc-range]');if(!r)return;
-var money=function(n){return '$'+n.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2})};
-function upd(){var h=Number(r.value)||0,w=h*15;
+var money=function(n){return '$'+Math.round(n).toLocaleString('en-US')};
+var span=function(a,b){return money(a)+' to '+money(b)};
+function upd(){var h=Number(r.value)||0,lo=h*15,hi=h*16;
 document.querySelector('[data-calc="label"]').textContent=h===1?'1 hour a week':h+' hours a week';
-document.querySelector('[data-calc="weekly"]').textContent=money(w);
-document.querySelector('[data-calc="monthly"]').textContent=money(w*52/12);
-document.querySelector('[data-calc="yearly"]').textContent=money(w*52);}
+document.querySelector('[data-calc="weekly"]').textContent=span(lo,hi);
+document.querySelector('[data-calc="monthly"]').textContent=span(lo*52/12,hi*52/12);
+document.querySelector('[data-calc="yearly"]').textContent=span(lo*52,hi*52);}
 r.addEventListener('input',upd);r.addEventListener('change',upd);upd();})();"""
     build_generic("Pay Calculator", v, pre, js)
     print("built Pay Calculator -> pay-calculator")
