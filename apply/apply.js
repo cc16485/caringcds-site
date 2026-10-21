@@ -119,7 +119,7 @@ const S1 = [
   { id: 'myprofile', only: () => A.list === 'join', title: () => 'Your caregiver profile', body: () => `
     <p class="lead">This is what families see on findcdscaregivers.com. We filled in what you already told us. Add a few things only you can.</p>
     <label class="f" for="photo">A friendly photo of you</label>
-    ${local.photoUrl ? `<img class="photo" src="${local.photoUrl}" alt="Your photo">` : ''}
+    ${local.photoUrl ? `<img class="photo" src="${local.photoUrl}" alt="Your photo">` : local.photoDone ? '<div class="ok">Your photo is saved. Choose another to replace it.</div>' : ''}
     <input type="file" accept="image/*" id="photo">
     <p class="small">Your face clearly visible, good light, no sunglasses.</p>
     <label class="f" for="about_me">In two sentences, why do you like caring for people?</label><textarea id="about_me" rows="3">${esc(local.about_me || '')}</textarea>
@@ -127,12 +127,17 @@ const S1 = [
     <div class="chips">${COUNTIES.map(c => `<label><input type="checkbox" data-county="${esc(c)}" ${(local.counties || []).includes(c) ? 'checked' : ''}> ${esc(c)}</label>`).join('')}</div>
     <label class="f" for="miles">How far will you drive?</label>
     <select id="miles">${[['', 'Choose one'], ['10', 'Up to 10 miles'], ['20', 'Up to 20 miles'], ['30', 'Up to 30 miles'], ['50', 'Up to 50 miles']].map(([v, l]) => `<option value="${v}" ${local.miles === v ? 'selected' : ''}>${l}</option>`).join('')}</select>
+    <label class="check"><input type="checkbox" id="listok" ${local.listok ? 'checked' : ''}> <span>${esc(D.listing_consent)}</span></label>
     <div class="note">Families see your profile only after your background checks are clear and our office approves it. You can add a short hello video and change your profile any time later.</div>`,
     async done() {
       local.about_me = $('#about_me').value.trim(); local.miles = $('#miles').value;
+      local.listok = $('#listok').checked;
       if (!local.photoDone) return 'Add a photo of you.';
       if (!local.about_me || !(local.counties || []).length || !local.miles) return 'Add your two sentences, at least one county and how far you will drive.';
+      if (!local.listok) return 'Tick the box to say it is OK to show your profile to families.';
       await call('saveProfile', { draft: { about_me: local.about_me, counties: local.counties, travel_miles: +local.miles, town: A.city || '' } });
+      await call('giveConsent', { kind: 'profile' });
+      await call('submitForReview');   // waits in the office's review list; shown only after checks clear + one tap
     } },
 
   { id: 'work', title: () => 'Your work history', body: () => {
@@ -367,6 +372,13 @@ document.addEventListener('click', async e => {
 async function reload() {
   D = await call('packet');
   A = { ...D.answers, ...pick(A) };
+  // The caregiver profile they may have started earlier on this link.
+  const pr = D.profile || {}, dr = pr.draft || {};
+  if (pr.photo) local.photoDone = true;
+  if (local.about_me == null && dr.about_me) local.about_me = dr.about_me;
+  if (local.counties == null && dr.counties) local.counties = dr.counties;
+  if (local.miles == null && dr.travel_miles) local.miles = String(dr.travel_miles);
+  if (local.listok == null && pr.consent) local.listok = true;
 }
 // Where to open: the thank-you screen while checks run, the end once all is done,
 // otherwise the first screen (after the welcome once they agreed to e-sign).
