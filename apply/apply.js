@@ -39,6 +39,9 @@ const txt = (k, label, o = {}) => `<label class="f" for="${k}">${label}${o.opt ?
 const area = (k, label, o = {}) => `<label class="f" for="${k}">${label}${o.opt ? ' <span class="opt">(optional)</span>' : ''}</label><textarea id="${k}" data-k="${k}" rows="2">${esc(get(k))}</textarea>`;
 const seg = (k, opts) => `<div class="seg" role="radiogroup">${opts.map(([v, l]) => `<label><input type="radio" name="${k}" data-k="${k}" data-re="1" value="${v}" ${get(k) === v ? 'checked' : ''}> ${l}</label>`).join('')}</div>`;
 const yn = k => seg(k, [['yes', 'Yes'], ['no', 'No']]);
+// Missouri's attendant questions (her yes 2026-10-22). The server sends them only while its switch is on;
+// the guardian question only when they have a consumer.
+const moQs = () => Object.entries((D && D.mo_questions) || {}).filter(([k]) => k !== 'guardian' || A.has_consumer !== 'no');
 const today = () => new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
 const sign = (what) => `<div class="sign">
   <label class="check"><input type="checkbox" id="agree" ${local.agree ? 'checked' : ''}> <span>I have read the ${what} and agree to it.</span></label>
@@ -179,8 +182,12 @@ const S1 = [
     <label class="f">Are you registered with the Family Care Safety Registry (FCSR)?</label>${seg('fcsr', [['yes', 'Yes'], ['no', 'No'], ['notsure', 'Not sure']])}
     ${A.fcsr === 'yes' ? '<div class="ok">Good. If you are already registered, there is no fee again.</div>' : A.fcsr ? '<div class="note">You will need to register once. It costs $16 ($16.57 online) and you never pay it again. If you are already registered, there is no fee again. We will text you the link and help if you get stuck.</div>' : ''}
     <label class="f">For the last 5 years, where have you lived?</label>${seg('mo_only', [['mo', 'Only in Missouri'], ['more', 'In more than one state']])}
+    ${moQs().map(([k, x]) => `<label class="f">${esc(x.q)}</label>${yn(k)}${A[k] === 'yes' ? `<div class="note">Missouri does not allow this. Please call us at (417) 218-2888 if you have questions.</div>` : ''}`).join('')}
     <p class="small">This employer uses E-Verify to confirm you can work in the United States.</p>`; },
-    check: () => !!(A.convicted && A.gcw && A.fcsr && A.mo_only && (A.convicted === 'no' || A.offenses.some(o => o.what))) || 'Answer each question.' },
+    check: () => {
+      if (!(A.convicted && A.gcw && A.fcsr && A.mo_only && (A.convicted === 'no' || A.offenses.some(o => o.what))) || moQs().some(([k]) => !A[k])) return 'Answer each question.';
+      const stop = moQs().find(([k]) => A[k] === 'yes');
+      return stop ? 'Missouri does not allow this: ' + stop[1].q.replace(/\?$/, '') + '. Please call us at (417) 218-2888.' : true; } },
 
   { id: 'bgd', title: () => 'Details for the checks', body: () => {
     if (!A.addrs || !A.addrs.length) A.addrs = [{ a: [A.street, A.apt, A.city, A.state, A.zip].filter(Boolean).join(', '), d: '' }, {}];
