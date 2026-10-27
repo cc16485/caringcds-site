@@ -274,7 +274,7 @@ const S2 = [
     <ul class="tight"><li>Clock in and out only in your consumer's home.</li><li>You can only be clocked in for one person at a time.</li><li>Missed a clock-in or clock-out? Fill out the EVV correction form by Saturday at 11:59pm.</li></ul>` },
   { id: 'call', title: () => 'Book your 5-minute ID check', body: () => `
     <p class="lead">A quick video call with our office. You hold up the same original ID documents you uploaded to Empeon, so we can finish your I-9. That is all.</p>
-    ${D.call_slot ? `<div class="ok">Booked for ${esc(D.call_slot)}. We will text you the video link 10 minutes before.</div>` : `<label class="f">Pick a time</label>
+    ${D.call_slot ? `<div class="ok">Booked for ${esc(D.call_slot)}. We will text you the video link before your call.</div>${D.room_url ? `<a class="go" style="margin-top:10px" href="${esc(D.room_url)}" target="_blank" rel="noopener">Join the video call</a><p class="small">Open it at your time and wait to be let in. Need a different time? Call (417) 218-2888.</p>` : ''}` : `<label class="f">Pick a time</label>
     <div class="seg" role="radiogroup">${D.call_slots.map(t => `<label><input type="radio" name="slot" value="${esc(t.value)}" ${local.slot === t.value ? 'checked' : ''}> ${esc(t.label)}</label>`).join('')}</div>`}
     <h2>Have these ready</h2>
     <ul class="tight"><li>Your original ID documents (not copies)</li><li>Your phone, charged</li><li>A spot with good light</li></ul>`,
