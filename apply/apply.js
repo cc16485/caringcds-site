@@ -59,14 +59,38 @@ function contractHtml() {
 }
 
 // ---------- the screens ----------
+// The four attendant papers (signed in Step 1 since 2026-11-04; before that they waited for clear checks).
+const PAPERS = [
+  { id: 'contract', title: () => 'Attendant Care Contract', body: () => (D.signed.contract ? `<div class="ok">Signed by ${esc(D.signed.contract.name)}.</div>` : `
+    <p class="lead">Between <b>${esc(D.company)}</b>, you, and your consumer and employer (<b>${esc(D.consumer || 'your consumer')}</b>). Read each part and put your initials after it.</p>
+    ${contractHtml()}${sign('Attendant Care Contract')}<p class="small">Caring Companions signs after you, once your background checks are clear. You will get the fully signed copy.</p>`),
+    next: 'Sign the contract', async done() { if (!D.signed.contract) { const miss = D.contract_parts.filter(p => !/^[A-Za-z]{2,4}$/.test(((local.ini || {})[p] || '').trim())); if (miss.length) return 'Put your initials after every part (' + miss.length + ' left).'; await signForm('contract', local.ini); } } },
+  { id: 'pay', title: () => 'Your pay rate', body: () => (D.signed.pay ? `<div class="ok">Signed by ${esc(D.signed.pay.name)}.</div>` : docHtml('pay') + sign('pay rate information') + '<p class="small">Your consumer or their authorized representative signs this too.</p>'),
+    next: 'Sign', async done() { if (!D.signed.pay) await signForm('pay'); } },
+  { id: 'units', title: () => 'Hours, units and getting paid', body: () => (D.signed.units ? `<div class="ok">Signed by ${esc(D.signed.units.name)}.</div>` : docHtml('units') + sign('unit utilization and payroll agreement')),
+    next: 'Sign', async done() { if (!D.signed.units) await signForm('units'); } },
+  { id: 'handbook', title: () => 'Your Attendant Handbook', body: () => (D.signed.handbook ? `<div class="ok">Signed by ${esc(D.signed.handbook.name)}.</div>` : `
+    <p class="lead">Everything about being a Caring Companions CDS attendant in one place.</p>
+    <a class="go back" href="${esc(D.handbook_url)}" target="_blank" rel="noopener">Open your Attendant Handbook</a>
+    <p class="small"><b>Save this link</b> on your phone: caringcds.com/handbook. It is yours to keep for any question while you work as an attendant.</p>
+    ${docHtml('handbook')}${sign('Attendant Handbook')}`),
+    next: 'Sign', async done() { if (!D.signed.handbook) await signForm('handbook'); } },
+];
+// Someone who signed their application before 2026-11-04 and has not signed the papers yet: just these, then on.
+const SP = [
+  { id: 'papers1', title: () => 'A few more forms, ' + first(), body: () => `
+    <p class="lead">We moved these into your application so there are fewer steps. Please sign them now. It takes about 10 minutes.</p>
+    <ol class="road"><li class="now"><div><b>Your attendant papers</b><span>The Attendant Care Contract, your pay rate, how hours and units work, and your handbook.</span></div></li></ol>`, next: 'Start' },
+  ...PAPERS,
+];
 const S1 = [
   { id: 'welcome', title: () => 'Welcome, ' + first() + '!', body: () => `
-    <p class="lead">${fromList() ? 'Thanks for joining the Caring Companions CDS caregiver list.' : 'We are glad to help you get started as ' + esc(D.consumer || 'your consumer') + "'s CDS caregiver."} This is your application. It takes about 15 minutes, and it saves as you go, so you can stop and come back with the same link.</p>
+    <p class="lead">${fromList() ? 'Thanks for joining the Caring Companions CDS caregiver list.' : 'We are glad to help you get started as ' + esc(D.consumer || 'your consumer') + "'s CDS caregiver."} This is your application. It takes about 25 minutes, and it saves as you go, so you can stop and come back with the same link.</p>
     <ol class="road">
       ${fromList() ? '<li class="done"><div><b>Join the caregiver list</b><span>Done. Thank you!</span></div></li>' : `<li class="done"><div><b>${esc(D.consumer || 'Your consumer')} chose you</b><span>The consumer is the employer and picks their own caregiver.</span></div></li>`}
-      <li class="now"><div><b>Your application</b><span>You are here. About you, your work history, references, and the details we need for the state background checks.</span></div></li>
+      <li class="now"><div><b>Your application and papers</b><span>You are here. About you, your work history, references, the details we need for the state background checks, and your attendant papers.</span></div></li>
       <li><div><b>We run the background checks</b><span>Family Care Safety Registry and the other checks Missouri requires. We text you when they come back.</span></div></li>
-      <li><div><b>Onboarding</b><span>Opens on this same link once your checks are clear: your attendant papers, payroll setup in Empeon, and a 5-minute ID check.</span></div></li>
+      <li><div><b>Last steps</b><span>Open on this same link once your checks are clear: payroll setup in Empeon and a 5-minute ID check.</span></div></li>
     </ol>
     <h2>Have these handy</h2>
     <ul class="tight"><li>Your jobs for the last 7 years (company, supervisor, phone)</li><li>2 personal references who are not relatives</li><li>Your Social Security number and your addresses for the last 7 years</li></ul>
@@ -211,6 +235,9 @@ const S1 = [
       }
     } },
 
+  // 2026-11-04 (Samantha: "I would rather they sign that at once in step 1 - the less steps the better"): the contract,
+  // pay, units and handbook are signed here in Step 1, before the application, so the last button still sends it all.
+  ...PAPERS,
   { id: 'signapp', title: () => 'Sign your application', body: () => (D.signed.application ? `<div class="ok">Signed by ${esc(D.signed.application.name)}.</div>` : `<p class="lead">Please read this, then sign.</p>${docHtml('application')}${sign('applicant statement')}`),
     async done() { if (!D.signed.application) await signForm('application'); } },
 
@@ -226,9 +253,9 @@ const S1 = [
     ${D.orientation_done ? '<div class="ok">Orientation finished. Thank you!</div>' : '<button class="back" style="width:100%;margin-top:10px" data-act="orientdone">I finished the orientation</button>'}
     <h2>What happens next</h2>
     <ol class="road">
-      <li class="done"><div><b>Your application</b><span>Signed. Each form was saved the moment you finished it, with your signature and the time.</span></div></li>
+      <li class="done"><div><b>Your application and papers</b><span>Signed. Each form was saved the moment you finished it, with your signature and the time.</span></div></li>
       <li class="now"><div><b>We run your background checks</b><span>Family Care Safety Registry (FCSR), the Employee Disqualification List (EDL) and the federal OIG exclusion list.${A.fcsr !== 'yes' ? ' Watch for our text with the FCSR registration link ($16, one time).' : ''}</span></div></li>
-      <li><div><b>We text you when they are clear</b><span>Then this same link opens Step 2: your attendant papers, payroll setup in Empeon, and a 5-minute ID check.</span></div></li>
+      <li><div><b>We text you when they are clear</b><span>Then this same link opens the last steps: payroll setup in Empeon and a 5-minute ID check.</span></div></li>
     </ol>` },
 ];
 
@@ -238,25 +265,10 @@ const S2 = [
     <p>Thank you for choosing to become a caregiver through the Consumer Directed Services (CDS) Program with Caring Companions. We are excited to have you on board and grateful that you are stepping up to care for someone who trusts you.</p>
     <h2>Here is what to expect</h2>
     <ol class="road">
-      <li class="now"><div><b>Your attendant papers</b><span>The Attendant Care Contract, your pay rate, how hours and units work, and your handbook. About 10 minutes.</span></div></li>
-      <li><div><b>Payroll setup in Empeon</b><span>Your W-4, I-9, direct deposit, and photos of your ID documents, on Empeon's own secure site.</span></div></li>
+      <li class="now"><div><b>Payroll setup in Empeon</b><span>Your W-4, I-9, direct deposit, and photos of your ID documents, on Empeon's own secure site.</span></div></li>
       <li><div><b>A 5-minute video call</b><span>You show us your ID documents so we can finish your I-9.</span></div></li>
     </ol>
     <p>We are a locally owned agency, and we are here to support you from day one. Welcome to the team. We are glad you are here.<br><i>Warmly, the Caring Companions Team</i></p>`, next: 'Start' },
-  { id: 'contract', title: () => 'Attendant Care Contract', body: () => (D.signed.contract ? `<div class="ok">Signed by ${esc(D.signed.contract.name)}.</div>` : `
-    <p class="lead">Between <b>${esc(D.company)}</b>, you, and your consumer and employer (<b>${esc(D.consumer || 'your consumer')}</b>). Read each part and put your initials after it.</p>
-    ${contractHtml()}${sign('Attendant Care Contract')}<p class="small">Caring Companions signs after you. You will get the fully signed copy.</p>`),
-    next: 'Sign the contract', async done() { if (!D.signed.contract) { const miss = D.contract_parts.filter(p => !/^[A-Za-z]{2,4}$/.test(((local.ini || {})[p] || '').trim())); if (miss.length) return 'Put your initials after every part (' + miss.length + ' left).'; await signForm('contract', local.ini); } } },
-  { id: 'pay', title: () => 'Your pay rate', body: () => (D.signed.pay ? `<div class="ok">Signed by ${esc(D.signed.pay.name)}.</div>` : docHtml('pay') + sign('pay rate information') + '<p class="small">Your consumer or their authorized representative signs this too.</p>'),
-    next: 'Sign', async done() { if (!D.signed.pay) await signForm('pay'); } },
-  { id: 'units', title: () => 'Hours, units and getting paid', body: () => (D.signed.units ? `<div class="ok">Signed by ${esc(D.signed.units.name)}.</div>` : docHtml('units') + sign('unit utilization and payroll agreement')),
-    next: 'Sign', async done() { if (!D.signed.units) await signForm('units'); } },
-  { id: 'handbook', title: () => 'Your Attendant Handbook', body: () => (D.signed.handbook ? `<div class="ok">Signed by ${esc(D.signed.handbook.name)}.</div>` : `
-    <p class="lead">Everything about being a Caring Companions CDS attendant in one place.</p>
-    <a class="go back" href="${esc(D.handbook_url)}" target="_blank" rel="noopener">Open your Attendant Handbook</a>
-    <p class="small"><b>Save this link</b> on your phone: caringcds.com/handbook. It is yours to keep for any question while you work as an attendant.</p>
-    ${docHtml('handbook')}${sign('Attendant Handbook')}`),
-    next: 'Sign', async done() { if (!D.signed.handbook) await signForm('handbook'); } },
   { id: 'empeon', title: () => 'Set up your payroll in Empeon', body: () => `
     <p class="lead">Empeon is the payroll company. Your W-4, I-9 and direct deposit are done on their secure site, not here.</p>
     <ol class="road">
@@ -282,7 +294,7 @@ const S2 = [
   { id: 'done2', last: true, title: () => 'Your part is done, ' + first() + '!', body: () => `
     <div class="ok">Thank you. Next is your 5-minute ID check${D.call_slot ? ' on ' + esc(D.call_slot) : ''}.</div>
     <ol class="road">
-      <li class="done"><div><b>Attendant papers and handbook</b><span>Signed.</span></div></li>
+      <li class="done"><div><b>Application, papers and handbook</b><span>Signed.</span></div></li>
       <li class="${D.empeon_done ? 'done' : 'now'}"><div><b>Empeon payroll</b><span>${D.empeon_done ? 'Done.' : 'Still to do. Watch for the Empeon email.'}</span></div></li>
       <li class="${D.call_slot ? 'now' : ''}"><div><b>5-minute ID check</b><span>${D.call_slot ? esc(D.call_slot) + '. Have your original ID documents ready.' : 'Not booked yet.'}</span></div></li>
       <li><div><b>The office finishes your I-9 and payroll setup</b><span>Then we let you and ${cfirst()} know you can start.</span></div></li>
@@ -291,7 +303,7 @@ const S2 = [
 ];
 
 // ---------- running it ----------
-const screens = () => (D.step === 1 ? S1 : D.step === 'checks' ? S1 : S2).filter(s => !s.only || s.only());
+const screens = () => (D.step === 1 || D.step === 'checks' ? S1 : D.step === 'papers' ? SP : S2).filter(s => !s.only || s.only());
 async function signForm(form, initials) {
   const agree = $('#agree') && $('#agree').checked, name = ($('#signame') || {}).value || '';
   if (!agree) throw new Error('Tick the box to say you read it and agree.');
@@ -302,7 +314,7 @@ async function signForm(form, initials) {
 function render(keep) {
   const list = screens(); at = Math.max(0, Math.min(at, list.length - 1));
   const s = list[at];
-  $('#chip').textContent = D.step === 1 || D.step === 'checks' ? 'Step 1 · Application' : 'Step 2 · Onboarding';
+  $('#chip').textContent = D.step === 1 || D.step === 'checks' || D.step === 'papers' ? 'Step 1 · Application' : 'Last steps';
   $('#barfill').style.width = Math.round(100 * (at + 1) / list.length) + '%';
   $('#count').textContent = 'Screen ' + (at + 1) + ' of ' + list.length;
   const nav = s.last ? (at > 0 && D.step !== 'checks' && D.step !== 'done' ? '' : '') : `<div class="nav">${at > 0 ? '<button class="back" data-act="back">Back</button>' : ''}<button class="go" data-act="next">${s.next || 'Continue'}</button></div>`;
@@ -389,7 +401,7 @@ async function reload() {
 }
 // Where to open: the thank-you screen while checks run, the end once all is done,
 // otherwise the first screen (after the welcome once they agreed to e-sign).
-const startAt = () => (D.step === 'checks' || D.step === 'done' ? screens().length - 1 : D.step === 1 && D.esign ? 1 : 0);
+const startAt = () => (D.step === 'checks' || D.step === 'done' ? screens().length - 1 : D.step === 1 && D.esign ? 1 : 0);   // 'papers' starts at 0
 // Keep what was typed but not yet on the server (lists the user just added rows to).
 const pick = o => { const k = {}; for (const x of ['jobs', 'refs', 'offenses', 'addrs']) if (o[x] && o[x].length > ((D.answers || {})[x] || []).length) k[x] = o[x]; return k; };
 
@@ -397,7 +409,7 @@ const pick = o => { const k = {}; for (const x of ['jobs', 'refs', 'offenses', '
 function startScreen() {
   $('#chip').textContent = 'Application'; $('#bar').hidden = true;
   app.innerHTML = `<section class="card"><h1>Apply to be a CDS attendant</h1>
-    <p class="lead">With Caring Companions. It takes about 15 minutes on your phone, and it saves as you go.</p>
+    <p class="lead">With Caring Companions. It takes about 25 minutes on your phone, and it saves as you go.</p>
     <label class="f" for="consumer">Who will you care for? <span class="opt">(your consumer's full name)</span></label><input id="consumer" type="text">
     <div class="row"><div><label class="f" for="fn">Your first name</label><input id="fn" type="text" autocomplete="given-name"></div><div><label class="f" for="ln">Last name</label><input id="ln" type="text" autocomplete="family-name"></div></div>
     <div class="row"><div><label class="f" for="ph">Your cell phone</label><input id="ph" type="tel" autocomplete="tel"></div><div><label class="f" for="em">Your email</label><input id="em" type="email" autocomplete="email"></div></div>
