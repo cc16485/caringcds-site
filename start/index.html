@@ -171,6 +171,11 @@ details p { margin-top: 10px; font-size: 17px; line-height: 1.6; color: var(--so
   <path d="M12 2.8 4.5 5.6v6c0 .13 0 .27.01.4H12z" fill="#8FD1C7" stroke="none" opacity=".55"/>
   <path d="M8.6 12.2l2.3 2.3 4.5-4.6" fill="none" stroke="#F0A63A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
   <path d="M12 2.8 4.5 5.6v6c0 5 3.2 8.3 7.5 9.8 4.3-1.5 7.5-4.8 7.5-9.8v-6z" fill="none" stroke="#0D365F" stroke-width="1.6" stroke-linejoin="round"/>
+</symbol><symbol id="i-clipboard" viewBox="0 0 24 24">
+  <rect x="4.5" y="4" width="15" height="18" rx="2" fill="#EAF4F6" stroke="#0D365F" stroke-width="1.6"/>
+  <rect x="8.6" y="2.2" width="6.8" height="3.6" rx="1.2" fill="#1F7A8C" stroke="#0D365F" stroke-width="1.4"/>
+  <path d="M8 10.5h8M8 14h8M8 17.5h5" stroke="#0D365F" stroke-width="1.5" stroke-linecap="round"/>
+  <circle cx="16.4" cy="17.5" r="1.1" fill="#F0A63A"/>
 </symbol><symbol id="i-shirt" viewBox="0 0 24 24"><path d="M8.5 4l-5 2.6 1.8 4 2.2-1V20h9V9.6l2.2 1 1.8-4-5-2.6a3.5 3.5 0 0 1-7 0z" fill="#1F7A8C" stroke="#0D365F" stroke-width="1.5" stroke-linejoin="round"/><path d="M8.5 4a3.5 3.5 0 0 0 7 0" fill="#F0A63A" stroke="#0D365F" stroke-width="1.5"/></symbol><symbol id="i-bed" viewBox="0 0 24 24"><path d="M3 18V7M21 18v-4" fill="none" stroke="#0D365F" stroke-width="1.5" stroke-linecap="round"/><path d="M3 14h18v-1.5a2.5 2.5 0 0 0-2.5-2.5H10v4" fill="#8FD1C7" stroke="#0D365F" stroke-width="1.5" stroke-linejoin="round"/><rect x="4.5" y="10.2" width="4.5" height="3" rx="1.5" fill="#F0A63A" stroke="#0D365F" stroke-width="1.5"/><path d="M3 14h18" stroke="#0D365F" stroke-width="1.5"/></symbol><symbol id="i-restroom" viewBox="0 0 24 24"><rect x="5" y="3.5" width="6" height="7" rx="1.2" fill="#8FD1C7" stroke="#0D365F" stroke-width="1.5"/><path d="M4 10.5h14a0 0 0 0 1 0 0 6 6 0 0 1-6 6H9.5A5.5 5.5 0 0 1 4 11z" fill="#1F7A8C" stroke="#0D365F" stroke-width="1.5" stroke-linejoin="round"/><path d="M9 16.4 8.4 20.5h6.2l-.6-4.1" fill="#EAF4F6" stroke="#0D365F" stroke-width="1.5" stroke-linejoin="round"/></symbol></svg>
 <div class="gp">
   <div class="gp-top">
@@ -192,6 +197,22 @@ details p { margin-top: 10px; font-size: 17px; line-height: 1.6; color: var(--so
   var i = 0, app = document.getElementById('app');
 
   var q = new URLSearchParams(location.search);
+  // A lead's own link (?k=...) from our office: the answers go to that lead, not the website inbox.
+  var KEY = /^[A-Za-z0-9_-]{20,100}$/.test(q.get('k') || '') ? q.get('k') : '';
+  var FN = 'https://siivpekcaryeyttszwav.supabase.co/functions/v1/cds-match', ANON = 'sb_publishable_iDJ00Ve4hw5iw2YtVmiulg__FmjShmO';
+  async function server(action, input) {
+    var r = await fetch(FN, { method: 'POST', headers: { 'Content-Type': 'application/json', apikey: ANON }, body: JSON.stringify({ role: 'public', action: action, input: input }) });
+    var j = await r.json().catch(function () { return {}; });
+    if (!r.ok) { var e = new Error(j.error || 'That did not go through.'); e.status = r.status; throw e; }
+    return j;
+  }
+  async function toLead() {
+    await server('leadQuestionsAnswer', { k: KEY, answers: { who: a.who, decide: a.decide, county: a.county, medicaid: a.medicaid, tasks: a.tasks, hours: a.hours,
+      basics: a.basics, first: a.first, last: a.last, phone: a.phone, email: a.email, cared: a.cared, when: a.when, consName: a.consName, consDob: a.consDob } });
+  }
+  // A link that no longer works says so up front, and the page still works like the public one.
+  if (KEY && LIVE) server('leadQuestionsCheck', { k: KEY }).catch(function (e) { KEY = ''; var n = document.createElement('div'); n.className = 'preview-note'; n.style.margin = '0 auto 12px'; n.style.maxWidth = '620px';
+    n.textContent = (e.status === 410 ? 'This link has expired' : 'This link is not working') + ', but you can still answer below and our CDS team will get your answers.'; app.parentNode.insertBefore(n, app); });
   ['utm_source','utm_medium','utm_campaign','utm_content','ref'].forEach(function (k) { if (q.get(k)) a[k] = q.get(k); });
 
   function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
@@ -226,10 +247,12 @@ details p { margin-top: 10px; font-size: 17px; line-height: 1.6; color: var(--so
     decide: function () {
       var html = '<div class="kick">Question 2</div><h2>Do they make their own decisions about their care?</h2><p class="hint">In CDS, the person getting care is the boss. They hire, train and direct their caregiver.</p><div class="opts">' +
         opt('decide', 'Yes', 'Yes, they make their own decisions', 'i-compass') +
-        opt('decide', 'Has guardian or POA', 'Someone has guardianship or power of attorney for them', 'i-doc') +
+        opt('decide', 'Guardian', 'Someone has guardianship of them', 'i-doc') +
+        opt('decide', 'POA', 'Someone has power of attorney for them', 'i-clipboard') +
         opt('decide', 'Not sure', 'I&rsquo;m not sure', 'i-info') + '</div>';
       if (a.decide === 'Yes') html += '<div class="good"><strong>Perfect.</strong><p>That is exactly how CDS works. They stay in charge, and we handle the payroll and paperwork.</p></div>' + go();
-      if (a.decide === 'Has guardian or POA') html += '<div class="good heads"><strong>Let&rsquo;s talk about this one.</strong><p>Missouri does not allow CDS for someone with a guardian or conservator, or a power of attorney that lets someone else handle their care decisions. Keep going and we will look at your situation together.</p></div>' + go('Keep going');
+      if (a.decide === 'Guardian') html += '<div class="good heads"><strong>Let&rsquo;s talk about this one.</strong><p>Missouri does not allow CDS for someone who has a guardian or conservator. Keep going and we will look at your situation together.</p></div>' + go('Keep going');
+      if (a.decide === 'POA') html += '<div class="good warm"><strong>That may be fine.</strong><p>A power of attorney matters only if it lets someone else make their care decisions for them. We will ask about it on the call.</p></div>' + go();
       if (a.decide === 'Not sure') html += '<div class="good warm"><strong>That&rsquo;s okay.</strong><p>We will go over it together when we call.</p></div>' + go();
       return html + back;
     },
@@ -247,7 +270,9 @@ details p { margin-top: 10px; font-size: 17px; line-height: 1.6; color: var(--so
       var html = '<div class="kick">Question 4</div><h2>Do they have Medicaid?</h2><p class="hint">In Missouri it is called MO HealthNet.</p><div class="opts">' +
         opt('medicaid', 'Yes', 'Yes, they have it', 'i-check') + opt('medicaid', 'Not sure', 'I&rsquo;m not sure', 'i-info') + opt('medicaid', 'No', 'No, not right now', 'i-clock') + '</div>';
       if (a.medicaid === 'Yes') html += '<div class="good"><strong>That&rsquo;s the big one.</strong><p>CDS is paid for through MO HealthNet, so you are already past the first step.</p></div>' + go();
-      if (a.medicaid === 'Not sure') html += '<div class="good"><strong>That&rsquo;s okay.</strong><p>Lots of families aren&rsquo;t sure. We can help you find out when we call.</p></div>' + go();
+      if (a.medicaid === 'Not sure') html += '<div class="good"><strong>That&rsquo;s okay. We can check for you.</strong><p>All we need is ' + them() + '&rsquo;s full name and date of birth. Add them here if you have them, or we can get them on the call.</p>' +
+        '<label class="f" for="consName">Their full name <span style="font-weight:400;color:var(--muted)">(optional)</span></label><input id="consName" type="text" data-in="consName" value="' + esc(a.consName || '') + '">' +
+        '<label class="f" for="consDob">Their date of birth <span style="font-weight:400;color:var(--muted)">(optional)</span></label><input id="consDob" type="text" inputmode="numeric" placeholder="MM/DD/YYYY" data-in="consDob" value="' + esc(a.consDob || '') + '"></div>' + go();
       if (a.medicaid === 'No') html += '<div class="good heads"><strong>CDS needs MO HealthNet.</strong><p>The program is paid for through Missouri Medicaid. If they might qualify, or have applied, keep going and we will talk about what comes next.</p></div>' + go('Keep going');
       return html + back;
     },
@@ -287,10 +312,10 @@ details p { margin-top: 10px; font-size: 17px; line-height: 1.6; color: var(--so
     },
     how: function () {
       return '<div class="kick">How it works</div><h2>Four steps to your first paycheck</h2><ul class="list">' +
-        '<li><span class="n">1</span><span><strong>We talk.</strong> A short call to make sure CDS fits and answer your questions.</span></li>' +
+        '<li><span class="n">1</span><span><strong>We talk with you and with ' + them() + '.</strong> They are the one in charge, so we ask them a few questions and get their OK before we refer them to the program.</span></li>' +
         '<li><span class="n">2</span><span><strong>The state assessment.</strong> The state meets with ' + them() + ' to see whether they qualify and decides how many hours of help they get.</span></li>' +
         '<li><span class="n">3</span><span><strong>Sign up with us.</strong> One signing packet, on your phone or on paper, whichever you prefer.</span></li>' +
-        '<li><span class="n">4</span><span><strong>Start caring and get paid.</strong> You work the schedule ' + them() + ' sets, clock in and out, and get paid every Thursday.</span></li>' +
+        '<li><span class="n">4</span><span><strong>Start caring and get paid.</strong> You work the schedule ' + them() + ' sets and clock in and out correctly for every shift. Those clock-ins are how your hours are verified, keep you in compliance, and get you paid every Thursday.</span></li>' +
         '</ul>' + go('Almost done') + back;
     },
     faq: function () {
@@ -354,6 +379,7 @@ details p { margin-top: 10px; font-size: 17px; line-height: 1.6; color: var(--so
     if (e.target.dataset.sel) { a[e.target.dataset.sel] = e.target.value; render(); keep(); }
   });
   app.addEventListener('input', function (e) {
+    if (e.target.dataset.in) { a[e.target.dataset.in] = e.target.value.slice(0, 80); return; }
     if (e.target.id !== 'hours') return;
     var h = a.hours = +e.target.value;
     document.getElementById('wk').innerHTML = money(h * 15) + '&ndash;' + money(h * 16).slice(1);
@@ -374,7 +400,7 @@ details p { margin-top: 10px; font-size: 17px; line-height: 1.6; color: var(--so
     }
     var btn = document.getElementById('send'); btn.disabled = true; btn.textContent = 'Sending…';
     var lines = [
-      'Who they care for: ' + (a.who || ''), 'Makes own decisions: ' + (a.decide || ''), 'Their first name: ' + (a.cared || ''),
+      'Who they care for: ' + (a.who || ''), 'Their full name: ' + (a.consName || ''), 'Their date of birth: ' + (a.consDob || ''), 'Makes own decisions: ' + (a.decide || ''), 'Their first name: ' + (a.cared || ''),
       'Needs help with: ' + a.tasks.join(', '), 'Hours a week they pictured: ' + a.hours,
       '18+, can work in US, background screening: ' + (a.basics || ''), 'Best time to call: ' + (a.when || '')
     ];
@@ -382,7 +408,8 @@ details p { margin-top: 10px; font-size: 17px; line-height: 1.6; color: var(--so
     var row = { agency_id: 'caring-companions-cds', source: 'get paid to care', first_name: a.first, last_name: a.last, phone: a.phone, email: a.email || null,
       county: a.county || null, who_needs_care: 'wants to be the caregiver', has_medicaid: (a.medicaid || '').toLowerCase(), message: lines.join('\n') };
     try {
-      if (LIVE) {
+      if (LIVE && KEY) await toLead();
+      else if (LIVE) {
         var db = window.supabase.createClient('https://siivpekcaryeyttszwav.supabase.co', 'sb_publishable_iDJ00Ve4hw5iw2YtVmiulg__FmjShmO');
         var res = await db.from('site_leads').insert(row);
         if (res.error) throw res.error;
