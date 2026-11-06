@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Get Paid to Care for Someone You Love | Caring Companions CDS</title>
+<meta name="description" content="Already caring for a parent, grandparent, relative or friend in Southwest Missouri? See if Missouri CDS can pay you $15 to $16 an hour, paid every Thursday.">
+<link rel="canonical" href="https://caringcds.com/start/">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://caringcds.com/start/">
+<meta property="og:title" content="Get paid to care for someone you love">
+<meta property="og:description" content="Already caring for a parent, grandparent, relative or friend in Southwest Missouri? See if Missouri CDS can pay you $15 to $16 an hour, paid every Thursday.">
+<meta property="og:image" content="https://caringcds.com/assets/logo.png">
+<meta name="theme-color" content="#0e3860">
+<link rel="icon" href="/assets/icon-192.png">
+<link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,400;6..72,500;6..72,600&family=Public+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+<style>
+/* Layout: one centered card column, one question per screen, progress bar on top, the site's own cream/navy/teal. */
+:root {
+  --cream: #f7f3ec; --paper: #fffdf9; --ink: #2b2721; --soft: #4c463c; --muted: #7a7266;
+  --navy: #14304d; --navy-btn: #0e3860; --teal: #0f7a7c; --teal-pale: #e3f1ef; --honey: #f0a63a; --honey-pale: #fdf1dc;
+  --line: #e4ddd1; --warn-pale: #f6ece4; --warn: #7c4a30;
+  --display: Newsreader, Georgia, serif; --body: "Public Sans", Helvetica, Arial, sans-serif;
+  color-scheme: light;
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--cream); color: var(--ink); font-family: var(--body); -webkit-font-smoothing: antialiased; }
+.gp { min-height: 100%; display: flex; flex-direction: column; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+.gp-top { max-width: 620px; width: 100%; margin: 0 auto; padding-block: 18px 8px; display: flex; align-items: center; gap: 14px; }
+.gp-top img { height: 40px; width: auto; display: block; }
+.gp-top .gp-call { margin-left: auto; font-size: 15px; font-weight: 600; color: var(--navy-btn); text-decoration: none; white-space: nowrap; }
+.gp-bar { max-width: 620px; width: 100%; margin: 4px auto 0; height: 8px; background: var(--line); border-radius: 99px; overflow: hidden; }
+.gp-bar i { display: block; height: 100%; width: 0; background: linear-gradient(90deg, var(--teal), #2aa39b); border-radius: 99px; transition: width .45s ease; }
+.gp-main { flex: 1; max-width: 620px; width: 100%; margin: 0 auto; padding-block: 22px 48px; }
+.step { animation: rise .4s ease both; }
+@keyframes rise { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
+.kick { font-size: 13px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: var(--teal); }
+h1, h2 { font-family: var(--display); font-weight: 500; color: var(--navy); letter-spacing: -.015em; text-wrap: balance; margin: 10px 0 0; }
+h1 { font-size: clamp(36px, 8vw, 54px); line-height: 1.05; }
+h2 { font-size: clamp(28px, 6vw, 38px); line-height: 1.12; }
+p { margin: 0; }
+.lede { margin-top: 14px; font-size: 19px; line-height: 1.55; color: var(--soft); max-width: 52ch; }
+.hint { margin-top: 10px; font-size: 16px; line-height: 1.5; color: var(--muted); }
+.chips { margin-top: 22px; display: flex; flex-wrap: wrap; gap: 10px; }
+.chip { background: var(--paper); border: 1px solid var(--line); border-radius: 99px; padding: 9px 15px; font-size: 15.5px; font-weight: 600; color: var(--navy); }
+.chip b { color: var(--teal); }
+.opts { margin-top: 24px; display: grid; gap: 12px; }
+.opt { display: flex; align-items: center; gap: 14px; width: 100%; text-align: left; background: var(--paper); border: 1.5px solid var(--line); border-radius: 14px; padding: 17px 18px; font: 600 18px/1.3 var(--body); color: var(--ink); cursor: pointer; transition: border-color .15s, transform .15s, background .15s; }
+.opt:hover { border-color: var(--teal); transform: translateY(-1px); }
+.opt:focus-visible, .btn:focus-visible, select:focus-visible, input:focus-visible { outline: 3px solid #8fd1c7; outline-offset: 2px; }
+.opt .ic { flex: none; width: 42px; height: 42px; border-radius: 50%; background: var(--teal-pale); display: grid; place-items: center; font-size: 21px; }
+.opt small { display: block; font-weight: 400; font-size: 15px; color: var(--muted); margin-top: 2px; }
+.opt[aria-pressed="true"] { border-color: var(--teal); background: var(--teal-pale); }
+.multi { grid-template-columns: 1fr 1fr; }
+.multi .opt { padding: 14px; font-size: 16.5px; }
+.btn { display: inline-flex; justify-content: center; align-items: center; gap: 8px; border: 0; border-radius: 99px; padding: 18px 28px; font: 700 18px var(--body); cursor: pointer; text-decoration: none; }
+.btn-go { background: var(--navy-btn); color: #fff; width: 100%; margin-top: 26px; }
+.btn-go:hover { background: #0a2844; }
+.btn-go[disabled] { opacity: .45; cursor: default; }
+.back { margin-top: 18px; background: none; border: 0; color: var(--muted); font: 600 15.5px var(--body); cursor: pointer; padding: 6px 0; }
+.back:hover { color: var(--navy); }
+.good { margin-top: 22px; background: var(--teal-pale); border-radius: 16px; padding: 20px; animation: rise .35s ease both; }
+.good.warm { background: var(--honey-pale); }
+.good.heads { background: var(--warn-pale); }
+.good strong { display: block; font-family: var(--display); font-size: 23px; font-weight: 500; color: var(--navy); }
+.good p { margin-top: 6px; font-size: 17px; line-height: 1.55; color: var(--soft); }
+.card { margin-top: 22px; background: var(--paper); border: 1px solid var(--line); border-radius: 18px; padding: 22px; }
+select, input[type=text], input[type=tel], input[type=email] { width: 100%; font: 18px var(--body); color: var(--ink); background: var(--paper); border: 1.5px solid var(--line); border-radius: 12px; padding: 15px 14px; }
+label.f { display: block; margin-top: 16px; font-size: 15px; font-weight: 700; color: var(--navy); }
+label.f input, label.f select { margin-top: 6px; }
+.money { text-align: center; }
+.money .big { font-family: var(--display); font-size: clamp(50px, 13vw, 76px); line-height: 1; color: var(--navy); font-variant-numeric: tabular-nums; }
+.money .per { margin-top: 6px; font-size: 16px; color: var(--muted); }
+.trio { margin-top: 18px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+.trio div { background: var(--cream); border-radius: 12px; padding: 12px 6px; text-align: center; }
+.trio b { display: block; font-size: 18px; color: var(--navy); font-variant-numeric: tabular-nums; }
+.trio span { font-size: 13px; color: var(--muted); }
+input[type=range] { width: 100%; margin-top: 18px; accent-color: var(--teal); height: 32px; }
+.hrs { display: flex; justify-content: space-between; font-size: 15px; color: var(--muted); }
+.hrs b { color: var(--navy); font-size: 17px; }
+.week { margin-top: 22px; display: grid; grid-template-columns: repeat(7, 1fr); gap: 5px; }
+.week div { text-align: center; border-radius: 10px; padding: 10px 0; font-size: 13.5px; font-weight: 700; background: var(--teal-pale); color: var(--teal); }
+.week-label { margin-top: 8px; font-size: 14.5px; color: var(--muted); text-align: center; }
+.payday { margin-top: 14px; display: flex; align-items: center; gap: 14px; background: var(--honey); color: var(--navy); border-radius: 16px; padding: 16px 18px; }
+.payday .d { font-family: var(--display); font-size: 30px; line-height: 1; }
+.payday p { font-size: 16px; line-height: 1.4; font-weight: 600; }
+.list { margin: 18px 0 0; padding: 0; list-style: none; display: grid; gap: 14px; }
+.list li { display: flex; gap: 14px; font-size: 17px; line-height: 1.5; color: var(--soft); }
+.list li .n { flex: none; width: 34px; height: 34px; border-radius: 50%; background: var(--navy-btn); color: #fff; display: grid; place-items: center; font-weight: 700; font-size: 15px; }
+.list li .ck { flex: none; width: 28px; height: 28px; border-radius: 50%; background: var(--teal); color: #fff; display: grid; place-items: center; font-size: 15px; font-weight: 700; margin-top: 1px; }
+.list strong { color: var(--navy); }
+details { border-top: 1px solid var(--line); padding: 15px 0; }
+details:last-child { border-bottom: 1px solid var(--line); }
+summary { cursor: pointer; list-style: none; display: flex; gap: 12px; font: 500 21px/1.3 var(--display); color: var(--navy); }
+summary::-webkit-details-marker { display: none; }
+summary::after { content: "+"; margin-left: auto; color: var(--teal); font-family: var(--body); font-weight: 700; }
+details[open] summary::after { content: "\2212"; }
+details p { margin-top: 10px; font-size: 17px; line-height: 1.6; color: var(--soft); }
+.err { margin-top: 16px; background: var(--warn-pale); color: var(--warn); border-radius: 12px; padding: 13px 15px; font-size: 16px; line-height: 1.5; }
+.fine { margin-top: 14px; font-size: 13.5px; line-height: 1.5; color: var(--muted); }
+.done { text-align: center; }
+.done .burst { font-size: 64px; line-height: 1; animation: pop .6s cubic-bezier(.2,1.6,.4,1) both; }
+@keyframes pop { from { transform: scale(.3); opacity: 0; } to { transform: none; opacity: 1; } }
+.done .list { text-align: left; }
+.phone { font-family: var(--display); font-size: 30px; color: var(--navy); margin-top: 6px; user-select: all; }
+.preview-note { margin-top: 16px; background: var(--honey-pale); color: var(--navy); border-radius: 12px; padding: 12px 14px; font-size: 15px; line-height: 1.5; text-align: left; }
+#confetti { position: fixed; inset: 0; pointer-events: none; z-index: 50; }
+@media (max-width: 420px) { .multi { grid-template-columns: 1fr; } .opt { font-size: 17px; } }
+@media (prefers-reduced-motion: reduce) { .step, .good, .done .burst { animation: none; } .gp-bar i { transition: none; } }
+</style>
+
+<div class="gp">
+  <div class="gp-top">
+    <img src="/assets/logo.png" alt="Caring Companions Consumer Directed Services">
+    <a class="gp-call" href="tel:+14172182888">417-218-2888</a>
+  </div>
+  <div class="gp-bar" aria-hidden="true"><i id="bar"></i></div>
+  <main class="gp-main" id="app" aria-live="polite"></main>
+</div>
+<canvas id="confetti" hidden></canvas>
+
+<script>
+(function () {
+  var COUNTIES = ['Barry','Barton','Benton','Camden','Cedar','Christian','Dade','Dallas','Douglas','Greene','Hickory','Jasper','Laclede','Lawrence','McDonald','Newton','Ozark','Phelps','Polk','Pulaski','St. Clair','Stone','Taney','Texas','Vernon','Webster','Wright'];
+  var TASKS = [['Bathing','🛁'],['Dressing','👕'],['Meals','🍲'],['Housework','🧺'],['Errands and rides','🚗'],['Medicine reminders','💊'],['Getting around','🦯'],['Keeping them company','💬']];
+  var LIVE = /(^|\.)caringcds\.com$/.test(location.hostname);
+  var a = { tasks: [], hours: 20 };
+  var STEPS = ['hello','who','county','medicaid','tasks','hours','payday','you','how','faq','contact','done'];
+  var i = 0, app = document.getElementById('app');
+
+  var q = new URLSearchParams(location.search);
+  ['utm_source','utm_medium','utm_campaign','utm_content','ref'].forEach(function (k) { if (q.get(k)) a[k] = q.get(k); });
+
+  function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
+  function money(n) { return '$' + Math.round(n).toLocaleString('en-US'); }
+  function opt(key, val, label, ic, sub) {
+    return '<button class="opt" data-k="' + key + '" data-v="' + esc(val) + '"' + (a[key] === val ? ' aria-pressed="true"' : '') + '><span class="ic" aria-hidden="true">' + ic + '</span><span>' + label + (sub ? '<small>' + sub + '</small>' : '') + '</span></button>';
+  }
+  var back = '<button class="back" data-back>&larr; Back</button>';
+  var go = function (label, off) { return '<button class="btn btn-go" data-next' + (off ? ' disabled' : '') + '>' + (label || 'Continue') + ' &rarr;</button>'; };
+  function them() { return a.who === 'Mom or dad' ? 'your parent' : a.who === 'A grandparent' ? 'your grandparent' : a.who === 'A friend or neighbor' ? 'your friend' : 'your loved one'; }
+
+  var view = {
+    hello: function () {
+      return '<div class="kick">Missouri Consumer Directed Services</div>' +
+        '<h1>Get paid to care for someone you love.</h1>' +
+        '<p class="lede">If you already help a family member or friend at home, Missouri&rsquo;s CDS program can pay you for it. Answer a few quick questions and see what you could earn.</p>' +
+        '<div class="chips"><span class="chip"><b>$15 to $16</b> an hour</span><span class="chip">Paid <b>every Thursday</b></span><span class="chip">About <b>2 minutes</b></span></div>' +
+        go('Let&rsquo;s see if you qualify') +
+        '<p class="fine">27 Southwest Missouri counties. No trip to Springfield required.</p>';
+    },
+    who: function () {
+      var html = '<div class="kick">Question 1</div><h2>Who do you take care of?</h2><div class="opts">' +
+        opt('who', 'Mom or dad', 'My mom or dad', '👵') + opt('who', 'A grandparent', 'A grandparent', '🧓') +
+        opt('who', 'Another relative', 'Another relative', '🏡', 'Aunt, uncle, sibling, cousin') +
+        opt('who', 'A friend or neighbor', 'A friend or neighbor', '🤝') +
+        opt('who', 'My husband or wife', 'My husband or wife', '💍') + '</div>';
+      if (a.who === 'My husband or wife') html += '<div class="good heads"><strong>One thing to know</strong><p>Missouri does not pay a spouse through CDS. Many families have an adult child, sibling or friend take the paid hours instead, so the caring is shared. We are happy to talk it through with you.</p></div>' + go('Keep going');
+      else if (a.who) html += '<div class="good"><strong>Wonderful.</strong><p>Family and friends are exactly who CDS was made for. The person you care for chooses their own caregiver, and they can choose you.</p></div>' + go();
+      return html + back;
+    },
+    county: function () {
+      var inArea = COUNTIES.indexOf(a.county) > -1;
+      var html = '<div class="kick">Question 2</div><h2>Which county do they live in?</h2>' +
+        '<label class="f" for="county">County in Missouri</label><select id="county" data-sel="county"><option value="">Choose a county</option>' +
+        COUNTIES.map(function (c) { return '<option' + (a.county === c ? ' selected' : '') + '>' + c + '</option>'; }).join('') +
+        '<option' + (a.county === 'Another Missouri county' ? ' selected' : '') + '>Another Missouri county</option></select>';
+      if (inArea) html += '<div class="good"><strong>Good news! We serve ' + esc(a.county) + ' County.</strong><p>We work with families across 27 Southwest Missouri counties.</p></div>' + go();
+      else if (a.county) html += '<div class="good heads"><strong>That one may be outside our area.</strong><p>We serve 27 counties in Southwest Missouri. Finish up anyway and we will tell you who can help where you are.</p></div>' + go('Keep going');
+      return html + back;
+    },
+    medicaid: function () {
+      var html = '<div class="kick">Question 3</div><h2>Do they have Medicaid?</h2><p class="hint">In Missouri it is called MO HealthNet.</p><div class="opts">' +
+        opt('medicaid', 'Yes', 'Yes, they have it', '✅') + opt('medicaid', 'Not sure', 'I&rsquo;m not sure', '🤔') + opt('medicaid', 'No', 'No, not right now', '✋') + '</div>';
+      if (a.medicaid === 'Yes') html += '<div class="good"><strong>That&rsquo;s the big one.</strong><p>CDS is paid for through MO HealthNet, so you are already past the first step.</p></div>' + go();
+      if (a.medicaid === 'Not sure') html += '<div class="good"><strong>That&rsquo;s okay.</strong><p>Lots of families aren&rsquo;t sure. We can help you find out when we call.</p></div>' + go();
+      if (a.medicaid === 'No') html += '<div class="good heads"><strong>CDS needs MO HealthNet.</strong><p>The program is paid for through Missouri Medicaid. If they might qualify, or have applied, keep going and we will talk about what comes next.</p></div>' + go('Keep going');
+      return html + back;
+    },
+    tasks: function () {
+      return '<div class="kick">Question 4</div><h2>What do you already help with?</h2><p class="hint">Tap all that fit.</p><div class="opts multi">' +
+        TASKS.map(function (t) { return '<button class="opt" data-task="' + t[0] + '" aria-pressed="' + (a.tasks.indexOf(t[0]) > -1) + '"><span class="ic" aria-hidden="true">' + t[1] + '</span><span>' + t[0] + '</span></button>'; }).join('') + '</div>' +
+        (a.tasks.length ? '<div class="good warm"><strong>You&rsquo;re already doing the work.</strong><p>' + (a.tasks.length > 2 ? 'That is a lot of love. ' : '') + 'CDS lets you get paid for the care ' + them() + ' is authorized to receive.</p></div>' : '') +
+        go('Continue', !a.tasks.length) + back;
+    },
+    hours: function () {
+      return '<div class="kick">Question 5</div><h2>About how many hours a week do you help?</h2>' +
+        '<div class="card money"><div class="big" id="wk">' + money(a.hours * 15) + '&ndash;' + money(a.hours * 16).slice(1) + '</div><div class="per">a week, before taxes</div>' +
+        '<input type="range" id="hours" min="5" max="40" step="1" value="' + a.hours + '" aria-label="Hours a week">' +
+        '<div class="hrs"><span>5 hrs</span><b id="hv">' + a.hours + ' hours a week</b><span>40 hrs</span></div>' +
+        '<div class="trio"><div><b id="mo">' + money(a.hours * 15.5 * 52 / 12) + '</b><span>a month</span></div><div><b id="yr">' + money(a.hours * 15.5 * 52) + '</b><span>a year</span></div><div><b>$15&ndash;16</b><span>an hour</span></div></div></div>' +
+        '<p class="fine">An estimate to help you picture it. The state assessment decides how many hours ' + them() + ' gets each month, and you are paid for the hours you actually work within that.</p>' +
+        go('That&rsquo;s about right') + back;
+    },
+    payday: function () {
+      return '<div class="kick">How you get paid</div><h2>Every week. Every Thursday.</h2>' +
+        '<p class="lede">No invoices, no chasing, no waiting a month to see what you earned.</p>' +
+        '<div class="week" aria-hidden="true"><div>Sun</div><div>Mon</div><div>Tue</div><div>Wed</div><div>Thu</div><div>Fri</div><div>Sat</div></div>' +
+        '<p class="week-label">You work your shifts Sunday through Saturday&hellip;</p>' +
+        '<div class="payday"><span class="d">Thu</span><p>&hellip;and your pay lands the next Thursday. Same day, every week.</p></div>' +
+        '<ul class="list">' +
+        '<li><span class="ck">✓</span><span><strong>Direct deposit or a pay card,</strong> whichever you prefer.</span></li>' +
+        '<li><span class="ck">✓</span><span><strong>Taxes handled.</strong> We withhold and file for you. You get a W-2, so no year-end surprise.</span></li>' +
+        '<li><span class="ck">✓</span><span><strong>Easy clock-in.</strong> Use the phone app or call from the home phone. We set it up with you and do a practice run before your first shift.</span></li>' +
+        '</ul>' + go('Sounds good') + back;
+    },
+    you: function () {
+      var html = '<div class="kick">Question 6</div><h2>A few quick things about you</h2><p class="hint">Every paid caregiver in Missouri must be 18 or older, able to work in the US, and pass the state background screening.</p><div class="opts">' +
+        opt('basics', 'Yes', 'Yes, that&rsquo;s me', '🙋') + opt('basics', 'Not sure', 'I have a question about one of these', '❓') + '</div>';
+      if (a.basics === 'Yes') html += '<div class="good"><strong>You sound like a great fit.</strong><p>Next, here is how getting started works.</p></div>' + go();
+      if (a.basics === 'Not sure') html += '<div class="good warm"><strong>No problem.</strong><p>Ask us when we call. We will give you a straight answer.</p></div>' + go();
+      return html + back;
+    },
+    how: function () {
+      return '<div class="kick">How it works</div><h2>Four steps to your first paycheck</h2><ul class="list">' +
+        '<li><span class="n">1</span><span><strong>We talk.</strong> A short call to make sure CDS fits and answer your questions.</span></li>' +
+        '<li><span class="n">2</span><span><strong>The state assessment.</strong> The state meets with ' + them() + ' and decides how many hours of help they get.</span></li>' +
+        '<li><span class="n">3</span><span><strong>Sign up with us.</strong> One signing packet, on your phone or on paper, whichever you prefer.</span></li>' +
+        '<li><span class="n">4</span><span><strong>Start caring and get paid.</strong> You work the schedule ' + them() + ' sets, clock in and out, and get paid every Thursday.</span></li>' +
+        '</ul>' + go('Almost done') + back;
+    },
+    faq: function () {
+      return '<div class="kick">Good questions</div><h2>Why families choose Caring Companions</h2><div class="card" style="padding-block: 6px">' +
+        '<details open><summary>Who is the boss?</summary><p>' + them().replace(/^your/, 'Your') + ' is. In CDS the person receiving care is the employer. They choose their caregiver and set the schedule, and we take care of payroll, taxes and paperwork for them.</p></details>' +
+        '<details><summary>Do I need training or a license?</summary><p>No license is needed. Missouri does require a short orientation on a set list of topics. It is one honest conversation with a checklist, and we help you through it.</p></details>' +
+        '<details><summary>How much do you pay?</summary><p>$15 to $16 an hour. Every CDS agency in Missouri sets its own caregiver pay, so it is worth comparing. If it ever changes, we tell you before it takes effect.</p></details>' +
+        '<details><summary>Can I switch to you from another agency?</summary><p>Yes. Yes. If you already use another CDS provider, there is no new assessment. The authorization moves with you, care is not interrupted, and we guide you through every step.</p></details>' +
+        '<details><summary>Who will I talk to?</summary><p>Our CDS team in Southwest Missouri. Call 417-218-2888 with any question, or toll free 866-863-5151.</p></details>' +
+        '</div>' + go('Get my call') + back;
+    },
+    contact: function () {
+      return '<div class="kick">Last step</div><h2>Where can our CDS team reach you?</h2><p class="hint">We will call to answer your questions and help you get started.</p>' +
+        '<form id="lead" novalidate>' +
+        '<label class="f" for="first">Your first name</label><input id="first" type="text" autocomplete="given-name" value="' + esc(a.first || '') + '">' +
+        '<label class="f" for="last">Your last name</label><input id="last" type="text" autocomplete="family-name" value="' + esc(a.last || '') + '">' +
+        '<label class="f" for="phone">Your cell phone</label><input id="phone" type="tel" inputmode="tel" autocomplete="tel" value="' + esc(a.phone || '') + '">' +
+        '<label class="f" for="email">Email <span style="font-weight:400;color:var(--muted)">(optional)</span></label><input id="email" type="email" autocomplete="email" value="' + esc(a.email || '') + '">' +
+        '<label class="f" for="cared">First name of the person you care for</label><input id="cared" type="text" value="' + esc(a.cared || '') + '">' +
+        '<label class="f" for="when">Best time to call</label><select id="when"><option>Any time</option><option>Morning</option><option>Afternoon</option><option>Evening</option></select>' +
+        '<div id="err" class="err" hidden></div>' +
+        '<button class="btn btn-go" type="submit" id="send">Yes, call me &rarr;</button>' +
+        '<p class="fine">By tapping, you agree that Caring Companions may call or text you about CDS at the number above. Message and data rates may apply. Reply STOP to opt out.</p>' +
+        '</form>' + back;
+    },
+    done: function () {
+      return '<div class="done step"><div class="burst" aria-hidden="true">🎉</div><h2>You&rsquo;re on your way, ' + esc(a.first) + '!</h2>' +
+        '<p class="lede" style="margin-inline:auto">Our CDS team has your answers and will call you' + (a.when && a.when !== 'Any time' ? ' in the ' + a.when.toLowerCase() : '') + ' from:</p>' +
+        '<div class="phone">417-218-2888</div><p class="hint">Save it in your phone so you know it&rsquo;s us.</p>' +
+        '<div class="card"><strong style="font-family:var(--display);font-size:22px;font-weight:500;color:var(--navy)">While you wait</strong><ul class="list">' +
+        '<li><span class="ck">✓</span><span>Find ' + (a.cared ? esc(a.cared) + '&rsquo;s' : them() + '&rsquo;s') + ' MO HealthNet card, if they have one.</span></li>' +
+        '<li><span class="ck">✓</span><span>Jot down the days and times you usually help.</span></li>' +
+        '<li><span class="ck">✓</span><span>Write down any questions. No question is too small.</span></li>' +
+        '</ul></div>' +
+        (LIVE ? '' : '<div class="preview-note"><strong>Preview only.</strong> Nothing was sent. On caringcds.com this would land on the CDS Leads tab and in GoHighLevel.</div>') +
+        '</div>';
+    }
+  };
+
+  function render() {
+    var s = STEPS[i];
+    app.innerHTML = '<div class="step">' + view[s]() + '</div>';
+    document.getElementById('bar').style.width = Math.round(i / (STEPS.length - 1) * 100) + '%';
+    if (s === 'done') confetti();
+  }
+  function move(d) { i = Math.max(0, Math.min(STEPS.length - 1, i + d)); render(); window.scrollTo({ top: 0, behavior: 'smooth' }); }
+  function keep() {
+    var s = app.querySelector('.good'); if (s) s.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }
+
+  app.addEventListener('click', function (e) {
+    var o = e.target.closest('[data-k]');
+    if (o) { a[o.dataset.k] = o.dataset.v; render(); keep(); return; }
+    var t = e.target.closest('[data-task]');
+    if (t) { var k = a.tasks.indexOf(t.dataset.task); if (k > -1) a.tasks.splice(k, 1); else a.tasks.push(t.dataset.task); render(); return; }
+    if (e.target.closest('[data-next]')) return move(1);
+    if (e.target.closest('[data-back]')) return move(-1);
+  });
+  app.addEventListener('change', function (e) {
+    if (e.target.dataset.sel) { a[e.target.dataset.sel] = e.target.value; render(); keep(); }
+  });
+  app.addEventListener('input', function (e) {
+    if (e.target.id !== 'hours') return;
+    var h = a.hours = +e.target.value;
+    document.getElementById('wk').innerHTML = money(h * 15) + '&ndash;' + money(h * 16).slice(1);
+    document.getElementById('hv').textContent = h + ' hours a week';
+    document.getElementById('mo').textContent = money(h * 15.5 * 52 / 12);
+    document.getElementById('yr').textContent = money(h * 15.5 * 52);
+  });
+  app.addEventListener('submit', async function (e) {
+    e.preventDefault();
+    ['first','last','phone','email','cared','when'].forEach(function (k) { a[k] = document.getElementById(k).value.trim(); });
+    var err = document.getElementById('err'), bad = [];
+    ['first','last','phone'].forEach(function (k) { document.getElementById(k).style.borderColor = ''; if (!a[k]) bad.push(k); });
+    if (a.phone && a.phone.replace(/\D/g, '').replace(/^1/, '').length !== 10) bad.push('phone');
+    if (bad.length) {
+      bad.forEach(function (k) { document.getElementById(k).style.borderColor = '#9a5a48'; });
+      err.textContent = bad.indexOf('phone') > -1 && a.phone ? 'Please check the phone number. It needs all 10 digits.' : 'Please fill in your name and phone number so we can call you.';
+      err.hidden = false; document.getElementById(bad[0]).focus(); return;
+    }
+    var btn = document.getElementById('send'); btn.disabled = true; btn.textContent = 'Sending…';
+    var lines = [
+      'Who they care for: ' + (a.who || ''), 'Their first name: ' + (a.cared || ''),
+      'Helps with: ' + a.tasks.join(', '), 'Hours a week now: about ' + a.hours,
+      '18+, can work in US, background screening: ' + (a.basics || ''), 'Best time to call: ' + (a.when || '')
+    ];
+    ['utm_source','utm_medium','utm_campaign','utm_content','ref'].forEach(function (k) { if (a[k]) lines.push(k.replace('_', ' ') + ': ' + a[k]); });
+    var row = { agency_id: 'caring-companions-cds', source: 'get paid to care', first_name: a.first, last_name: a.last, phone: a.phone, email: a.email || null,
+      county: a.county || null, who_needs_care: 'wants to be the caregiver', has_medicaid: (a.medicaid || '').toLowerCase(), message: lines.join('\n') };
+    try {
+      if (LIVE) {
+        var db = window.supabase.createClient('https://siivpekcaryeyttszwav.supabase.co', 'sb_publishable_iDJ00Ve4hw5iw2YtVmiulg__FmjShmO');
+        var res = await db.from('site_leads').insert(row);
+        if (res.error) throw res.error;
+      }
+      move(1);
+    } catch (x) {
+      btn.disabled = false; btn.textContent = 'Yes, call me →';
+      err.innerHTML = 'That did not go through, so nothing was sent. Please call us at <strong>417-218-2888</strong> (toll free 866-863-5151) and we will help right away.';
+      err.hidden = false;
+    }
+  });
+
+  function confetti() {
+    if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    var c = document.getElementById('confetti'), x = c.getContext('2d'); c.hidden = false;
+    c.width = innerWidth; c.height = innerHeight;
+    var cols = ['#0f7a7c', '#f0a63a', '#14304d', '#8fd1c7', '#e8c988'], p = [];
+    for (var n = 0; n < 140; n++) p.push({ x: Math.random() * c.width, y: -20 - Math.random() * c.height * .5, r: 4 + Math.random() * 5, vy: 2 + Math.random() * 3, vx: -1.5 + Math.random() * 3, a: Math.random() * 6, c: cols[n % cols.length] });
+    var t0 = performance.now();
+    (function f(t) {
+      x.clearRect(0, 0, c.width, c.height);
+      p.forEach(function (q) { q.x += q.vx; q.y += q.vy; q.a += .1; x.fillStyle = q.c; x.save(); x.translate(q.x, q.y); x.rotate(q.a); x.fillRect(-q.r, -q.r / 2, q.r * 2, q.r); x.restore(); });
+      if (t - t0 < 3500) requestAnimationFrame(f); else c.hidden = true;
+    })(t0);
+  }
+
+  render();
+})();
+</script>
+
+</body>
+</html>
