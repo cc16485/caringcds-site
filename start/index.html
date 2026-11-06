@@ -113,6 +113,15 @@ details p { margin-top: 10px; font-size: 17px; line-height: 1.6; color: var(--so
 .phone { font-family: var(--display); font-size: 30px; color: var(--navy); margin-top: 6px; user-select: all; }
 .preview-note { margin-top: 16px; background: var(--honey-pale); color: var(--navy); border-radius: 12px; padding: 12px 14px; font-size: 15px; line-height: 1.5; text-align: left; }
 #confetti { position: fixed; inset: 0; pointer-events: none; z-index: 50; }
+h2.ask { margin-top: 28px; font-size: clamp(24px, 5vw, 30px); }
+.paths .opt { padding: 20px; font-size: 20px; }
+.paths .opt .ic { width: 52px; height: 52px; }
+.paths .opt .ic svg { width: 30px; height: 30px; }
+.big h2 { font-size: clamp(32px, 7vw, 42px); }
+.big .hint, .big .good p { font-size: 19px; }
+.big .opt { font-size: 20px; padding: 19px 20px; }
+.big .list li { font-size: 19px; }
+.big details p, .big label.f { font-size: 17.5px; }
 @media (max-width: 420px) { .multi { grid-template-columns: 1fr; } .opt { font-size: 17px; } }
 @media (prefers-reduced-motion: reduce) { .step, .good, .done .burst { animation: none; } .gp-bar i { transition: none; } }
 </style>
@@ -176,6 +185,10 @@ details p { margin-top: 10px; font-size: 17px; line-height: 1.6; color: var(--so
   <rect x="8.6" y="2.2" width="6.8" height="3.6" rx="1.2" fill="#1F7A8C" stroke="#0D365F" stroke-width="1.4"/>
   <path d="M8 10.5h8M8 14h8M8 17.5h5" stroke="#0D365F" stroke-width="1.5" stroke-linecap="round"/>
   <circle cx="16.4" cy="17.5" r="1.1" fill="#F0A63A"/>
+</symbol><symbol id="i-search" viewBox="0 0 24 24">
+  <circle cx="10.5" cy="10.5" r="6.5" fill="#EAF4F6" stroke="#0D365F" stroke-width="1.8"/>
+  <path d="M15.4 15.4 21 21" stroke="#1F7A8C" stroke-width="2.2" stroke-linecap="round"/>
+  <path d="M7.3 9.2a3.4 3.4 0 0 1 2.4-2.2" fill="none" stroke="#F0A63A" stroke-width="1.5" stroke-linecap="round"/>
 </symbol><symbol id="i-shirt" viewBox="0 0 24 24"><path d="M8.5 4l-5 2.6 1.8 4 2.2-1V20h9V9.6l2.2 1 1.8-4-5-2.6a3.5 3.5 0 0 1-7 0z" fill="#1F7A8C" stroke="#0D365F" stroke-width="1.5" stroke-linejoin="round"/><path d="M8.5 4a3.5 3.5 0 0 0 7 0" fill="#F0A63A" stroke="#0D365F" stroke-width="1.5"/></symbol><symbol id="i-bed" viewBox="0 0 24 24"><path d="M3 18V7M21 18v-4" fill="none" stroke="#0D365F" stroke-width="1.5" stroke-linecap="round"/><path d="M3 14h18v-1.5a2.5 2.5 0 0 0-2.5-2.5H10v4" fill="#8FD1C7" stroke="#0D365F" stroke-width="1.5" stroke-linejoin="round"/><rect x="4.5" y="10.2" width="4.5" height="3" rx="1.5" fill="#F0A63A" stroke="#0D365F" stroke-width="1.5"/><path d="M3 14h18" stroke="#0D365F" stroke-width="1.5"/></symbol><symbol id="i-restroom" viewBox="0 0 24 24"><rect x="5" y="3.5" width="6" height="7" rx="1.2" fill="#8FD1C7" stroke="#0D365F" stroke-width="1.5"/><path d="M4 10.5h14a0 0 0 0 1 0 0 6 6 0 0 1-6 6H9.5A5.5 5.5 0 0 1 4 11z" fill="#1F7A8C" stroke="#0D365F" stroke-width="1.5" stroke-linejoin="round"/><path d="M9 16.4 8.4 20.5h6.2l-.6-4.1" fill="#EAF4F6" stroke="#0D365F" stroke-width="1.5" stroke-linejoin="round"/></symbol></svg>
 <div class="gp">
   <div class="gp-top">
@@ -193,7 +206,13 @@ details p { margin-top: 10px; font-size: 17px; line-height: 1.6; color: var(--so
   var TASKS = [['Bathing and grooming','i-bath'],['Dressing','i-shirt'],['Meals','i-meal'],['Toileting','i-restroom'],['Getting in and out of bed','i-bed'],['Getting around','i-mobility'],['Housekeeping','i-home'],['Shopping and rides','i-car']];
   var LIVE = /(^|\.)caringcds\.com$/.test(location.hostname);
   var a = { tasks: [], hours: 15 };
-  var STEPS = ['hello','who','decide','county','medicaid','tasks','hours','payday','you','how','faq','contact','done'];
+  // Two paths after the first question (2026-11-05): the family caregiver (care) or the person who needs help (self).
+  var PATHS = {
+    care: ['hello','who','decide','county','medicaid','tasks','hours','payday','you','how','faq','contact','done'],
+    self: ['hello','sDecide','sCounty','sMedicaid','sTasks','helper','sHow','sFaq','sContact','sDone']
+  };
+  var STEPS = PATHS.care;
+  var HELPER_REL = ['Son or daughter','Grandchild','Another relative','Friend or neighbor','Husband or wife','Someone else'];
   var i = 0, app = document.getElementById('app');
 
   var q = new URLSearchParams(location.search);
@@ -208,12 +227,15 @@ details p { margin-top: 10px; font-size: 17px; line-height: 1.6; color: var(--so
   }
   async function toLead() {
     await server('leadQuestionsAnswer', { k: KEY, answers: { who: a.who, decide: a.decide, county: a.county, medicaid: a.medicaid, tasks: a.tasks, hours: a.hours,
-      basics: a.basics, first: a.first, last: a.last, phone: a.phone, email: a.email, cared: a.cared, when: a.when, consName: a.consName, consDob: a.consDob } });
+      basics: a.basics, first: a.first, last: a.last, phone: a.phone, email: a.email, cared: a.cared, when: a.when,
+      consName: a.path === 'self' ? [a.first, a.last].filter(Boolean).join(' ') : a.consName, consDob: a.path === 'self' ? a.dob : a.consDob,
+      path: a.path, helper: a.helper, helperName: a.helperName, helperRel: a.helperRel } });
   }
   // A link that no longer works says so up front, and the page still works like the public one.
   if (KEY && LIVE) server('leadQuestionsCheck', { k: KEY }).catch(function (e) { KEY = ''; var n = document.createElement('div'); n.className = 'preview-note'; n.style.margin = '0 auto 12px'; n.style.maxWidth = '620px';
     n.textContent = (e.status === 410 ? 'This link has expired' : 'This link is not working') + ', but you can still answer below and our CDS team will get your answers.'; app.parentNode.insertBefore(n, app); });
   ['utm_source','utm_medium','utm_campaign','utm_content','ref'].forEach(function (k) { if (q.get(k)) a[k] = q.get(k); });
+  var FROM_AD = a.utm_campaign === 'get_paid_to_care';
 
   function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
   function icon(id) { return '<svg viewBox="0 0 24 24"><use href="#' + id + '"/></svg>'; }
@@ -228,10 +250,11 @@ details p { margin-top: 10px; font-size: 17px; line-height: 1.6; color: var(--so
   var view = {
     hello: function () {
       return '<div class="kick">Missouri Consumer Directed Services</div>' +
-        '<h1>Get paid to care for someone you love.</h1>' +
-        '<p class="lede">When an adult you love needs help at home because of a disability or health condition, Missouri&rsquo;s CDS program lets them choose a family member or friend as their paid caregiver. Answer a few quick questions and see what you could earn.</p>' +
-        '<div class="chips"><span class="chip"><b>$15 to $16</b> an hour</span><span class="chip">Paid <b>every Thursday</b></span><span class="chip">About <b>2 minutes</b></span></div>' +
-        go('Let&rsquo;s see if you qualify') +
+        (FROM_AD ? '<h1>Get paid to care for someone you love.</h1>' : '<h1>Care at home, from someone you choose.</h1>') +
+        '<p class="lede">Missouri&rsquo;s CDS program lets adults who need help at home choose their own caregiver, often a family member or friend. Answer a few quick questions. It takes about 2 minutes.</p>' +
+        '<h2 class="ask">Which sounds like you?</h2><div class="opts paths">' +
+        opt('path', 'care', 'I help someone I love', 'i-heart', 'See how you could be paid $15 to $16 an hour, every Thursday') +
+        opt('path', 'self', 'I need help myself', 'i-home', 'Stay home, choose your own caregiver, and stay in charge') + '</div>' +
         '<p class="fine">27 Southwest Missouri counties. No trip to Springfield required.</p>';
     },
     who: function () {
@@ -324,7 +347,7 @@ details p { margin-top: 10px; font-size: 17px; line-height: 1.6; color: var(--so
         '<details><summary>Do I need training or a license?</summary><p>No license is needed. Missouri does require a short orientation on a set list of topics. It is one honest conversation with a checklist, and we help you through it.</p></details>' +
         '<details><summary>How much do you pay?</summary><p>$15 to $16 an hour, paid every Thursday. Every CDS provider in Missouri sets its own caregiver pay. If ours ever changes, we tell you before it takes effect.</p></details>' +
         '<details><summary>Who cannot be paid?</summary><p>A spouse or a legal guardian cannot be the paid caregiver. Adult children, siblings, grandchildren, other relatives, friends and neighbors can.</p></details>' +
-        '<details><summary>Can I switch to you from another agency?</summary><p>Yes. Yes. If you already use another CDS provider, there is no new assessment. The authorization moves with you, care is not interrupted, and we guide you through every step.</p></details>' +
+        '<details><summary>Can I switch to you from another agency?</summary><p>Yes. If you already use another CDS provider, there is no new assessment. The authorization moves with you, care is not interrupted, and we guide you through every step.</p></details>' +
         '<details><summary>Who will I talk to?</summary><p>Our CDS team in Southwest Missouri. Call 417-218-2888 with any question, or toll free 866-863-5151.</p></details>' +
         '</div>' + go('Get my call') + back;
     },
@@ -342,6 +365,100 @@ details p { margin-top: 10px; font-size: 17px; line-height: 1.6; color: var(--so
         '<p class="fine">By tapping, you agree that Caring Companions Consumer Directed Services may call or text you about CDS at the number above. Agreeing is not required to get services. Message and data rates may apply. Reply STOP to opt out. See our <a href="/privacy/">Privacy Policy</a>.</p>' +
         '</form>' + back;
     },
+    sDecide: function () {
+      var html = '<div class="kick">Question 1</div><h2>Do you make your own decisions about your care?</h2><p class="hint">In CDS, you are the boss. You choose, train and direct your caregiver. We take care of the paperwork.</p><div class="opts">' +
+        opt('decide', 'Yes', 'Yes, I make my own decisions', 'i-compass') +
+        opt('decide', 'Guardian', 'Someone has guardianship of me', 'i-doc') +
+        opt('decide', 'POA', 'Someone has power of attorney for me', 'i-clipboard') +
+        opt('decide', 'Not sure', 'I&rsquo;m not sure', 'i-info') + '</div>';
+      if (a.decide === 'Yes') html += '<div class="good"><strong>Perfect.</strong><p>That is exactly how CDS works. You stay in charge of your own care.</p></div>' + go();
+      if (a.decide === 'Guardian') html += '<div class="good heads"><strong>Let&rsquo;s talk about this one.</strong><p>Missouri does not allow CDS for someone who has a guardian or conservator. Keep going and we will look at your situation together.</p></div>' + go('Keep going');
+      if (a.decide === 'POA') html += '<div class="good warm"><strong>That may be fine.</strong><p>A power of attorney matters only if it lets someone else make your care decisions for you. We will ask about it on the call.</p></div>' + go();
+      if (a.decide === 'Not sure') html += '<div class="good warm"><strong>That&rsquo;s okay.</strong><p>We will go over it together when we call.</p></div>' + go();
+      return html + back;
+    },
+    sCounty: function () {
+      var inArea = COUNTIES.indexOf(a.county) > -1;
+      var html = '<div class="kick">Question 2</div><h2>Which county do you live in?</h2>' +
+        '<label class="f" for="county">County in Missouri</label><select id="county" data-sel="county"><option value="">Choose a county</option>' +
+        COUNTIES.map(function (c) { return '<option' + (a.county === c ? ' selected' : '') + '>' + c + '</option>'; }).join('') +
+        '<option' + (a.county === 'Another Missouri county' ? ' selected' : '') + '>Another Missouri county</option></select>';
+      if (inArea) html += '<div class="good"><strong>Good news! We serve ' + esc(a.county) + ' County.</strong><p>We work with people across 27 Southwest Missouri counties.</p></div>' + go();
+      else if (a.county) html += '<div class="good heads"><strong>That one may be outside our area.</strong><p>We serve 27 counties in Southwest Missouri. Finish up anyway and we will tell you who can help where you are.</p></div>' + go('Keep going');
+      return html + back;
+    },
+    sMedicaid: function () {
+      var html = '<div class="kick">Question 3</div><h2>Do you have Medicaid?</h2><p class="hint">In Missouri it is called MO HealthNet.</p><div class="opts">' +
+        opt('medicaid', 'Yes', 'Yes, I have it', 'i-check') + opt('medicaid', 'Not sure', 'I&rsquo;m not sure', 'i-info') + opt('medicaid', 'No', 'No, not right now', 'i-clock') + '</div>';
+      if (a.medicaid === 'Yes') html += '<div class="good"><strong>That&rsquo;s the big one.</strong><p>CDS is paid for through MO HealthNet, so you are already past the first step.</p></div>' + go();
+      if (a.medicaid === 'Not sure') html += '<div class="good"><strong>That&rsquo;s okay. We can check for you.</strong><p>All we need is your full name and date of birth. We ask for them at the end.</p></div>' + go();
+      if (a.medicaid === 'No') html += '<div class="good heads"><strong>CDS needs MO HealthNet.</strong><p>The program is paid for through Missouri Medicaid. If you might qualify, or have applied, keep going and we will talk about what comes next.</p></div>' + go('Keep going');
+      return html + back;
+    },
+    sTasks: function () {
+      return '<div class="kick">Question 4</div><h2>What do you need help with?</h2><p class="hint">Tap all that fit. These are the everyday tasks CDS can pay for.</p><div class="opts multi">' +
+        TASKS.map(function (t) { return '<button class="opt" data-task="' + t[0] + '" aria-pressed="' + (a.tasks.indexOf(t[0]) > -1) + '"><span class="ic" aria-hidden="true">' + icon(t[1]) + '</span><span>' + t[0] + '</span></button>'; }).join('') + '</div>' +
+        (a.tasks.length ? '<div class="good warm"><strong>Those are the tasks CDS is for.</strong><p>If the state approves care hours for you, you choose who gives that care.</p></div>' : '') +
+        go('Continue', !a.tasks.length) + back;
+    },
+    helper: function () {
+      var html = '<div class="kick">Question 5</div><h2>Do you have someone in mind to be your caregiver?</h2><p class="hint">Many people choose a son, daughter, grandchild, other relative or friend.</p><div class="opts">' +
+        opt('helper', 'has', 'Yes, someone I know', 'i-handshake') + opt('helper', 'find', 'I&rsquo;d like help finding someone', 'i-search') + opt('helper', 'unsure', 'Not sure yet', 'i-info') + '</div>';
+      if (a.helper === 'has') {
+        html += '<div class="good"><strong>Wonderful.</strong><p>They can be paid $15 to $16 an hour, every Thursday, for the approved hours they work.</p>' +
+          '<label class="f" for="helperName">Their first name <span style="font-weight:400;color:var(--muted)">(optional)</span></label><input id="helperName" type="text" data-in="helperName" value="' + esc(a.helperName || '') + '">' +
+          '<label class="f" for="helperRel">How are they related to you?</label><select id="helperRel" data-sel="helperRel"><option value="">Choose one</option>' +
+          HELPER_REL.map(function (r) { return '<option' + (a.helperRel === r ? ' selected' : '') + '>' + r + '</option>'; }).join('') + '</select></div>';
+        if (a.helperRel === 'Husband or wife') html += '<div class="good heads"><strong>One thing to know</strong><p>Missouri does not pay a husband or wife through CDS. Another relative or a friend can be your paid caregiver instead. We are happy to talk it through.</p></div>';
+        html += go();
+      }
+      if (a.helper === 'find') html += '<div class="good"><strong>We can help you look.</strong><p>We will talk about what you need and help you find a caregiver who fits. You still choose who you hire.</p></div>' + go();
+      if (a.helper === 'unsure') html += '<div class="good warm"><strong>That&rsquo;s okay.</strong><p>We will talk it through when we call.</p></div>' + go();
+      return html + back;
+    },
+    sHow: function () {
+      return '<div class="kick">How it works</div><h2>Four steps to care at home</h2><ul class="list">' +
+        '<li><span class="n">1</span><span><strong>We talk with you.</strong> A short call to go over your answers. With your OK, we refer you to the program.</span></li>' +
+        '<li><span class="n">2</span><span><strong>The state assessment.</strong> The state meets with you to see whether you qualify and decides how many hours of help you get.</span></li>' +
+        '<li><span class="n">3</span><span><strong>Sign up with us.</strong> One signing packet, on your phone or on paper, whichever you prefer.</span></li>' +
+        '<li><span class="n">4</span><span><strong>Your caregiver starts.</strong> You set the schedule. Your caregiver clocks in and out for every shift, and we handle payroll and taxes.</span></li>' +
+        '</ul>' + go('Almost done') + back;
+    },
+    sFaq: function () {
+      return '<div class="kick">Good questions</div><h2>Why people choose Caring Companions</h2><div class="card" style="padding-block: 6px">' +
+        '<details open><summary>Who is the boss?</summary><p>You are. In CDS the person receiving care is the employer. You choose your caregiver, set the schedule and pick which CDS provider you use. We take care of payroll, taxes and paperwork for you.</p></details>' +
+        '<details><summary>Can a family member be my caregiver?</summary><p>Yes. Adult children, grandchildren, siblings, other relatives, friends and neighbors can. A husband, wife or legal guardian cannot be paid.</p></details>' +
+        '<details><summary>What if I don&rsquo;t have anyone in mind?</summary><p>We can help you look for a caregiver who fits. You still choose who you hire.</p></details>' +
+        '<details><summary>Can I switch to you from another agency?</summary><p>Yes. If you already use another CDS provider, there is no new assessment. The authorization moves with you, care is not interrupted, and we guide you through every step.</p></details>' +
+        '<details><summary>Who will I talk to?</summary><p>Our CDS team in Southwest Missouri. Call 417-218-2888 with any question, or toll free 866-863-5151.</p></details>' +
+        '</div>' + go('Get my call') + back;
+    },
+    sContact: function () {
+      return '<div class="kick">Last step</div><h2>Where can our CDS team reach you?</h2><p class="hint">We will call to go over your answers and help you get started.</p>' +
+        '<form id="lead" novalidate>' +
+        '<label class="f" for="first">Your first name</label><input id="first" type="text" autocomplete="given-name" value="' + esc(a.first || '') + '">' +
+        '<label class="f" for="last">Your last name</label><input id="last" type="text" autocomplete="family-name" value="' + esc(a.last || '') + '">' +
+        '<label class="f" for="phone">Your phone</label><input id="phone" type="tel" inputmode="tel" autocomplete="tel" value="' + esc(a.phone || '') + '">' +
+        '<label class="f" for="dob">Your date of birth <span style="font-weight:400;color:var(--muted)">(optional, so we can check your MO HealthNet)</span></label><input id="dob" type="text" inputmode="numeric" placeholder="MM/DD/YYYY" autocomplete="bday" value="' + esc(a.dob || '') + '">' +
+        '<label class="f" for="email">Email <span style="font-weight:400;color:var(--muted)">(optional)</span></label><input id="email" type="email" autocomplete="email" value="' + esc(a.email || '') + '">' +
+        '<label class="f" for="when">Best time to call</label><select id="when"><option>Any time</option><option>Morning</option><option>Afternoon</option><option>Evening</option></select>' +
+        '<div id="err" class="err" hidden></div>' +
+        '<button class="btn btn-go" type="submit" id="send">Yes, call me &rarr;</button>' +
+        '<p class="fine">By tapping, you agree that Caring Companions Consumer Directed Services may call or text you about CDS at the number above. Agreeing is not required to get services. Message and data rates may apply. Reply STOP to opt out. See our <a href="/privacy/">Privacy Policy</a>.</p>' +
+        '</form>' + back;
+    },
+    sDone: function () {
+      return '<div class="done step"><div class="burst" aria-hidden="true">' + icon('i-celebrate') + '</div><h2>You&rsquo;re on your way, ' + esc(a.first) + '!</h2>' +
+        '<p class="lede" style="margin-inline:auto">Our CDS team has your answers and will call you' + (a.when && a.when !== 'Any time' ? ' in the ' + a.when.toLowerCase() : '') + ' from:</p>' +
+        '<div class="phone">417-218-2888</div><p class="hint">Save it in your phone so you know it&rsquo;s us.</p>' +
+        '<div class="card"><strong style="font-family:var(--display);font-size:22px;font-weight:500;color:var(--navy)">While you wait</strong><ul class="list">' +
+        '<li><span class="ck">✓</span><span>Find your MO HealthNet card, if you have one.</span></li>' +
+        '<li><span class="ck">✓</span><span>Think about who you would like as your caregiver' + (a.helperName ? ', and let ' + esc(a.helperName) + ' know we will call you' : '') + '.</span></li>' +
+        '<li><span class="ck">✓</span><span>Write down any questions. No question is too small.</span></li>' +
+        '</ul></div>' +
+        (LIVE ? '' : '<div class="preview-note"><strong>Preview only.</strong> Nothing was sent. On caringcds.com this would land on the CDS Leads tab and in GoHighLevel.</div>') +
+        '</div>';
+    },
     done: function () {
       return '<div class="done step"><div class="burst" aria-hidden="true">' + icon('i-celebrate') + '</div><h2>You&rsquo;re on your way, ' + esc(a.first) + '!</h2>' +
         '<p class="lede" style="margin-inline:auto">Our CDS team has your answers and will call you' + (a.when && a.when !== 'Any time' ? ' in the ' + a.when.toLowerCase() : '') + ' from:</p>' +
@@ -356,11 +473,13 @@ details p { margin-top: 10px; font-size: 17px; line-height: 1.6; color: var(--so
     }
   };
 
+  if (PATHS[q.get('for')]) { a.path = q.get('for'); STEPS = PATHS[a.path]; i = 1; }
   function render() {
     var s = STEPS[i];
     app.innerHTML = '<div class="step">' + view[s]() + '</div>';
+    app.classList.toggle('big', a.path === 'self');
     document.getElementById('bar').style.width = Math.round(i / (STEPS.length - 1) * 100) + '%';
-    if (s === 'done') confetti();
+    if (s === 'done' || s === 'sDone') confetti();
   }
   function move(d) { i = Math.max(0, Math.min(STEPS.length - 1, i + d)); render(); window.scrollTo({ top: 0, behavior: 'smooth' }); }
   function keep() {
@@ -369,6 +488,7 @@ details p { margin-top: 10px; font-size: 17px; line-height: 1.6; color: var(--so
 
   app.addEventListener('click', function (e) {
     var o = e.target.closest('[data-k]');
+    if (o && o.dataset.k === 'path') { a.path = o.dataset.v; STEPS = PATHS[a.path]; i = 1; render(); window.scrollTo({ top: 0, behavior: 'smooth' }); return; }
     if (o) { a[o.dataset.k] = o.dataset.v; render(); keep(); return; }
     var t = e.target.closest('[data-task]');
     if (t) { var k = a.tasks.indexOf(t.dataset.task); if (k > -1) a.tasks.splice(k, 1); else a.tasks.push(t.dataset.task); render(); return; }
@@ -389,7 +509,7 @@ details p { margin-top: 10px; font-size: 17px; line-height: 1.6; color: var(--so
   });
   app.addEventListener('submit', async function (e) {
     e.preventDefault();
-    ['first','last','phone','email','cared','when'].forEach(function (k) { a[k] = document.getElementById(k).value.trim(); });
+    ['first','last','phone','email','cared','when','dob'].forEach(function (k) { var el = document.getElementById(k); if (el) a[k] = el.value.trim(); });
     var err = document.getElementById('err'), bad = [];
     ['first','last','phone'].forEach(function (k) { document.getElementById(k).style.borderColor = ''; if (!a[k]) bad.push(k); });
     if (a.phone && a.phone.replace(/\D/g, '').replace(/^1/, '').length !== 10) bad.push('phone');
@@ -399,14 +519,18 @@ details p { margin-top: 10px; font-size: 17px; line-height: 1.6; color: var(--so
       err.hidden = false; document.getElementById(bad[0]).focus(); return;
     }
     var btn = document.getElementById('send'); btn.disabled = true; btn.textContent = 'Sending…';
-    var lines = [
+    var lines = a.path === 'self' ? [
+      'Filled out by: the person who needs care', 'Date of birth: ' + (a.dob || ''), 'Makes own decisions: ' + (a.decide || ''),
+      'Needs help with: ' + a.tasks.join(', '), 'Caregiver in mind: ' + ({ has: 'Yes', find: 'Wants help finding one', unsure: 'Not sure yet' }[a.helper] || '') +
+        (a.helperName || a.helperRel ? ' (' + [a.helperName, a.helperRel].filter(Boolean).join(', ') + ')' : ''), 'Best time to call: ' + (a.when || '')
+    ] : [
       'Who they care for: ' + (a.who || ''), 'Their full name: ' + (a.consName || ''), 'Their date of birth: ' + (a.consDob || ''), 'Makes own decisions: ' + (a.decide || ''), 'Their first name: ' + (a.cared || ''),
       'Needs help with: ' + a.tasks.join(', '), 'Hours a week they pictured: ' + a.hours,
       '18+, can work in US, background screening: ' + (a.basics || ''), 'Best time to call: ' + (a.when || '')
     ];
     ['utm_source','utm_medium','utm_campaign','utm_content','ref'].forEach(function (k) { if (a[k]) lines.push(k.replace('_', ' ') + ': ' + a[k]); });
-    var row = { agency_id: 'caring-companions-cds', source: 'get paid to care', first_name: a.first, last_name: a.last, phone: a.phone, email: a.email || null,
-      county: a.county || null, who_needs_care: 'wants to be the caregiver', has_medicaid: (a.medicaid || '').toLowerCase(), message: lines.join('\n') };
+    var row = { agency_id: 'caring-companions-cds', source: a.path === 'self' ? 'get care at home' : 'get paid to care', first_name: a.first, last_name: a.last, phone: a.phone, email: a.email || null,
+      county: a.county || null, who_needs_care: a.path === 'self' ? 'self' : 'wants to be the caregiver', has_medicaid: (a.medicaid || '').toLowerCase(), message: lines.join('\n') };
     try {
       if (LIVE && KEY) await toLead();
       else if (LIVE) {
