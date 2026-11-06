@@ -128,10 +128,10 @@ details p { margin-top: 10px; font-size: 17px; line-height: 1.6; color: var(--so
 <script>
 (function () {
   var COUNTIES = ['Barry','Barton','Benton','Camden','Cedar','Christian','Dade','Dallas','Douglas','Greene','Hickory','Jasper','Laclede','Lawrence','McDonald','Newton','Ozark','Phelps','Polk','Pulaski','St. Clair','Stone','Taney','Texas','Vernon','Webster','Wright'];
-  var TASKS = [['Bathing','🛁'],['Dressing','👕'],['Meals','🍲'],['Housework','🧺'],['Errands and rides','🚗'],['Medicine reminders','💊'],['Getting around','🦯'],['Keeping them company','💬']];
+  var TASKS = [['Bathing and grooming','🛁'],['Dressing','👕'],['Meals','🍲'],['Toileting','🚻'],['Getting in and out of bed','🛏️'],['Getting around','🦯'],['Housekeeping','🧺'],['Shopping and rides','🚗']];
   var LIVE = /(^|\.)caringcds\.com$/.test(location.hostname);
-  var a = { tasks: [], hours: 20 };
-  var STEPS = ['hello','who','county','medicaid','tasks','hours','payday','you','how','faq','contact','done'];
+  var a = { tasks: [], hours: 15 };
+  var STEPS = ['hello','who','decide','county','medicaid','tasks','hours','payday','you','how','faq','contact','done'];
   var i = 0, app = document.getElementById('app');
 
   var q = new URLSearchParams(location.search);
@@ -150,7 +150,7 @@ details p { margin-top: 10px; font-size: 17px; line-height: 1.6; color: var(--so
     hello: function () {
       return '<div class="kick">Missouri Consumer Directed Services</div>' +
         '<h1>Get paid to care for someone you love.</h1>' +
-        '<p class="lede">If you already help a family member or friend at home, Missouri&rsquo;s CDS program can pay you for it. Answer a few quick questions and see what you could earn.</p>' +
+        '<p class="lede">When an adult you love needs help at home because of a disability or health condition, Missouri&rsquo;s CDS program lets them choose a family member or friend as their paid caregiver. Answer a few quick questions and see what you could earn.</p>' +
         '<div class="chips"><span class="chip"><b>$15 to $16</b> an hour</span><span class="chip">Paid <b>every Thursday</b></span><span class="chip">About <b>2 minutes</b></span></div>' +
         go('Let&rsquo;s see if you qualify') +
         '<p class="fine">27 Southwest Missouri counties. No trip to Springfield required.</p>';
@@ -161,13 +161,23 @@ details p { margin-top: 10px; font-size: 17px; line-height: 1.6; color: var(--so
         opt('who', 'Another relative', 'Another relative', '🏡', 'Aunt, uncle, sibling, cousin') +
         opt('who', 'A friend or neighbor', 'A friend or neighbor', '🤝') +
         opt('who', 'My husband or wife', 'My husband or wife', '💍') + '</div>';
-      if (a.who === 'My husband or wife') html += '<div class="good heads"><strong>One thing to know</strong><p>Missouri does not pay a spouse through CDS. Many families have an adult child, sibling or friend take the paid hours instead, so the caring is shared. We are happy to talk it through with you.</p></div>' + go('Keep going');
+      if (a.who === 'My husband or wife') html += '<div class="good heads"><strong>One thing to know</strong><p>Missouri does not pay a spouse or a legal guardian through CDS. Many families have an adult child, sibling or friend take the paid hours instead, so the caring is shared. We are happy to talk it through with you.</p></div>' + go('Keep going');
       else if (a.who) html += '<div class="good"><strong>Wonderful.</strong><p>Family and friends are exactly who CDS was made for. The person you care for chooses their own caregiver, and they can choose you.</p></div>' + go();
+      return html + back;
+    },
+    decide: function () {
+      var html = '<div class="kick">Question 2</div><h2>Do they make their own decisions about their care?</h2><p class="hint">In CDS, the person getting care is the boss. They hire, train and direct their caregiver.</p><div class="opts">' +
+        opt('decide', 'Yes', 'Yes, they make their own decisions', '🧭') +
+        opt('decide', 'Has guardian or POA', 'Someone has guardianship or power of attorney for them', '📄') +
+        opt('decide', 'Not sure', 'I&rsquo;m not sure', '🤔') + '</div>';
+      if (a.decide === 'Yes') html += '<div class="good"><strong>Perfect.</strong><p>That is exactly how CDS works. They stay in charge, and we handle the payroll and paperwork.</p></div>' + go();
+      if (a.decide === 'Has guardian or POA') html += '<div class="good heads"><strong>Let&rsquo;s talk about this one.</strong><p>Missouri does not allow CDS for someone with a guardian or conservator, or a power of attorney that lets someone else handle their care decisions. Keep going and we will look at your situation together.</p></div>' + go('Keep going');
+      if (a.decide === 'Not sure') html += '<div class="good warm"><strong>That&rsquo;s okay.</strong><p>We will go over it together when we call.</p></div>' + go();
       return html + back;
     },
     county: function () {
       var inArea = COUNTIES.indexOf(a.county) > -1;
-      var html = '<div class="kick">Question 2</div><h2>Which county do they live in?</h2>' +
+      var html = '<div class="kick">Question 3</div><h2>Which county do they live in?</h2>' +
         '<label class="f" for="county">County in Missouri</label><select id="county" data-sel="county"><option value="">Choose a county</option>' +
         COUNTIES.map(function (c) { return '<option' + (a.county === c ? ' selected' : '') + '>' + c + '</option>'; }).join('') +
         '<option' + (a.county === 'Another Missouri county' ? ' selected' : '') + '>Another Missouri county</option></select>';
@@ -176,7 +186,7 @@ details p { margin-top: 10px; font-size: 17px; line-height: 1.6; color: var(--so
       return html + back;
     },
     medicaid: function () {
-      var html = '<div class="kick">Question 3</div><h2>Do they have Medicaid?</h2><p class="hint">In Missouri it is called MO HealthNet.</p><div class="opts">' +
+      var html = '<div class="kick">Question 4</div><h2>Do they have Medicaid?</h2><p class="hint">In Missouri it is called MO HealthNet.</p><div class="opts">' +
         opt('medicaid', 'Yes', 'Yes, they have it', '✅') + opt('medicaid', 'Not sure', 'I&rsquo;m not sure', '🤔') + opt('medicaid', 'No', 'No, not right now', '✋') + '</div>';
       if (a.medicaid === 'Yes') html += '<div class="good"><strong>That&rsquo;s the big one.</strong><p>CDS is paid for through MO HealthNet, so you are already past the first step.</p></div>' + go();
       if (a.medicaid === 'Not sure') html += '<div class="good"><strong>That&rsquo;s okay.</strong><p>Lots of families aren&rsquo;t sure. We can help you find out when we call.</p></div>' + go();
@@ -184,18 +194,18 @@ details p { margin-top: 10px; font-size: 17px; line-height: 1.6; color: var(--so
       return html + back;
     },
     tasks: function () {
-      return '<div class="kick">Question 4</div><h2>What do you already help with?</h2><p class="hint">Tap all that fit.</p><div class="opts multi">' +
+      return '<div class="kick">Question 5</div><h2>What do they need help with?</h2><p class="hint">Tap all that fit. These are the everyday tasks CDS can pay for.</p><div class="opts multi">' +
         TASKS.map(function (t) { return '<button class="opt" data-task="' + t[0] + '" aria-pressed="' + (a.tasks.indexOf(t[0]) > -1) + '"><span class="ic" aria-hidden="true">' + t[1] + '</span><span>' + t[0] + '</span></button>'; }).join('') + '</div>' +
-        (a.tasks.length ? '<div class="good warm"><strong>You&rsquo;re already doing the work.</strong><p>' + (a.tasks.length > 2 ? 'That is a lot of love. ' : '') + 'CDS lets you get paid for the care ' + them() + ' is authorized to receive.</p></div>' : '') +
+        (a.tasks.length ? '<div class="good warm"><strong>' + (a.tasks.length > 2 ? 'That is a lot to carry.' : 'Those are the tasks CDS is for.') + '</strong><p>If the state approves care hours for ' + them() + ', they can choose you to give that care, and you get paid for it.</p></div>' : '') +
         go('Continue', !a.tasks.length) + back;
     },
     hours: function () {
-      return '<div class="kick">Question 5</div><h2>About how many hours a week do you help?</h2>' +
+      return '<div class="kick">See what you could earn</div><h2>If hours are approved, how many a week would you work?</h2>' +
         '<div class="card money"><div class="big" id="wk">' + money(a.hours * 15) + '&ndash;' + money(a.hours * 16).slice(1) + '</div><div class="per">a week, before taxes</div>' +
-        '<input type="range" id="hours" min="5" max="40" step="1" value="' + a.hours + '" aria-label="Hours a week">' +
-        '<div class="hrs"><span>5 hrs</span><b id="hv">' + a.hours + ' hours a week</b><span>40 hrs</span></div>' +
+        '<input type="range" id="hours" min="5" max="35" step="1" value="' + a.hours + '" aria-label="Hours a week">' +
+        '<div class="hrs"><span>5 hrs</span><b id="hv">' + a.hours + ' hours a week</b><span>35 hrs</span></div>' +
         '<div class="trio"><div><b id="mo">' + money(a.hours * 15.5 * 52 / 12) + '</b><span>a month</span></div><div><b id="yr">' + money(a.hours * 15.5 * 52) + '</b><span>a year</span></div><div><b>$15&ndash;16</b><span>an hour</span></div></div></div>' +
-        '<p class="fine">An estimate to help you picture it. The state assessment decides how many hours ' + them() + ' gets each month, and you are paid for the hours you actually work within that.</p>' +
+        '<p class="fine">An example to help you picture it, not a promise. The state assessment decides whether ' + them() + ' qualifies and how many hours they get each month. Many people are approved for fewer hours than this. You are paid only for approved hours you actually work.</p>' +
         go('That&rsquo;s about right') + back;
     },
     payday: function () {
@@ -211,7 +221,7 @@ details p { margin-top: 10px; font-size: 17px; line-height: 1.6; color: var(--so
         '</ul>' + go('Sounds good') + back;
     },
     you: function () {
-      var html = '<div class="kick">Question 6</div><h2>A few quick things about you</h2><p class="hint">Every paid caregiver in Missouri must be 18 or older, able to work in the US, and pass the state background screening.</p><div class="opts">' +
+      var html = '<div class="kick">Question 6</div><h2>A few quick things about you</h2><p class="hint">Every CDS caregiver must be 18 or older, able to work in the US, and pass the state background screening through the Family Care Safety Registry.</p><div class="opts">' +
         opt('basics', 'Yes', 'Yes, that&rsquo;s me', '🙋') + opt('basics', 'Not sure', 'I have a question about one of these', '❓') + '</div>';
       if (a.basics === 'Yes') html += '<div class="good"><strong>You sound like a great fit.</strong><p>Next, here is how getting started works.</p></div>' + go();
       if (a.basics === 'Not sure') html += '<div class="good warm"><strong>No problem.</strong><p>Ask us when we call. We will give you a straight answer.</p></div>' + go();
@@ -220,16 +230,17 @@ details p { margin-top: 10px; font-size: 17px; line-height: 1.6; color: var(--so
     how: function () {
       return '<div class="kick">How it works</div><h2>Four steps to your first paycheck</h2><ul class="list">' +
         '<li><span class="n">1</span><span><strong>We talk.</strong> A short call to make sure CDS fits and answer your questions.</span></li>' +
-        '<li><span class="n">2</span><span><strong>The state assessment.</strong> The state meets with ' + them() + ' and decides how many hours of help they get.</span></li>' +
+        '<li><span class="n">2</span><span><strong>The state assessment.</strong> The state meets with ' + them() + ' to see whether they qualify and decides how many hours of help they get.</span></li>' +
         '<li><span class="n">3</span><span><strong>Sign up with us.</strong> One signing packet, on your phone or on paper, whichever you prefer.</span></li>' +
         '<li><span class="n">4</span><span><strong>Start caring and get paid.</strong> You work the schedule ' + them() + ' sets, clock in and out, and get paid every Thursday.</span></li>' +
         '</ul>' + go('Almost done') + back;
     },
     faq: function () {
       return '<div class="kick">Good questions</div><h2>Why families choose Caring Companions</h2><div class="card" style="padding-block: 6px">' +
-        '<details open><summary>Who is the boss?</summary><p>' + them().replace(/^your/, 'Your') + ' is. In CDS the person receiving care is the employer. They choose their caregiver and set the schedule, and we take care of payroll, taxes and paperwork for them.</p></details>' +
+        '<details open><summary>Who is the boss?</summary><p>' + them().replace(/^your/, 'Your') + ' is. In CDS the person receiving care is the employer. They choose their caregiver, set the schedule and pick which CDS provider they use. We take care of payroll, taxes and paperwork for them.</p></details>' +
         '<details><summary>Do I need training or a license?</summary><p>No license is needed. Missouri does require a short orientation on a set list of topics. It is one honest conversation with a checklist, and we help you through it.</p></details>' +
-        '<details><summary>How much do you pay?</summary><p>$15 to $16 an hour. Every CDS agency in Missouri sets its own caregiver pay, so it is worth comparing. If it ever changes, we tell you before it takes effect.</p></details>' +
+        '<details><summary>How much do you pay?</summary><p>$15 to $16 an hour, paid every Thursday. Every CDS provider in Missouri sets its own caregiver pay. If ours ever changes, we tell you before it takes effect.</p></details>' +
+        '<details><summary>Who cannot be paid?</summary><p>A spouse or a legal guardian cannot be the paid caregiver. Adult children, siblings, grandchildren, other relatives, friends and neighbors can.</p></details>' +
         '<details><summary>Can I switch to you from another agency?</summary><p>Yes. Yes. If you already use another CDS provider, there is no new assessment. The authorization moves with you, care is not interrupted, and we guide you through every step.</p></details>' +
         '<details><summary>Who will I talk to?</summary><p>Our CDS team in Southwest Missouri. Call 417-218-2888 with any question, or toll free 866-863-5151.</p></details>' +
         '</div>' + go('Get my call') + back;
@@ -245,7 +256,7 @@ details p { margin-top: 10px; font-size: 17px; line-height: 1.6; color: var(--so
         '<label class="f" for="when">Best time to call</label><select id="when"><option>Any time</option><option>Morning</option><option>Afternoon</option><option>Evening</option></select>' +
         '<div id="err" class="err" hidden></div>' +
         '<button class="btn btn-go" type="submit" id="send">Yes, call me &rarr;</button>' +
-        '<p class="fine">By tapping, you agree that Caring Companions may call or text you about CDS at the number above. Message and data rates may apply. Reply STOP to opt out.</p>' +
+        '<p class="fine">By tapping, you agree that Caring Companions Consumer Directed Services may call or text you about CDS at the number above. Agreeing is not required to get services. Message and data rates may apply. Reply STOP to opt out.</p>' +
         '</form>' + back;
     },
     done: function () {
@@ -254,7 +265,7 @@ details p { margin-top: 10px; font-size: 17px; line-height: 1.6; color: var(--so
         '<div class="phone">417-218-2888</div><p class="hint">Save it in your phone so you know it&rsquo;s us.</p>' +
         '<div class="card"><strong style="font-family:var(--display);font-size:22px;font-weight:500;color:var(--navy)">While you wait</strong><ul class="list">' +
         '<li><span class="ck">✓</span><span>Find ' + (a.cared ? esc(a.cared) + '&rsquo;s' : them() + '&rsquo;s') + ' MO HealthNet card, if they have one.</span></li>' +
-        '<li><span class="ck">✓</span><span>Jot down the days and times you usually help.</span></li>' +
+        '<li><span class="ck">✓</span><span>Let ' + (a.cared ? esc(a.cared) : them()) + ' know we will call. They are the one in charge, so we will want to talk with them too.</span></li>' +
         '<li><span class="ck">✓</span><span>Write down any questions. No question is too small.</span></li>' +
         '</ul></div>' +
         (LIVE ? '' : '<div class="preview-note"><strong>Preview only.</strong> Nothing was sent. On caringcds.com this would land on the CDS Leads tab and in GoHighLevel.</div>') +
@@ -305,8 +316,8 @@ details p { margin-top: 10px; font-size: 17px; line-height: 1.6; color: var(--so
     }
     var btn = document.getElementById('send'); btn.disabled = true; btn.textContent = 'Sending…';
     var lines = [
-      'Who they care for: ' + (a.who || ''), 'Their first name: ' + (a.cared || ''),
-      'Helps with: ' + a.tasks.join(', '), 'Hours a week now: about ' + a.hours,
+      'Who they care for: ' + (a.who || ''), 'Makes own decisions: ' + (a.decide || ''), 'Their first name: ' + (a.cared || ''),
+      'Needs help with: ' + a.tasks.join(', '), 'Hours a week they pictured: ' + a.hours,
       '18+, can work in US, background screening: ' + (a.basics || ''), 'Best time to call: ' + (a.when || '')
     ];
     ['utm_source','utm_medium','utm_campaign','utm_content','ref'].forEach(function (k) { if (a[k]) lines.push(k.replace('_', ' ') + ': ' + a[k]); });
