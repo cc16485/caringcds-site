@@ -62,6 +62,9 @@ var SUPABASE_ANON = 'sb_publishable_iDJ00Ve4hw5iw2YtVmiulg__FmjShmO';
 var AGENCY_ID     = 'caring-companions-cds';
 var GHL_WEBHOOK   = null;   // set to the GHL inbound webhook URL to enable automations
 
+/* Visit counter (2026-11-09): lives in assets/visit.js so /start/ (which does not load this file) counts too. */
+(function () { try { var v = document.createElement('script'); v.src = '/assets/visit.js?v=1'; v.async = true; document.head.appendChild(v); } catch (e) {} })();
+
 (function () {
   var forms = document.querySelectorAll('form[data-lead-form], form[data-pool-form]');
   if (!forms.length) return;
