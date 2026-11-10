@@ -18,8 +18,8 @@
    {
     "chip": "What is CDS?",
     "head": "You choose your caregiver",
-    "sub": "Medicaid pays them. No cost to you.",
-    "text": "In CDS, the person who needs care chooses their own caregiver. Often it's someone they already know and trust: an adult son or daughter, a grandchild, a friend, or the neighbor who already helps. Medicaid pays the caregiver, and there's no cost to the person receiving care."
+    "sub": "Medicaid pays for approved services",
+    "text": "In CDS, the person who needs care chooses their own caregiver. Often it's someone they already know and trust: an adult son or daughter, a grandchild, a friend, or the neighbor who already helps. Medicaid pays the caregiver for the services the state approves, and there's no charge to the person receiving care for those approved hours."
    },
    {
     "chip": "The rules",
@@ -43,7 +43,7 @@
     "chip": "Step 2 of 8",
     "head": "Referral and state assessment",
     "sub": "Your plan of care: the tasks and the hours",
-    "text": "Step two: the state assessment. We refer you to the state, or you can refer yourself. The state then contacts you to set up an assessment of the help you need. The result is your plan of care: the tasks your caregiver is paid for, and how many hours. Switching from another CDS agency? There's no new assessment. Your hours move with you."
+    "text": "Step two: the state assessment. We refer you to the state, or you can refer yourself. The state then contacts you to set up an assessment of the help you need. The result is your plan of care: the tasks your caregiver is paid for, and how many hours. Switching from another CDS agency? We help coordinate the move, and in many cases your hours move with you."
    },
    {
     "chip": "Step 3 of 8",
@@ -116,51 +116,51 @@
     "You choose your caregiver"
    ],
    [
-    "0:44",
+    "0:48",
     "Who can be paid"
    ],
    [
-    "1:06",
+    "1:10",
     "The person receiving care stays in charge"
    ],
    [
-    "1:21",
+    "1:26",
     "Step 1 of 8: Check that CDS fits"
    ],
    [
-    "1:45",
+    "1:49",
     "Step 2 of 8: Referral and state assessment"
    ],
    [
-    "2:21",
+    "2:25",
     "Step 4 of 8: Become the employer, on paper"
    ],
    [
-    "2:39",
+    "2:44",
     "Step 5 of 8: Choose your caregiver"
    ],
    [
-    "3:03",
+    "3:07",
     "Step 6 of 8: Orientation"
    ],
    [
-    "3:18",
+    "3:23",
     "Step 7 of 8: Clocking in (EVV)"
    ],
    [
-    "3:37",
+    "3:42",
     "Step 8 of 8: The first shift"
    ],
    [
-    "3:53",
+    "3:57",
     "$15 to $16 an hour, every Thursday"
    ],
    [
-    "4:22",
+    "4:27",
     "Our steps move in days"
    ],
    [
-    "4:33",
+    "4:38",
     "How to reach us"
    ]
   ]
