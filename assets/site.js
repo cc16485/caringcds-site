@@ -66,6 +66,8 @@ var GHL_WEBHOOK   = null;   // set to the GHL inbound webhook URL to enable auto
 (function () { try { var v = document.createElement('script'); v.src = '/assets/visit.js?v=1'; v.async = true; document.head.appendChild(v); } catch (e) {} })();
 /* Facebook pixel (2026-11-11): page views only, never on private pages; see assets/fb.js. */
 (function () { try { var s = document.createElement('script'); s.src = '/assets/fb.js?v=1'; s.async = true; document.head.appendChild(s); } catch (e) {} })();
+/* Email sign-up box (2026-11-11): worksheet sign-ups on the home, Getting Paid, How it works, Consumers, check, service area and county pages; see assets/email-signup.js. */
+(function () { try { var s = document.createElement('script'); s.src = '/assets/email-signup.js?v=1'; s.async = true; document.head.appendChild(s); } catch (e) {} })();
 /* Google tag (2026-11-11): page views, sent forms and phone taps only, never on private pages; see assets/ga.js. */
 (function () { try { var s = document.createElement('script'); s.src = '/assets/ga.js?v=2'; s.async = true; document.head.appendChild(s); } catch (e) {} })();
 
