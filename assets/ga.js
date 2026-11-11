@@ -4,8 +4,11 @@
    - Never on the private pages: attendant application, enrollment, form signing, training courses.
    - Google gets three things: page views, "lead_submitted" with a plain form name from the list below, and
      "call_click" when someone taps a phone number. Never anything a person types, never their answers.
-   - Web addresses are cleaned before Google sees them: only ad codes (utm_*, gclid, gbraid, wbraid) are kept,
-     so a lead's own link code (?k=...) on /start never reaches Google.
+   - Web addresses: Google's tag reads the real address itself, so cleaning it in code is not enough (checked live
+     2026-11-11). If this page's address, or the caringcds.com page the visitor came from, carries anything other
+     than ad codes (utm_*, gclid, gbraid, wbraid), the Google tag does not load for that visit at all. A lead's own
+     link code (?k=...) on /start can never reach Google. The Google Analytics stream also redacts k, c, for, end,
+     head, token, email, phone, name, first and last as a second guard.
    - Google signals and ad personalization are off: this is for counting leads, not for following people. */
 (function () {
   'use strict';
@@ -16,6 +19,11 @@
   var FORMS = { consumer: 1, caregiver: 1, caregiver_list: 1, contact: 1, check: 1, start: 1, home: 1, area: 1 };
   var on = false;
 
+  // True when an address carries anything besides ad codes.
+  function extra(href) {
+    try { var bad = false; new URL(href).searchParams.forEach(function (v, k) { if (!KEEP.test(k)) bad = true; }); return bad; }
+    catch (e) { return true; }
+  }
   function clean(href) {
     try {
       var u = new URL(href), keep = [];
@@ -39,6 +47,7 @@
   window.CDSGa = {
     formName: formName,
     clean: clean,
+    extra: extra,
     lead: function (source) {
       try { if (on) window.gtag('event', 'lead_submitted', { form: formName(source) }); } catch (e) {}
     }
@@ -48,6 +57,8 @@
     if (!GA_ID) return;
     if (!/(^|\.)caringcds\.com$/.test(location.hostname)) return;
     if (PRIVATE.test(location.pathname)) return;
+    if (extra(location.href)) return;
+    if (document.referrer && /^https?:\/\/([a-z0-9-]+\.)*caringcds\.com\//i.test(document.referrer) && extra(document.referrer)) return;
     var s = document.createElement('script'); s.async = true;
     s.src = 'https://www.googletagmanager.com/gtag/js?id=' + GA_ID;
     document.head.appendChild(s);
