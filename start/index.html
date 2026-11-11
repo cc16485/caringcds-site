@@ -540,6 +540,7 @@ h2.ask { margin-top: 28px; font-size: clamp(24px, 5vw, 30px); }
         if (res.error) throw res.error;
       }
       try { if (LIVE && window.CDSFb) window.CDSFb.markSent(); } catch (ignore) {}
+      try { if (LIVE && window.CDSGa) window.CDSGa.lead('start'); } catch (ignore) {}
       move(1);
     } catch (x) {
       btn.disabled = false; btn.textContent = 'Yes, call me →';
@@ -567,6 +568,6 @@ h2.ask { margin-top: 28px; font-size: clamp(24px, 5vw, 30px); }
 </script>
 
 <script src="/assets/visit.js?v=1" async></script>
-<script src="/assets/fb.js?v=1" async></script><!-- Facebook pixel, page views only (2026-11-11) --><!-- visit counter (2026-11-09, content scorecard) -->
+<script src="/assets/fb.js?v=1" async></script><script src="/assets/ga.js?v=1" async></script><!-- Google tag, page views + sent form + phone taps (2026-11-11) --><!-- Facebook pixel, page views only (2026-11-11) --><!-- visit counter (2026-11-09, content scorecard) -->
 </body>
 </html>
