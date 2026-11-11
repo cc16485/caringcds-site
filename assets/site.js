@@ -67,7 +67,7 @@ var GHL_WEBHOOK   = null;   // set to the GHL inbound webhook URL to enable auto
 /* Facebook pixel (2026-11-11): page views only, never on private pages; see assets/fb.js. */
 (function () { try { var s = document.createElement('script'); s.src = '/assets/fb.js?v=1'; s.async = true; document.head.appendChild(s); } catch (e) {} })();
 /* Google tag (2026-11-11): page views, sent forms and phone taps only, never on private pages; see assets/ga.js. */
-(function () { try { var s = document.createElement('script'); s.src = '/assets/ga.js?v=1'; s.async = true; document.head.appendChild(s); } catch (e) {} })();
+(function () { try { var s = document.createElement('script'); s.src = '/assets/ga.js?v=2'; s.async = true; document.head.appendChild(s); } catch (e) {} })();
 
 (function () {
   var forms = document.querySelectorAll('form[data-lead-form], form[data-pool-form]');
