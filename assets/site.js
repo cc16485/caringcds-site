@@ -64,6 +64,8 @@ var GHL_WEBHOOK   = null;   // set to the GHL inbound webhook URL to enable auto
 
 /* Visit counter (2026-11-09): lives in assets/visit.js so /start/ (which does not load this file) counts too. */
 (function () { try { var v = document.createElement('script'); v.src = '/assets/visit.js?v=1'; v.async = true; document.head.appendChild(v); } catch (e) {} })();
+/* Facebook pixel (2026-11-11): page views only, never on private pages; see assets/fb.js. */
+(function () { try { var s = document.createElement('script'); s.src = '/assets/fb.js?v=1'; s.async = true; document.head.appendChild(s); } catch (e) {} })();
 
 (function () {
   var forms = document.querySelectorAll('form[data-lead-form], form[data-pool-form]');
@@ -134,6 +136,7 @@ var GHL_WEBHOOK   = null;   // set to the GHL inbound webhook URL to enable auto
           try { await fetch(GHL_WEBHOOK, { method: 'POST',
             headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(row) }); } catch (ignore) {}
         }
+        try { if (window.CDSFb) window.CDSFb.markSent(); } catch (ignore) {}
         /* swap form for its thank-you panel */
         var key = form.getAttribute('data-thanks-key') || 'main';
         var scope = form.parentElement;
