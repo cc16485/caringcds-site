@@ -102,7 +102,7 @@ var GHL_WEBHOOK   = null;   // set to the GHL inbound webhook URL to enable auto
       }
       if (problems.length) {
         errBox.textContent = 'Please fill in the highlighted fields' +
-          (problems.some(function (p) { return p.type === 'tel'; }) ? ' — the phone number needs all 10 digits.' : '.');
+          (problems.some(function (p) { return p.type === 'tel'; }) ? '. The phone number needs all 10 digits.' : '.');
         errBox.style.display = 'block';
         problems[0].focus();
         return;
