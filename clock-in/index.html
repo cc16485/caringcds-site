@@ -389,7 +389,7 @@
           <li><span>Still stuck? Call or text us at <a href="tel:+14172182888">417-218-2888</a>. We can check the address on file.</span></li>
         </ol>
       </div>
-      <p class="ci-note">App screens come from WellSky&rsquo;s own caregiver guide, with practice names. Your app may look a little different. If something does not match, call us.</p>
+      <p class="ci-note">App screens come from WellSky Personal Care caregiver guides, with practice names. Your app may look a little different. If something does not match, call us.</p>
     </div>
   </section>
 </main>
@@ -397,29 +397,30 @@
 <script>
 (function () {
   var I = function (id) { return '<svg class="ci-ico"><use href="#i-' + id + '"/></svg>'; };
-  var ready = { title: 'Get ready', icon: 'down', screen: { virtual: 'ready' },
-    body: 'Download the free WellSky Personal Care app from the App Store or Google Play. Log in with the email we have on file.',
-    tip: 'Turn on Location for the app. Forgot your password? Call us at 417-218-2888.' };
-  var menu = { title: 'Open Shifts', icon: 'menu', screen: { img: 'menu', hot: [21, 27] },
-    body: 'Tap the menu, then tap Shifts. This is where your shifts live.' };
+  var ready = { title: 'Get the app', icon: 'down', screen: { img: 'store', hot: [50, 23] },
+    body: 'Download the free WellSky Personal Care app from the App Store or Google Play. Tap Get or Install, then open it.',
+    tip: 'Turn on Location for the app: Always Allow or While Using.' };
+  var menu = { title: 'Log in', icon: 'key', screen: { img: 'login', hot: [50, 50] },
+    body: 'Type the email we have on file and tap Continue to Login, then your password. You land on your Shifts screen.',
+    tip: 'Passwords are case sensitive. Forgot it? Call us at 417-218-2888.' };
   var after = [
-    { title: 'Mark your tasks', icon: 'list', screen: { img: 'tasks', hot: [74, 26] },
+    { title: 'Mark your tasks', icon: 'list', screen: { img: 'tasks', hot: [73, 33] },
       body: 'Before you clock out, mark each task Yes or No.', tip: 'A task that was not done needs a short comment, like why it was skipped today.' },
-    { title: 'Clock out', icon: 'stop', screen: { img: 'review', hot: [87, 96] },
+    { title: 'Clock out', icon: 'stop', screen: { img: 'review', hot: [91, 96] },
       body: 'When the work ends, tap Clock Out. Check your tasks and notes, then tap Next.', tip: 'Clock out before you leave the house, every visit.' },
-    { title: 'Answer and confirm', icon: 'chat', screen: { img: 'question', hot: [74, 42] },
-      body: 'Answer the questions about how your consumer is doing. Tap Next through each screen, then tap Confirm.' },
+    { title: 'Answer and confirm', icon: 'chat', screen: { img: 'question', hot: [73, 37] },
+      body: 'Answer the questions about how your consumer is doing and whether you had a safe shift. Tap Next through each screen, then tap Confirm.' },
     { title: 'All done', icon: 'check', screen: { img: 'done' },
       body: 'You are clocked out and your time is saved. Thank you for the care you give!' }
   ];
   var P = {
     set: [ready, menu,
-      { title: 'Tap the shift, then Clock In', icon: 'play', screen: { img: 'clockin', hot: [50, 93] },
+      { title: 'Tap the shift, then Clock In', icon: 'play', screen: { img: 'clockin', hot: [50, 94] },
         body: 'We put your shift on the schedule for you. Tap today’s shift, read the tasks, then tap the orange Clock In at the bottom.',
         tip: 'Wait a moment while it finds your location.' }].concat(after),
     flex: [ready, menu,
-      { title: 'Create A Shift', icon: 'plus', screen: { img: 'create', hot: [50, 69] },
-        body: 'When the work starts, tap Create A Shift. Put in the time you will finish, pick your consumer, and tap Submit. Your shift starts right then.',
+      { title: 'Create A Shift', icon: 'plus', screen: { img: 'create', hot: [50, 58] },
+        body: 'When the work starts, tap Create A Shift on the Shifts screen. Put in the time you will finish, pick your consumer, and choose the authorization if it asks. Tap Submit and your shift starts right then.',
         tip: 'It cannot go past your consumer’s authorized hours. If it will not save, call us.' }].concat(after),
     phone: [
       { title: 'Use the home phone', icon: 'phone', screen: { virtual: 'home' },
@@ -444,7 +445,7 @@
   var $ = function (id) { return document.getElementById(id); };
   var esc = function (s) { return String(s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); };
   // preload real screens
-  ['menu','clockin','create','tasks','review','question','done'].forEach(function (n) { var im = new Image(); im.src = '/clock-in/img/' + n + '.jpg'; });
+  ['store','login','clockin','create','tasks','review','question','done'].forEach(function (n) { var im = new Image(); im.src = '/clock-in/img/' + n + '.jpg'; });
   function render() {
     var list = P[path], s = list[step], sc = s.screen, scr = $('ciScreen');
     if (sc.img) {
